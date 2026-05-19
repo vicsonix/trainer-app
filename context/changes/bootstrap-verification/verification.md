@@ -142,3 +142,43 @@ Immediate next steps for development:
 - Set up environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - Configure Supabase auth middleware for route protection (covers FR-001/002)
 - Schema design: `packages`, `clients`, `appointments` tables with RLS policies per trainer account
+
+---
+
+## Post-bootstrap fixes (2026-05-19)
+
+Applied after health check (`context/foundation/health-check.md`). All Category A items resolved except Supabase env vars (requires user action).
+
+### Resolved
+
+| Fix | What was done |
+|-----|---------------|
+| `package.json` name | Changed `"bootstrap-scaffold"` → `"trainer-app"` |
+| Git repository | `git init` + initial commit `212ec63` (author: Victoria, email: budziakvictoria@gmail.com) |
+| Test runner | Added Vitest 4.x + `@testing-library/react` + jsdom; `vitest.config.ts` created; `test` and `test:watch` scripts added to `package.json` |
+| Code formatter | Added Prettier 3.x + `eslint-config-prettier`; `.prettierrc` created; `format` script added to `package.json` |
+| `.env.example` | Created with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` placeholders |
+| `.gitignore` | Added `!.env.example` exception so the template is tracked while `.env.local` stays ignored |
+
+### Requires user action
+
+| Item | Action needed |
+|------|---------------|
+| Supabase env vars | Create a Supabase project at supabase.com, copy the project URL and anon key, and update `.env.local` with real values. Without this the app cannot start — the middleware redirects all routes to `/login` and Supabase calls will fail with invalid URLs. |
+
+### Packages added
+
+```
+vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/user-event prettier eslint-config-prettier
+```
+
+### Outstanding advisory items (no action required now)
+
+- `@types/node` stays pinned to `^20` — v25 tracks Node 25 which is not the runtime LTS.
+- TypeScript 5→6 and ESLint 9→10: review migration guides before upgrading; not urgent.
+- `postcss < 8.5.10` MODERATE advisory: transitive via `next`; wait for a Next.js 16 patch release.
+
+### Category B items (addressed in upcoming lessons)
+
+- CI/CD pipeline → M1L5 (Sprint Zero: infrastructure & deploy)
+- `CLAUDE.md` / `AGENTS.md` agent context → M1L4 (Agent Onboarding)
