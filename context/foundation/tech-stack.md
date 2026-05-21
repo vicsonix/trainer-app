@@ -24,6 +24,13 @@ hints:
   has_background_jobs: false
 ---
 
+## Logging
+
+- **Provider**: Axiom (`@axiomhq/js`)
+- **Reason**: free tier (500 GB/month ingest), official Cloudflare Workers integration, structured queryable log history — fills the gap Cloudflare's free tier leaves (no persistent logs via `wrangler tail` alone)
+- **Dataset**: `trainer-app`
+- **Env var**: `AXIOM_TOKEN`
+
 ## Why this stack
 
 Solo developer building a personal trainer management web app in 6 after-hours weeks. Custom path chosen because the user explicitly requested Next.js and TypeScript over the JS recommended default (10x-astro-starter). Next.js with App Router clears all four agent-friendly gates (typed, convention-based, popular in training data, well-documented) and has verified bootstrapper confidence. Supabase is added post-scaffold to provide managed PostgreSQL, built-in email+password auth (covering FR-001/002 without writing auth from scratch), and storage — eliminating operational overhead critical for a solo timeline. Auth and AI feature flags are true; the AI assistant (FR-015–017) calls an LLM over structured client data using Next.js API routes, requiring no separate backend service. Vercel deployment integrates natively with Next.js; GitHub Actions with auto-deploy-on-merge matches a solo shipping cadence. NestJS was considered and declined — the additional service overhead is unjustified at this scale and timeline.
