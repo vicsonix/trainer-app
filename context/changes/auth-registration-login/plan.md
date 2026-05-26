@@ -292,12 +292,12 @@ Brak migracji danych — Supabase auth tables są zarządzane przez Supabase aut
 
 #### Automated
 
-- [x] 3.1 `npm run build` przechodzi bez błędów TypeScript
-- [x] 3.2 `npm run lint` przechodzi
+- [x] 3.1 `npm run build` przechodzi bez błędów TypeScript — 9b42584
+- [x] 3.2 `npm run lint` przechodzi — 9b42584
 
 #### Manual
 
-- [x] 3.3 Zalogowany trener na `/` → redirect na `/dashboard`
-- [x] 3.4 Dashboard pokazuje email i linki nawigacyjne
-- [x] 3.5 Pełny E2E flow na mobilnym (360px)
-- [x] 3.6 Tytuł karty: "Trainer App"
+- [x] 3.3 Zalogowany trener na `/` → redirect na `/dashboard` — 9b42584
+- [x] 3.4 Dashboard pokazuje email i linki nawigacyjne — 9b42584
+- [x] 3.5 Pełny E2E flow na mobilnym (360px) — 9b42584
+- [x] 3.6 Tytuł karty: "Trainer App" — 9b42584
