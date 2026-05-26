@@ -36,6 +36,11 @@ export async function registerAction(
 ): Promise<{ error: string }> {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+  const confirmPassword = formData.get('confirm-password') as string
+
+  if (password !== confirmPassword) {
+    return { error: 'Hasła nie są zgodne' }
+  }
 
   const supabase = await createClient()
   const { error } = await supabase.auth.signUp({ email, password })
@@ -49,6 +54,7 @@ export async function registerAction(
 
 export async function logoutAction(): Promise<never> {
   const supabase = await createClient()
-  await supabase.auth.signOut()
+  const { error } = await supabase.auth.signOut()
+  if (error) console.error('signOut error:', error.message)
   redirect('/login')
 }

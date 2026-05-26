@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { logoutAction } from '@/app/actions/auth'
@@ -18,6 +19,8 @@ export default async function DashboardLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser()
+
+  if (!user) redirect('/login')
 
   return (
     <div className="flex min-h-full flex-col">
