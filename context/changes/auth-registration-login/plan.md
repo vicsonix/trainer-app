@@ -262,15 +262,15 @@ Brak migracji danych — Supabase auth tables są zarządzane przez Supabase aut
 
 #### Automated
 
-- [x] 1.1 `npm run build` przechodzi bez błędów TypeScript
-- [x] 1.2 `npm run lint` przechodzi bez błędów
+- [x] 1.1 `npm run build` przechodzi bez błędów TypeScript — 6cc1a6f
+- [x] 1.2 `npm run lint` przechodzi bez błędów — 6cc1a6f
 
 #### Manual
 
-- [ ] 1.3 Formularz logowania widoczny na `/login`
-- [ ] 1.4 Błędne dane → inline błąd "Nieprawidłowy email lub hasło"
-- [ ] 1.5 Poprawne dane → redirect na `/dashboard` z emailem i przyciskiem Wyloguj
-- [ ] 1.6 Wyloguj → redirect na `/login`
+- [x] 1.3 Formularz logowania widoczny na `/login`
+- [x] 1.4 Błędne dane → inline błąd "Nieprawidłowy email lub hasło"
+- [x] 1.5 Poprawne dane → redirect na `/dashboard` z emailem i przyciskiem Wyloguj
+- [x] 1.6 Wyloguj → redirect na `/login`
 - [ ] 1.7 Sesja przeżywa zamknięcie przeglądarki
 - [ ] 1.8 Spinner widoczny podczas submit
 
@@ -278,15 +278,15 @@ Brak migracji danych — Supabase auth tables są zarządzane przez Supabase aut
 
 #### Automated
 
-- [ ] 2.1 `npm run build` przechodzi bez błędów TypeScript
-- [ ] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npm run build` przechodzi bez błędów TypeScript
+- [x] 2.2 `npm run lint` przechodzi
 
 #### Manual
 
-- [ ] 2.3 Formularz rejestracji widoczny na `/register`
-- [ ] 2.4 Niezgodne hasła → błąd "Hasła nie są zgodne" bez POST
-- [ ] 2.5 Istniejący email → inline błąd "Konto z tym emailem już istnieje"
-- [ ] 2.6 Nowy email → natychmiastowy redirect na `/dashboard`
+- [x] 2.3 Formularz rejestracji widoczny na `/register`
+- [x] 2.4 Niezgodne hasła → błąd "Hasła nie są zgodne" bez POST
+- [x] 2.5 Istniejący email → inline błąd "Konto z tym emailem już istnieje"
+- [x] 2.6 Nowy email → natychmiastowy redirect na `/dashboard`
 
 ### Phase 3: Dashboard nav shell + cleanup
 

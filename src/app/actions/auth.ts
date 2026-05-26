@@ -3,9 +3,13 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
-function mapSupabaseError(message: string): string {
+function mapSupabaseError(message: string | undefined): string {
+  if (!message) return 'Wystąpił błąd. Spróbuj ponownie.'
   if (message.includes('Invalid login credentials')) return 'Nieprawidłowy email lub hasło'
   if (message.includes('User already registered')) return 'Konto z tym emailem już istnieje'
+  if (message.includes('Password should be at least')) return 'Hasło musi mieć co najmniej 6 znaków'
+  if (message.includes('email rate limit')) return 'Zbyt wiele prób rejestracji. Poczekaj chwilę i spróbuj ponownie.'
+  if (message.includes('Email signups are disabled')) return 'Rejestracja przez email jest wyłączona. Skontaktuj się z administratorem.'
   return 'Wystąpił błąd. Spróbuj ponownie.'
 }
 
@@ -37,7 +41,7 @@ export async function registerAction(
   const { error } = await supabase.auth.signUp({ email, password })
 
   if (error) {
-    return { error: mapSupabaseError(error.message) }
+    return { error: mapSupabaseError(error.message ?? error.toString()) }
   }
 
   redirect('/dashboard')
