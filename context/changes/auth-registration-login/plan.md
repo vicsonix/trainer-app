@@ -271,33 +271,33 @@ Brak migracji danych — Supabase auth tables są zarządzane przez Supabase aut
 - [x] 1.4 Błędne dane → inline błąd "Nieprawidłowy email lub hasło"
 - [x] 1.5 Poprawne dane → redirect na `/dashboard` z emailem i przyciskiem Wyloguj
 - [x] 1.6 Wyloguj → redirect na `/login`
-- [ ] 1.7 Sesja przeżywa zamknięcie przeglądarki
-- [ ] 1.8 Spinner widoczny podczas submit
+- [x] 1.7 Sesja przeżywa zamknięcie przeglądarki
+- [x] 1.8 Spinner widoczny podczas submit
 
 ### Phase 2: Register page
 
 #### Automated
 
-- [x] 2.1 `npm run build` przechodzi bez błędów TypeScript
-- [x] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npm run build` przechodzi bez błędów TypeScript — 9721ab0
+- [x] 2.2 `npm run lint` przechodzi — 9721ab0
 
 #### Manual
 
-- [x] 2.3 Formularz rejestracji widoczny na `/register`
-- [x] 2.4 Niezgodne hasła → błąd "Hasła nie są zgodne" bez POST
-- [x] 2.5 Istniejący email → inline błąd "Konto z tym emailem już istnieje"
-- [x] 2.6 Nowy email → natychmiastowy redirect na `/dashboard`
+- [x] 2.3 Formularz rejestracji widoczny na `/register` — 9721ab0
+- [x] 2.4 Niezgodne hasła → błąd "Hasła nie są zgodne" bez POST — 9721ab0
+- [x] 2.5 Istniejący email → inline błąd "Konto z tym emailem już istnieje" — 9721ab0
+- [x] 2.6 Nowy email → natychmiastowy redirect na `/dashboard` — 9721ab0
 
 ### Phase 3: Dashboard nav shell + cleanup
 
 #### Automated
 
-- [ ] 3.1 `npm run build` przechodzi bez błędów TypeScript
-- [ ] 3.2 `npm run lint` przechodzi
+- [x] 3.1 `npm run build` przechodzi bez błędów TypeScript
+- [x] 3.2 `npm run lint` przechodzi
 
 #### Manual
 
-- [ ] 3.3 Zalogowany trener na `/` → redirect na `/dashboard`
-- [ ] 3.4 Dashboard pokazuje email i linki nawigacyjne
-- [ ] 3.5 Pełny E2E flow na mobilnym (360px)
-- [ ] 3.6 Tytuł karty: "Trainer App"
+- [x] 3.3 Zalogowany trener na `/` → redirect na `/dashboard`
+- [x] 3.4 Dashboard pokazuje email i linki nawigacyjne
+- [x] 3.5 Pełny E2E flow na mobilnym (360px)
+- [x] 3.6 Tytuł karty: "Trainer App"
