@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-26
+updated: 2026-05-28
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -30,7 +30,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | ID   | Change ID                 | Outcome (trainer can …)                                                                  | Prerequisites           | PRD refs                               | Status   |
 |------|---------------------------|------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|----------|
 | F-01 | ai-streaming-route        | (foundation) LLM provider wired; streaming API route in place                            | —                       | FR-015, FR-016, FR-017                 | ready    |
-| S-01 | auth-registration-login   | register an account and log in with email + password                                     | auth scaffold (present) | FR-001, FR-002                         | ready    |
+| S-01 | auth-registration-login   | register an account and log in with email + password                                     | auth scaffold (present) | FR-001, FR-002                         | done     |
 | S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | proposed |
 | S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | proposed |
 | S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | proposed |
@@ -86,7 +86,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Unknowns:**
   - Registration page/form — baseline confirms `login/page.tsx` exists but does not confirm a registration form is wired; verify before closing this slice — Owner: user. Block: no (does not prevent planning; check during `/10x-plan auth-registration-login`).
 - **Risk:** Auth is the trust foundation of the entire product; a session or data-isolation bug here breaks every downstream slice and violates the NFR "trainer's client data is never accessible from another trainer's account."
-- **Status:** ready
+- **Status:** done
 
 ### S-02: Package management
 
@@ -177,4 +177,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 
 ## Done
 
-(Empty on first generation. `/10x-archive` appends an entry here when a change matching a roadmap item is archived.)
+- **S-01: trainer can register a new account and log in with email + password; session persists across browser restarts.** — Archived 2026-05-28 → `context/archive/2026-05-26-auth-registration-login/`. Lesson: —.
