@@ -267,12 +267,12 @@ Brak migracji danych — Supabase auth tables są zarządzane przez Supabase aut
 
 #### Manual
 
-- [x] 1.3 Formularz logowania widoczny na `/login`
-- [x] 1.4 Błędne dane → inline błąd "Nieprawidłowy email lub hasło"
-- [x] 1.5 Poprawne dane → redirect na `/dashboard` z emailem i przyciskiem Wyloguj
-- [x] 1.6 Wyloguj → redirect na `/login`
-- [x] 1.7 Sesja przeżywa zamknięcie przeglądarki
-- [x] 1.8 Spinner widoczny podczas submit
+- [x] 1.3 Formularz logowania widoczny na `/login` — 6cc1a6f
+- [x] 1.4 Błędne dane → inline błąd "Nieprawidłowy email lub hasło" — 6cc1a6f
+- [x] 1.5 Poprawne dane → redirect na `/dashboard` z emailem i przyciskiem Wyloguj — 6cc1a6f
+- [x] 1.6 Wyloguj → redirect na `/login` — 6cc1a6f
+- [x] 1.7 Sesja przeżywa zamknięcie przeglądarki — 6cc1a6f
+- [x] 1.8 Spinner widoczny podczas submit — 6cc1a6f
 
 ### Phase 2: Register page
 

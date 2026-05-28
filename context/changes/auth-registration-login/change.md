@@ -3,7 +3,7 @@ change_id: auth-registration-login
 roadmap_id: S-01
 status: impl_reviewed
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-28
 
 prd_refs: FR-001, FR-002
 ---
