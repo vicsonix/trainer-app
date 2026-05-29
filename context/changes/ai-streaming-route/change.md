@@ -1,9 +1,9 @@
 ---
 change_id: ai-streaming-route
-title: Wire OpenAI SDK and create AI streaming chat route
-status: implementing
+title: Wire Anthropic SDK and create AI streaming chat route
+status: implemented
 created: 2026-05-28
-updated: 2026-05-28
+updated: 2026-05-29
 archived_at: null
 ---
 

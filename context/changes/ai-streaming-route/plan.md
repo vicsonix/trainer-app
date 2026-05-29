@@ -260,10 +260,10 @@ No database changes. No existing routes affected.
 
 #### Automated
 
-- [x] 3.1 `npm run build:worker` exits 0
-- [x] 3.2 `wrangler deploy --dry-run` exits 0; gzipped bundle < 3 MiB
+- [x] 3.1 `npm run build:worker` exits 0 — 9f30b9c
+- [x] 3.2 `wrangler deploy --dry-run` exits 0; gzipped bundle < 3 MiB — 9f30b9c
 
 #### Manual
 
-- [x] 3.3 Bundle size confirmed under limit (or upgrade decision documented)
-- [x] 3.4 `wrangler secret put ANTHROPIC_API_KEY` documented and ready for production
+- [x] 3.3 Bundle size confirmed under limit (or upgrade decision documented) — 9f30b9c
+- [x] 3.4 `wrangler secret put ANTHROPIC_API_KEY` documented and ready for production — 9f30b9c
