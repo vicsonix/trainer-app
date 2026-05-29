@@ -246,24 +246,24 @@ No database changes. No existing routes affected.
 
 #### Automated
 
-- [x] 2.1 `npm run build` passes (new route included, no type errors)
-- [x] 2.2 `npm run lint` passes
-- [x] 2.3 `npm run test` passes (existing tests unaffected)
+- [x] 2.1 `npm run build` passes (new route included, no type errors) — a8aac56
+- [x] 2.2 `npm run lint` passes — a8aac56
+- [x] 2.3 `npm run test` passes (existing tests unaffected) — a8aac56
 
 #### Manual
 
-- [x] 2.4 `npm run preview` starts without errors; route present in output
-- [x] 2.5 curl with valid session cookie returns SSE chunks + `[DONE]`
-- [x] 2.6 curl without session cookie returns 401
+- [x] 2.4 `npm run preview` starts without errors; route present in output — a8aac56
+- [x] 2.5 curl with valid session cookie returns SSE chunks + `[DONE]` — a8aac56
+- [x] 2.6 curl without session cookie returns 401 — a8aac56
 
 ### Phase 3: Bundle Size Gate
 
 #### Automated
 
-- [ ] 3.1 `npm run build:worker` exits 0
-- [ ] 3.2 `wrangler deploy --dry-run` exits 0; gzipped bundle < 3 MiB
+- [x] 3.1 `npm run build:worker` exits 0
+- [x] 3.2 `wrangler deploy --dry-run` exits 0; gzipped bundle < 3 MiB
 
 #### Manual
 
-- [ ] 3.3 Bundle size confirmed under limit (or upgrade decision documented)
-- [ ] 3.4 `wrangler secret put ANTHROPIC_API_KEY` documented and ready for production
+- [x] 3.3 Bundle size confirmed under limit (or upgrade decision documented)
+- [x] 3.4 `wrangler secret put ANTHROPIC_API_KEY` documented and ready for production
