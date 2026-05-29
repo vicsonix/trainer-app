@@ -233,28 +233,28 @@ No database changes. No existing routes affected.
 
 #### Automated
 
-- [x] 1.1 `npm install` completes; `@anthropic-ai/sdk` in `package.json` dependencies
-- [x] 1.2 `npm run build` passes
-- [x] 1.3 `npm run lint` passes
+- [x] 1.1 `npm install` completes; `@anthropic-ai/sdk` in `package.json` dependencies — ea32251
+- [x] 1.2 `npm run build` passes — ea32251
+- [x] 1.3 `npm run lint` passes — ea32251
 
 #### Manual
 
-- [x] 1.4 `.env.example` contains `ANTHROPIC_API_KEY=`
-- [x] 1.5 Real key added to `.env.local` (not committed)
+- [x] 1.4 `.env.example` contains `ANTHROPIC_API_KEY=` — ea32251
+- [x] 1.5 Real key added to `.env.local` (not committed) — ea32251
 
 ### Phase 2: Create the Streaming API Route
 
 #### Automated
 
-- [ ] 2.1 `npm run build` passes (new route included, no type errors)
-- [ ] 2.2 `npm run lint` passes
-- [ ] 2.3 `npm run test` passes (existing tests unaffected)
+- [x] 2.1 `npm run build` passes (new route included, no type errors)
+- [x] 2.2 `npm run lint` passes
+- [x] 2.3 `npm run test` passes (existing tests unaffected)
 
 #### Manual
 
-- [ ] 2.4 `npm run preview` starts without errors; route present in output
-- [ ] 2.5 curl with valid session cookie returns SSE chunks + `[DONE]`
-- [ ] 2.6 curl without session cookie returns 401
+- [x] 2.4 `npm run preview` starts without errors; route present in output
+- [x] 2.5 curl with valid session cookie returns SSE chunks + `[DONE]`
+- [x] 2.6 curl without session cookie returns 401
 
 ### Phase 3: Bundle Size Gate
 
