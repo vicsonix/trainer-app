@@ -5,8 +5,15 @@ import { log } from '@/lib/logger'
 
 export const MAX_CONTEXT_CHARS = 8000
 
-if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set')
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+let _anthropic: Anthropic | null = null
+function getAnthropicClient(): Anthropic {
+  if (!_anthropic) {
+    const apiKey = process.env.ANTHROPIC_API_KEY
+    if (!apiKey) throw new Error('ANTHROPIC_API_KEY is not set')
+    _anthropic = new Anthropic({ apiKey })
+  }
+  return _anthropic
+}
 
 type Message = { role: 'user' | 'assistant'; content: string }
 
@@ -43,7 +50,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   const systemPrompt =
     `You are a personal fitness trainer assistant. You have access to the following client information:\n\n${context}\n\nAnswer questions based ONLY on the information provided above. If the answer is not in the client data, say so clearly. Do not invent or assume any details about the client.`
 
-  const streamResponse = anthropic.messages.stream({
+  const streamResponse = getAnthropicClient().messages.stream({
     model: 'claude-haiku-4-5',
     max_tokens: 1024,
     system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
