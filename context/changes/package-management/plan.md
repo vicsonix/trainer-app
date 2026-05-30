@@ -513,9 +513,9 @@ No database migration needed — the schema already defines all required tables 
 
 #### Manual
 
-- [ ] 0.1 Supabase table editor shows packages, clients, appointments tables
-- [ ] 0.2 RLS enabled on all three tables
-- [ ] 0.3 Test insert into packages succeeds as authenticated user
+- [x] 0.1 Supabase table editor shows packages, clients, appointments tables
+- [x] 0.2 RLS enabled on all three tables
+- [x] 0.3 Test insert into packages succeeds as authenticated user
 
 ### Phase 1: Foundation — shadcn/ui + zod + Auth Form Refactor
 
@@ -540,8 +540,8 @@ No database migration needed — the schema already defines all required tables 
 
 #### Manual
 
-- [x] 2.3 Navigating to /dashboard/packages highlights "Pakiety" in desktop and mobile nav
-- [x] 2.4 Dark mode active state visible
+- [x] 2.3 Navigating to /dashboard/packages highlights "Pakiety" in desktop and mobile nav — 2715810
+- [x] 2.4 Dark mode active state visible — 2715810
 
 ### Phase 3: Package Server Actions
 
@@ -552,36 +552,36 @@ No database migration needed — the schema already defines all required tables 
 
 #### Manual
 
-- [x] 3.3 src/app/actions/packages.ts exists with createPackageAction, updatePackageAction, deletePackageAction, packageSchema exports
+- [x] 3.3 src/app/actions/packages.ts exists with createPackageAction, updatePackageAction, deletePackageAction, packageSchema exports — 2715810
 
 ### Phase 4: Package List Page
 
 #### Automated
 
-- [x] 4.1 npm run build passes
-- [x] 4.2 npm run lint passes
-- [x] 4.3 npx tsc --noEmit passes
+- [x] 4.1 npm run build passes — 2715810
+- [x] 4.2 npm run lint passes — 2715810
+- [x] 4.3 npx tsc --noEmit passes — 2715810
 
 #### Manual
 
-- [x] 4.4 /dashboard/packages renders empty state with three preset template cards when no packages exist
-- [x] 4.5 Package list shows name, session count, total price, and per-session rate for each card
-- [x] 4.6 Delete AlertDialog shows correct client count message
-- [x] 4.7 Confirming delete removes the package from the list
+- [x] 4.4 /dashboard/packages renders empty state with three preset template cards when no packages exist — 2715810
+- [x] 4.5 Package list shows name, session count, total price, and per-session rate for each card — 2715810
+- [x] 4.6 Delete AlertDialog shows correct client count message — 2715810
+- [x] 4.7 Confirming delete removes the package from the list — 2715810
 
 ### Phase 5: Create Package Form
 
 #### Automated
 
-- [x] 5.1 npm run build passes
-- [x] 5.2 npx tsc --noEmit passes
+- [x] 5.1 npm run build passes — 2715810
+- [x] 5.2 npx tsc --noEmit passes — 2715810
 
 #### Manual
 
-- [x] 5.3 Clicking a session chip updates the visit count input and per-session rate
-- [x] 5.4 Submitting with empty name shows inline validation error below the name field
-- [x] 5.5 Valid submission shows "Pakiet zapisany" toast and closes modal
-- [x] 5.6 Preset card pre-selects the corresponding session chip via modal defaultVisits prop
+- [x] 5.3 Clicking a session chip updates the visit count input and per-session rate — 2715810
+- [x] 5.4 Submitting with empty name shows inline validation error below the name field — 2715810
+- [x] 5.5 Valid submission shows "Pakiet zapisany" toast and closes modal — 2715810
+- [x] 5.6 Preset card pre-selects the corresponding session chip via modal defaultVisits prop — 2715810
 
 ### Phase 6: Edit Package Form
 

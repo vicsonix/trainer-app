@@ -13,7 +13,10 @@
     "build:worker": "opennextjs-cloudflare build",
     "preview": "opennextjs-cloudflare preview",
     "deploy": "opennextjs-cloudflare deploy",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "db:link": "supabase link --project-ref mtcfvizoafkfolyesbrn",
+    "db:push": "supabase db push",
+    "db:migration": "supabase migration new"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.100.1",
