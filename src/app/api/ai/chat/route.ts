@@ -1,9 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk'
 import { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { log } from '@/lib/logger'
 
 export const MAX_CONTEXT_CHARS = 8000
 
+if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set')
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
 type Message = { role: 'user' | 'assistant'; content: string }
@@ -12,6 +14,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
+    log('warn', 'ai_chat_unauthorized')
     return new Response('Unauthorized', { status: 401 })
   }
 
@@ -30,7 +33,11 @@ export async function POST(request: NextRequest): Promise<Response> {
     return new Response('messages must be a non-empty array', { status: 400 })
   }
 
+  const originalContextLength = context.length
   context = context.slice(0, MAX_CONTEXT_CHARS)
+  if (context.length < originalContextLength) {
+    log('info', 'ai_chat_context_truncated', { originalLength: originalContextLength, truncatedTo: MAX_CONTEXT_CHARS })
+  }
 
   const systemPrompt =
     `You are a personal fitness trainer assistant. You have access to the following client information:\n\n${context}\n\nAnswer questions based ONLY on the information provided above. If the answer is not in the client data, say so clearly. Do not invent or assume any details about the client.`
@@ -61,6 +68,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         controller.close()
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Stream error'
+        log('error', 'ai_chat_stream_error', { message })
         controller.enqueue(
           encoder.encode(`event: error\ndata: ${JSON.stringify({ message })}\n\n`)
         )
