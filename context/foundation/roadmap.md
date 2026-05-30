@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-28
+updated: 2026-05-30
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -29,7 +29,7 @@ A solo personal trainer loses client context between sessions — before each ap
 
 | ID   | Change ID                 | Outcome (trainer can …)                                                                  | Prerequisites           | PRD refs                               | Status   |
 |------|---------------------------|------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|----------|
-| F-01 | ai-streaming-route        | (foundation) LLM provider wired; streaming API route in place                            | —                       | FR-015, FR-016, FR-017                 | ready    |
+| F-01 | ai-streaming-route        | (foundation) LLM provider wired; streaming API route in place                            | —                       | FR-015, FR-016, FR-017                 | done     |
 | S-01 | auth-registration-login   | register an account and log in with email + password                                     | auth scaffold (present) | FR-001, FR-002                         | done     |
 | S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | proposed |
 | S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | proposed |
@@ -62,7 +62,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 
 ### F-01: LLM provider wired + AI streaming API route
 
-- **Outcome:** (foundation) A streaming Next.js API route exists that accepts a client-context payload and a natural-language question, calls the OpenAI API, and returns a streaming response; API key wired as a Cloudflare Workers secret.
+- **Outcome:** (foundation) A streaming Next.js API route exists that accepts a client-context payload and a natural-language question, calls the Anthropic Claude API (`claude-haiku-4-5`), and returns a streaming response; API key wired as a Cloudflare Workers secret.
 - **Change ID:** ai-streaming-route
 - **PRD refs:** FR-015, FR-016, FR-017
 - **Unlocks:** S-06 (AI assistant slice); also proves streaming SSE works on the Cloudflare Workers + OpenNext stack before the full AI slice is planned
@@ -70,8 +70,8 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Parallel with:** S-01, S-02, S-03, S-04
 - **Blockers:** —
 - **Unknowns:** —
-- **Risk:** No API routes exist in the codebase; adding the OpenAI SDK may push the Cloudflare Workers free-tier gzipped bundle past 3 MiB — validate bundle size with `wrangler deploy --dry-run` before merging (per `context/foundation/infrastructure.md` risk register).
-- **Status:** ready
+- **Risk:** No API routes exist in the codebase; adding the Anthropic SDK (`@anthropic-ai/sdk`) may push the Cloudflare Workers free-tier gzipped bundle past 3 MiB — validate bundle size with `wrangler deploy --dry-run` before merging (per `context/foundation/infrastructure.md` risk register).
+- **Status:** done
 
 ## Slices
 
@@ -152,7 +152,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 
 | Roadmap ID | Change ID                | Suggested issue title                                         | Ready for `/10x-plan` | Notes                                                        |
 |------------|--------------------------|---------------------------------------------------------------|-----------------------|--------------------------------------------------------------|
-| F-01       | ai-streaming-route       | Wire OpenAI API and create AI streaming route                 | yes                   | Run `/10x-plan ai-streaming-route` |
+| F-01       | ai-streaming-route       | Wire Anthropic Claude API and create AI streaming route       | yes                   | Run `/10x-plan ai-streaming-route` |
 | S-01       | auth-registration-login  | Complete auth registration + login flow                       | yes                   | Run `/10x-plan auth-registration-login`                      |
 | S-02       | package-management       | Package CRUD (add / edit / delete)                           | no                    | Needs S-01 done                                              |
 | S-03       | client-management        | Client management with interview notes and package assignment | no                    | Needs S-02 done                                              |
@@ -162,7 +162,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 
 ## Open Roadmap Questions
 
-1. ~~**Which LLM provider — Claude API or OpenAI?**~~ **Resolved 2026-05-26: OpenAI API (GPT-4o mini).** F-01 and S-06 unblocked.
+1. ~~**Which LLM provider — Claude API or OpenAI?**~~ **Resolved 2026-05-29: Anthropic Claude API (`claude-haiku-4-5`).** F-01 and S-06 unblocked.
 2. **Are `target_scale.qps` and `target_scale.data_volume` correct as `low` / `small`?** — Owner: user. Block: no (PRD estimates based on 5–20 clients/week and text + calendar data; override if actual deployment profile differs).
 
 ## Parked
@@ -178,3 +178,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 ## Done
 
 - **S-01: trainer can register a new account and log in with email + password; session persists across browser restarts.** — Archived 2026-05-28 → `context/archive/2026-05-26-auth-registration-login/`. Lesson: —.
+- **F-01: (foundation) LLM provider wired; streaming API route in place** — Archived 2026-05-30 → `context/archive/2026-05-28-ai-streaming-route/`. Lesson: —.
