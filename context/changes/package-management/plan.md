@@ -587,18 +587,18 @@ No database migration needed — the schema already defines all required tables 
 
 #### Automated
 
-- [x] 6.1 npm run build passes
-- [x] 6.2 npx tsc --noEmit passes
+- [x] 6.1 npm run build passes — 6370ab2
+- [x] 6.2 npx tsc --noEmit passes — 6370ab2
 
 #### Manual
 
-- [x] 6.3 Edit form pre-filled with existing package values
-- [x] 6.4 Submitting changes shows success toast and updates the list
-- [x] 6.5 Invalid package ID returns 404 page (edit page removed; modal approach)
-- [x] 6.6 RLS enforced — cannot edit another trainer's package
+- [x] 6.3 Edit form pre-filled with existing package values — 6370ab2
+- [x] 6.4 Submitting changes shows success toast and updates the list — 6370ab2
+- [x] 6.5 Invalid package ID returns 404 page (edit page removed; modal approach) — 6370ab2
+- [x] 6.6 RLS enforced — cannot edit another trainer's package — 6370ab2
 
 ### Phase 7: Unit Tests
 
 #### Automated
 
-- [ ] 7.1 npm run test passes with all seven schema validation test cases green
+- [x] 7.1 npm run test passes with all seven schema validation test cases green
