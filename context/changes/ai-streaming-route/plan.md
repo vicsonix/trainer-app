@@ -129,16 +129,18 @@ Create `src/app/api/ai/chat/route.ts` — the POST handler that authenticates th
 
 **Contract**:
 
+- Import `log` from `@/lib/logger` at the top of the file
 - Export `async function POST(request: NextRequest): Promise<Response>`
-- Auth: call `createClient()` → `supabase.auth.getUser()` → return `new Response('Unauthorized', { status: 401 })` if `!user`
+- Auth: call `createClient()` → `supabase.auth.getUser()` → `log('warn', 'ai_chat_unauthorized')` → return `new Response('Unauthorized', { status: 401 })` if `!user`
 - Parse body: destructure `{ messages, context }` from `request.json()`; wrap in try/catch → 400 on parse failure
-- Validate: `messages` must be a non-empty array of `{ role: 'user' | 'assistant', content: string }` → 400 with descriptive message if not; `context` is a string (default `''`)
-- Truncate: `context = context.slice(0, MAX_CONTEXT_CHARS)` where `MAX_CONTEXT_CHARS = 8000` (exported constant)
+- Validate: `messages` must be a non-empty array → 400 with descriptive message if not; `context` is a string (default `''`). Individual message field types (role enum, content string) are NOT validated at the route layer — the Anthropic SDK enforces the schema and throws on invalid types; the stream catch block handles this as an SSE error event.
+- Truncate: record `originalContextLength = context.length`; `context = context.slice(0, MAX_CONTEXT_CHARS)` where `MAX_CONTEXT_CHARS = 8000` (exported constant); if truncated, `log('info', 'ai_chat_context_truncated', { originalLength, truncatedTo: MAX_CONTEXT_CHARS })`
 - System prompt: `"You are a personal fitness trainer assistant. You have access to the following client information:\n\n{context}\n\nAnswer questions based ONLY on the information provided above. If the answer is not in the client data, say so clearly. Do not invent or assume any details about the client."`
 - Anthropic call: `anthropic.messages.stream({ model: 'claude-haiku-4-5', max_tokens: 1024, system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }], messages })`
 - Stream: wrap in `new ReadableStream({ async start(controller) { ... } })`; for each event where `event.type === 'content_block_delta' && event.delta.type === 'text_delta'`, enqueue `data: ${JSON.stringify({ content: event.delta.text })}\n\n` (skip empty text); after the loop, enqueue `data: [DONE]\n\n` and `controller.close()`
-- Errors mid-stream: catch inside the `start` callback; enqueue `event: error\ndata: ${JSON.stringify({ message })}\n\n` then `controller.close()`
+- Errors mid-stream: catch inside the `start` callback; `log('error', 'ai_chat_stream_error', { message })`; enqueue `event: error\ndata: ${JSON.stringify({ message })}\n\n` then `controller.close()`
 - Return `new Response(readable, { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' } })`
+- Guard: `if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set')` at module scope before the constructor — fails fast at Worker startup if the secret is missing rather than mid-stream during a user request
 - Instantiate `new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })` once at module scope
 
 ### Success Criteria
