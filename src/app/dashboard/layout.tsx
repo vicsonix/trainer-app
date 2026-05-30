@@ -23,11 +23,17 @@ export default async function DashboardLayout({
   if (!user) redirect('/login')
 
   return (
-    <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-10 border-b border-soft-linen-200 bg-white dark:border-carbon-black-800 dark:bg-carbon-black-950">
+    <div className="flex min-h-full flex-col bg-soft-linen-50 dark:bg-carbon-black-950">
+      <header className="sticky top-0 z-10 bg-white/80 dark:bg-carbon-black-900/80 backdrop-blur-md border-b border-soft-linen-200 dark:border-carbon-black-800">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-6">
-            <span className="text-base font-semibold tracking-tight">Trainer</span>
+            {/* Brand mark */}
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-lobster-pink-400 to-lobster-pink-700 flex items-center justify-center shadow-sm">
+                <span className="text-white font-bold text-xs">T</span>
+              </div>
+              <span className="text-base font-semibold tracking-tight">Trainer</span>
+            </div>
             <nav className="hidden sm:flex items-center gap-1">
               {navLinks.map(({ href, label }) => (
                 <NavLink key={href} href={href} label={label} />

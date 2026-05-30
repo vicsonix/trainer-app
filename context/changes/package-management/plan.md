@@ -535,8 +535,8 @@ No database migration needed — the schema already defines all required tables 
 
 #### Automated
 
-- [x] 2.1 npm run build passes — p2-sha
-- [x] 2.2 npm run lint passes — p2-sha
+- [x] 2.1 npm run build passes — 48f8cd9
+- [x] 2.2 npm run lint passes — 48f8cd9
 
 #### Manual
 
@@ -547,8 +547,8 @@ No database migration needed — the schema already defines all required tables 
 
 #### Automated
 
-- [ ] 3.1 npx tsc --noEmit passes (all action signatures)
-- [ ] 3.2 npm run lint passes
+- [x] 3.1 npx tsc --noEmit passes (all action signatures)
+- [x] 3.2 npm run lint passes
 
 #### Manual
 
