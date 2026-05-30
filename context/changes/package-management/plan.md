@@ -513,9 +513,9 @@ No database migration needed — the schema already defines all required tables 
 
 #### Manual
 
-- [x] 0.1 Supabase table editor shows packages, clients, appointments tables
-- [x] 0.2 RLS enabled on all three tables
-- [x] 0.3 Test insert into packages succeeds as authenticated user
+- [x] 0.1 Supabase table editor shows packages, clients, appointments tables — 3855f96
+- [x] 0.2 RLS enabled on all three tables — 3855f96
+- [x] 0.3 Test insert into packages succeeds as authenticated user — 3855f96
 
 ### Phase 1: Foundation — shadcn/ui + zod + Auth Form Refactor
 
