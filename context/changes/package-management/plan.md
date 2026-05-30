@@ -521,22 +521,22 @@ No database migration needed — the schema already defines all required tables 
 
 #### Automated
 
-- [x] 1.1 npm run build passes
-- [x] 1.2 npm run lint passes
-- [x] 1.3 npx tsc --noEmit passes
+- [x] 1.1 npm run build passes — f35d579
+- [x] 1.2 npm run lint passes — f35d579
+- [x] 1.3 npx tsc --noEmit passes — f35d579
 
 #### Manual
 
-- [x] 1.4 Login page renders with shadcn inputs; login flow works end-to-end
-- [x] 1.5 Register page renders with shadcn inputs; registration flow works end-to-end
-- [x] 1.6 No visual regression on auth pages (dark mode included)
+- [x] 1.4 Login page renders with shadcn inputs; login flow works end-to-end — f35d579
+- [x] 1.5 Register page renders with shadcn inputs; registration flow works end-to-end — f35d579
+- [x] 1.6 No visual regression on auth pages (dark mode included) — f35d579
 
 ### Phase 2: Active Navigation
 
 #### Automated
 
-- [ ] 2.1 npm run build passes
-- [ ] 2.2 npm run lint passes
+- [x] 2.1 npm run build passes — p2-sha
+- [x] 2.2 npm run lint passes — p2-sha
 
 #### Manual
 
