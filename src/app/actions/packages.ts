@@ -38,6 +38,7 @@ export async function createPackageAction(
     return { errors: { _form: ['Nie udało się zapisać pakietu'] } }
   }
 
+  revalidatePath('/dashboard/packages')
   return { success: true }
 }
 
@@ -73,6 +74,7 @@ export async function updatePackageAction(
     return { errors: { _form: ['Nie udało się zaktualizować pakietu'] } }
   }
 
+  revalidatePath('/dashboard/packages')
   return { success: true }
 }
 

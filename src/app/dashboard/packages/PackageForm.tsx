@@ -28,6 +28,7 @@ export default function PackageForm({
   const [state, formAction, pending] = useActionState(action, null)
 
   const initialVisits = defaultVisits ?? defaultValues?.visit_count ?? 10
+  const [name, setName] = useState(defaultValues?.name ?? '')
   const [visitCount, setVisitCount] = useState(initialVisits)
   const [price, setPrice] = useState(
     defaultValues?.price !== undefined ? String(defaultValues.price) : ''
@@ -41,6 +42,7 @@ export default function PackageForm({
   useEffect(() => {
     if (state && 'success' in state && state.success) {
       toast('Pakiet zapisany')
+      router.refresh()
       if (onSuccess) {
         onSuccess()
       } else {
@@ -57,7 +59,8 @@ export default function PackageForm({
         <Input
           id="name"
           name="name"
-          defaultValue={defaultValues?.name}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="np. Pakiet 10 wizyt"
         />
         {state && 'errors' in state && state.errors.name?.[0] && (

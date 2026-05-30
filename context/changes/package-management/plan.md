@@ -587,15 +587,15 @@ No database migration needed — the schema already defines all required tables 
 
 #### Automated
 
-- [ ] 6.1 npm run build passes
-- [ ] 6.2 npx tsc --noEmit passes
+- [x] 6.1 npm run build passes
+- [x] 6.2 npx tsc --noEmit passes
 
 #### Manual
 
-- [ ] 6.3 Edit form pre-filled with existing package values
-- [ ] 6.4 Submitting changes shows success toast and updates the list
-- [ ] 6.5 Invalid package ID returns 404 page
-- [ ] 6.6 RLS enforced — cannot edit another trainer's package
+- [x] 6.3 Edit form pre-filled with existing package values
+- [x] 6.4 Submitting changes shows success toast and updates the list
+- [x] 6.5 Invalid package ID returns 404 page (edit page removed; modal approach)
+- [x] 6.6 RLS enforced — cannot edit another trainer's package
 
 ### Phase 7: Unit Tests
 

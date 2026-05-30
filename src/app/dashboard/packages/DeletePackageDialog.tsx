@@ -1,5 +1,7 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +26,14 @@ export default function DeletePackageDialog({
   packageName,
   clientCount,
 }: DeletePackageDialogProps) {
+  const router = useRouter()
+
+  async function handleDelete() {
+    await deletePackageAction(packageId)
+    toast('Pakiet usunięty')
+    router.refresh()
+  }
+
   return (
     <AlertDialog>
       <AlertDialogTrigger className="rounded-md border border-red-300 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950 transition-colors">
@@ -40,11 +50,12 @@ export default function DeletePackageDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Anuluj</AlertDialogCancel>
-          <form action={deletePackageAction.bind(null, packageId)}>
-            <AlertDialogAction type="submit" className="bg-red-600 hover:bg-red-700">
-              Usuń
-            </AlertDialogAction>
-          </form>
+          <AlertDialogAction
+            className="bg-red-600 hover:bg-red-700"
+            onClick={handleDelete}
+          >
+            Usuń
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

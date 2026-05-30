@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import EditPackageModal from './EditPackageModal'
 import DeletePackageDialog from './DeletePackageDialog'
 
 interface PackageCardProps {
@@ -30,12 +30,12 @@ export default function PackageCard({
         <span>{perSession} PLN / sesja</span>
       </CardContent>
       <CardFooter className="justify-between">
-        <Link
-          href={`/dashboard/packages/${id}/edit`}
-          className="rounded-md border border-soft-linen-300 px-3 py-1.5 text-sm font-medium hover:bg-soft-linen-100 dark:border-carbon-black-700 dark:hover:bg-carbon-black-800 transition-colors"
-        >
-          Edytuj
-        </Link>
+        <EditPackageModal
+          id={id}
+          name={name}
+          visitCount={visitCount}
+          price={price}
+        />
         <DeletePackageDialog
           packageId={id}
           packageName={name}
