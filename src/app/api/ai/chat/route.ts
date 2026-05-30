@@ -25,7 +25,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     const body = await request.json()
     messages = body.messages
     context = typeof body.context === 'string' ? body.context : ''
-  } catch {
+  } catch (err) {
+    log('warn', 'ai_chat_invalid_body', { error: err instanceof Error ? err.message : String(err) })
     return new Response('Invalid JSON', { status: 400 })
   }
 

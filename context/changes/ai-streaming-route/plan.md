@@ -143,6 +143,17 @@ Create `src/app/api/ai/chat/route.ts` — the POST handler that authenticates th
 - Guard: `if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set')` at module scope before the constructor — fails fast at Worker startup if the secret is missing rather than mid-stream during a user request
 - Instantiate `new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })` once at module scope
 
+#### 2. Config adjustments (discovered during implementation)
+
+**Files**: `vitest.config.ts`, `eslint.config.mjs`, `tsconfig.json`
+
+**Intent**: Minor tooling fixes required to make the Phase 2 success criteria pass cleanly.
+
+**Changes made**:
+- `vitest.config.ts`: added `passWithNoTests: true` so `npm run test` exits 0 when no test files exist yet
+- `eslint.config.mjs`: added `.open-next/**` to `globalIgnores` to prevent linting OpenNext build artifacts
+- `tsconfig.json`: whitespace-only reformatting (no semantic change)
+
 ### Success Criteria
 
 #### Automated Verification
