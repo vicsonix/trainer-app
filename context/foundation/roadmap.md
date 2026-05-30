@@ -31,7 +31,7 @@ A solo personal trainer loses client context between sessions — before each ap
 |------|---------------------------|------------------------------------------------------------------------------------------|-------------------------|----------------------------------------|----------|
 | F-01 | ai-streaming-route        | (foundation) LLM provider wired; streaming API route in place                            | —                       | FR-015, FR-016, FR-017                 | done     |
 | S-01 | auth-registration-login   | register an account and log in with email + password                                     | auth scaffold (present) | FR-001, FR-002                         | done     |
-| S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | proposed |
+| S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | done     |
 | S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | proposed |
 | S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | proposed |
 | S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | proposed |
@@ -98,7 +98,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** This slice also produces the dashboard shell and navigation structure that all subsequent slices inherit. A wrong navigation decision here ripples into every later slice.
-- **Status:** proposed
+- **Status:** done
 
 ### S-03: Client management
 
@@ -179,3 +179,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 
 - **S-01: trainer can register a new account and log in with email + password; session persists across browser restarts.** — Archived 2026-05-28 → `context/archive/2026-05-26-auth-registration-login/`. Lesson: —.
 - **F-01: (foundation) LLM provider wired; streaming API route in place** — Archived 2026-05-30 → `context/archive/2026-05-28-ai-streaming-route/`. Lesson: —.
+- **S-02: trainer can add a training package (name, number of visits, price), edit it, and delete it.** — Archived 2026-05-30 → `context/archive/2026-05-30-package-management/`. Lesson: —.
