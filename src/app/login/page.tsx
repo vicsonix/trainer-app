@@ -3,53 +3,84 @@
 import { useActionState } from 'react'
 import Link from 'next/link'
 import { loginAction } from '@/app/actions/auth'
-import SubmitButton from '@/components/ui/SubmitButton'
+import SubmitButton from '@/components/SubmitButton'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 
 export default function LoginPage() {
   const [state, formAction] = useActionState(loginAction, null)
 
   return (
-    <div className="flex min-h-full flex-col items-center justify-center px-6 py-12">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-semibold text-center mb-8">Trainer App</h1>
-        <form action={formAction} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              autoComplete="email"
-              className="rounded-lg border border-zinc-300 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-black dark:border-zinc-700 dark:focus:ring-white"
-            />
+    <div className="relative flex min-h-full flex-col items-center justify-center px-4 py-12 overflow-hidden bg-soft-linen-50 dark:bg-carbon-black-950">
+
+      {/* Decorative blobs */}
+      <div className="absolute -top-28 -left-28 w-96 h-96 rounded-full bg-lobster-pink-300 dark:bg-lobster-pink-700 opacity-30 dark:opacity-20 blur-3xl" />
+      <div className="absolute -top-10 -right-16 w-72 h-72 rounded-full bg-jungle-teal-300 dark:bg-jungle-teal-600 opacity-25 dark:opacity-20 blur-3xl" />
+      <div className="absolute -bottom-20 -left-12 w-80 h-80 rounded-full bg-tiger-orange-200 dark:bg-tiger-orange-600 opacity-30 dark:opacity-15 blur-3xl" />
+      <div className="absolute -bottom-10 -right-10 w-64 h-64 rounded-full bg-lobster-pink-200 dark:bg-lobster-pink-800 opacity-25 dark:opacity-20 blur-3xl" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[480px] h-64 rounded-full bg-soft-linen-300 dark:bg-carbon-black-800 opacity-40 dark:opacity-30 blur-3xl" />
+
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-sm">
+
+        {/* Brand header */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-lobster-pink-400 to-lobster-pink-700 flex items-center justify-center shadow-lg mb-4">
+            <span className="text-white font-bold text-2xl tracking-tight">T</span>
           </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="password" className="text-sm font-medium">
-              Hasło
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              minLength={6}
-              autoComplete="current-password"
-              className="rounded-lg border border-zinc-300 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-black dark:border-zinc-700 dark:focus:ring-white"
-            />
-          </div>
-          {state?.error && (
-            <p role="alert" className="text-sm text-red-600">
-              {state.error}
-            </p>
-          )}
-          <SubmitButton label="Zaloguj się" />
-        </form>
-        <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">Trainer App</h1>
+          <p className="text-sm text-muted-foreground mt-1">Zaloguj się do swojego konta</p>
+        </div>
+
+        {/* Glass card */}
+        <div className="rounded-2xl border border-white/60 dark:border-carbon-black-700/60 shadow-xl overflow-hidden bg-white/70 dark:bg-carbon-black-900/70 backdrop-blur-md">
+          {/* Accent stripe */}
+          <div className="h-1 bg-gradient-to-r from-lobster-pink-600 via-lobster-pink-400 to-tiger-orange-400" />
+
+          <form action={formAction} className="flex flex-col gap-5 p-6">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className="h-11 px-3 bg-white/60 dark:bg-carbon-black-800/60 border-soft-linen-300 dark:border-carbon-black-600"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">Hasło</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                required
+                minLength={6}
+                autoComplete="current-password"
+                className="h-11 px-3 bg-white/60 dark:bg-carbon-black-800/60 border-soft-linen-300 dark:border-carbon-black-600"
+              />
+            </div>
+
+            {state?.error && (
+              <p role="alert" className="text-sm text-destructive">
+                {state.error}
+              </p>
+            )}
+
+            <div className="pt-1">
+              <SubmitButton label="Zaloguj się" />
+            </div>
+          </form>
+        </div>
+
+        <p className="mt-5 text-center text-sm text-muted-foreground">
           Nie masz konta?{' '}
-          <Link href="/register" className="font-medium underline text-foreground">
+          <Link
+            href="/register"
+            className="font-semibold text-lobster-pink-600 hover:text-lobster-pink-500 underline underline-offset-4 transition-colors"
+          >
             Zarejestruj się
           </Link>
         </p>
