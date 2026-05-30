@@ -14,7 +14,7 @@ export default function SubmitButton({ label }: SubmitButtonProps) {
     <button
       type="submit"
       disabled={pending}
-      className="flex items-center justify-center gap-2 w-full min-h-[48px] rounded-lg bg-primary text-primary-foreground font-medium disabled:opacity-60 transition-opacity hover:bg-lobster-pink-600"
+      className="flex items-center justify-center gap-2 w-full min-h-[48px] rounded-lg bg-gradient-to-r from-lobster-pink-500 to-lobster-pink-600 hover:from-lobster-pink-600 hover:to-lobster-pink-700 text-white font-medium shadow-sm disabled:opacity-60 transition-all"
     >
       {pending ? <Spinner /> : label}
     </button>

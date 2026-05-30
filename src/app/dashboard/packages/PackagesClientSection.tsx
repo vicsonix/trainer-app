@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { Plus } from 'lucide-react'
 import PackageCard from './PackageCard'
 import PackageEmptyState from './PackageEmptyState'
 import PackageFormModal from './PackageFormModal'
@@ -29,9 +29,30 @@ export default function PackagesClientSection({ packages }: PackagesClientSectio
 
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Pakiety</h1>
-        <Button onClick={() => openModal()}>Dodaj pakiet</Button>
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-lobster-pink-600 to-lobster-pink-400 bg-clip-text text-transparent">
+              Pakiety
+            </h1>
+            {packages.length > 0 && (
+              <span className="rounded-full bg-lobster-pink-100 dark:bg-lobster-pink-900/50 px-2.5 py-0.5 text-xs font-semibold text-lobster-pink-600 dark:text-lobster-pink-300">
+                {packages.length}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Zarządzaj swoimi pakietami treningowymi
+          </p>
+        </div>
+
+        <button
+          onClick={() => openModal()}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-lobster-pink-500 to-lobster-pink-600 hover:from-lobster-pink-600 hover:to-lobster-pink-700 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all"
+        >
+          <Plus size={15} />
+          Dodaj pakiet
+        </button>
       </div>
 
       {packages.length === 0 ? (

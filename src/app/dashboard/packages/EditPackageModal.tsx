@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Pencil } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -30,9 +31,10 @@ export default function EditPackageModal({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="rounded-md border border-soft-linen-300 px-3 py-1.5 text-sm font-medium hover:bg-soft-linen-100 dark:border-carbon-black-700 dark:hover:bg-carbon-black-800 transition-colors"
+        className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+        title="Edytuj pakiet"
       >
-        Edytuj
+        <Pencil size={14} />
       </button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>

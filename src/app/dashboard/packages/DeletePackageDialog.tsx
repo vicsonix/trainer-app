@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,8 +41,8 @@ export default function DeletePackageDialog({
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="rounded-md border border-red-300 px-3 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950 transition-colors">
-        Usuń
+      <AlertDialogTrigger className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors" title="Usuń pakiet">
+        <Trash2 size={14} />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
