@@ -16,6 +16,7 @@
     "postinstall": "patch-package",
     "db:link": "supabase link --project-ref mtcfvizoafkfolyesbrn",
     "db:push": "supabase db push",
+    "db:rollback": "supabase migration down",
     "db:migration": "supabase migration new"
   },
   "dependencies": {
