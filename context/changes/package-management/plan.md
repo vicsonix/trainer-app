@@ -601,4 +601,4 @@ No database migration needed — the schema already defines all required tables 
 
 #### Automated
 
-- [x] 7.1 npm run test passes with all seven schema validation test cases green
+- [x] 7.1 npm run test passes with all seven schema validation test cases green — a6dab58
