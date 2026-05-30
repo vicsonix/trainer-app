@@ -1,19 +1,14 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
+import { packageSchema } from './packageSchema'
 
 export type PackageFormState =
   | { errors: { name?: string[]; visit_count?: string[]; price?: string[]; _form?: string[] } }
   | { success: true }
   | null
 
-export const packageSchema = z.object({
-  name: z.string().min(1, 'Nazwa jest wymagana'),
-  visit_count: z.coerce.number().int().positive('Liczba wizyt musi być większa od zera'),
-  price: z.coerce.number().min(0, 'Cena nie może być ujemna'),
-})
 
 export async function createPackageAction(
   _prevState: PackageFormState,

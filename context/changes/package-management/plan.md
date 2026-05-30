@@ -540,48 +540,48 @@ No database migration needed — the schema already defines all required tables 
 
 #### Manual
 
-- [ ] 2.3 Navigating to /dashboard/packages highlights "Pakiety" in desktop and mobile nav
-- [ ] 2.4 Dark mode active state visible
+- [x] 2.3 Navigating to /dashboard/packages highlights "Pakiety" in desktop and mobile nav
+- [x] 2.4 Dark mode active state visible
 
 ### Phase 3: Package Server Actions
 
 #### Automated
 
-- [x] 3.1 npx tsc --noEmit passes (all action signatures)
-- [x] 3.2 npm run lint passes
+- [x] 3.1 npx tsc --noEmit passes (all action signatures) — 6f2f905
+- [x] 3.2 npm run lint passes — 6f2f905
 
 #### Manual
 
-- [ ] 3.3 src/app/actions/packages.ts exists with createPackageAction, updatePackageAction, deletePackageAction, packageSchema exports
+- [x] 3.3 src/app/actions/packages.ts exists with createPackageAction, updatePackageAction, deletePackageAction, packageSchema exports
 
 ### Phase 4: Package List Page
 
 #### Automated
 
-- [ ] 4.1 npm run build passes
-- [ ] 4.2 npm run lint passes
-- [ ] 4.3 npx tsc --noEmit passes
+- [x] 4.1 npm run build passes
+- [x] 4.2 npm run lint passes
+- [x] 4.3 npx tsc --noEmit passes
 
 #### Manual
 
-- [ ] 4.4 /dashboard/packages renders empty state with three preset template cards when no packages exist
-- [ ] 4.5 Package list shows name, session count, total price, and per-session rate for each card
-- [ ] 4.6 Delete AlertDialog shows correct client count message
-- [ ] 4.7 Confirming delete removes the package from the list
+- [x] 4.4 /dashboard/packages renders empty state with three preset template cards when no packages exist
+- [x] 4.5 Package list shows name, session count, total price, and per-session rate for each card
+- [x] 4.6 Delete AlertDialog shows correct client count message
+- [x] 4.7 Confirming delete removes the package from the list
 
 ### Phase 5: Create Package Form
 
 #### Automated
 
-- [ ] 5.1 npm run build passes
-- [ ] 5.2 npx tsc --noEmit passes
+- [x] 5.1 npm run build passes
+- [x] 5.2 npx tsc --noEmit passes
 
 #### Manual
 
-- [ ] 5.3 Clicking a session chip updates the visit count input and per-session rate
-- [ ] 5.4 Submitting with empty name shows inline validation error below the name field
-- [ ] 5.5 Valid submission shows "Pakiet zapisany" toast and redirects to list
-- [ ] 5.6 Preset card pre-selects the corresponding session chip via ?visits= param
+- [x] 5.3 Clicking a session chip updates the visit count input and per-session rate
+- [x] 5.4 Submitting with empty name shows inline validation error below the name field
+- [x] 5.5 Valid submission shows "Pakiet zapisany" toast and closes modal
+- [x] 5.6 Preset card pre-selects the corresponding session chip via modal defaultVisits prop
 
 ### Phase 6: Edit Package Form
 
