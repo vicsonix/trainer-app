@@ -27,8 +27,10 @@ export async function createPackageAction(
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  if (!user) return { errors: { _form: ['Sesja wygasła'] } }
+
   const { error } = await supabase.from('packages').insert({
-    trainer_id: user!.id,
+    trainer_id: user.id,
     name: result.data.name,
     visit_count: result.data.visit_count,
     price: result.data.price,
@@ -60,6 +62,8 @@ export async function updatePackageAction(
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  if (!user) return { errors: { _form: ['Sesja wygasła'] } }
+
   const { error } = await supabase
     .from('packages')
     .update({
@@ -68,7 +72,7 @@ export async function updatePackageAction(
       price: result.data.price,
     })
     .eq('id', id)
-    .eq('trainer_id', user!.id)
+    .eq('trainer_id', user.id)
 
   if (error) {
     return { errors: { _form: ['Nie udało się zaktualizować pakietu'] } }
@@ -82,11 +86,13 @@ export async function deletePackageAction(id: string): Promise<void> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  if (!user) return
+
   await supabase
     .from('packages')
     .delete()
     .eq('id', id)
-    .eq('trainer_id', user!.id)
+    .eq('trainer_id', user.id)
 
   revalidatePath('/dashboard/packages')
 }

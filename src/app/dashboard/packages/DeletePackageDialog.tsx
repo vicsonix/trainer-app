@@ -29,9 +29,13 @@ export default function DeletePackageDialog({
   const router = useRouter()
 
   async function handleDelete() {
-    await deletePackageAction(packageId)
-    toast('Pakiet usunięty')
-    router.refresh()
+    try {
+      await deletePackageAction(packageId)
+      toast('Pakiet usunięty')
+      router.refresh()
+    } catch {
+      toast.error('Błąd usuwania pakietu')
+    }
   }
 
   return (
