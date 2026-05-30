@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
+/* ── Semantic tokens (change between light / dark) ───────────────────── */
 :root {
   --radius: 0.5rem;
-
   --background: #f7f4ee;
   --foreground: #191a1a;
   --card: #ffffff;
@@ -46,8 +46,9 @@
   }
 }
 
+/* ── Semantic tokens → Tailwind utilities ────────────────────────────── */
+/* "inline" means these don't emit duplicate CSS custom props             */
 @theme inline {
-  /* Semantic tokens */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -66,18 +67,17 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
-  /* Radius scale */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
-
-  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
 
-  /* Lobster Pink */
+/* ── Fixed palette → Tailwind utilities ──────────────────────────────── */
+/* Plain @theme (no "inline") emits CSS custom props so var() resolves   */
+@theme {
   --color-lobster-pink-50: #fbeaec;
   --color-lobster-pink-100: #f6d5d8;
   --color-lobster-pink-200: #edabb1;
@@ -90,7 +90,6 @@
   --color-lobster-pink-900: #2a090c;
   --color-lobster-pink-950: #1d0609;
 
-  /* Soft Linen */
   --color-soft-linen-50: #f7f4ee;
   --color-soft-linen-100: #efe9dc;
   --color-soft-linen-200: #ded3ba;
@@ -103,7 +102,6 @@
   --color-soft-linen-900: #231d10;
   --color-soft-linen-950: #18140b;
 
-  /* Carbon Black */
   --color-carbon-black-50: #f2f2f3;
   --color-carbon-black-100: #e5e6e6;
   --color-carbon-black-200: #caccce;
@@ -116,7 +114,6 @@
   --color-carbon-black-900: #191a1a;
   --color-carbon-black-950: #111212;
 
-  /* Jungle Teal */
   --color-jungle-teal-50: #eff5f3;
   --color-jungle-teal-100: #e0ebe7;
   --color-jungle-teal-200: #c1d7d0;
@@ -129,7 +126,6 @@
   --color-jungle-teal-900: #141f1b;
   --color-jungle-teal-950: #0e1613;
 
-  /* Tiger Orange */
   --color-tiger-orange-50: #fff4e5;
   --color-tiger-orange-100: #ffe9cc;
   --color-tiger-orange-200: #ffd399;
@@ -143,6 +139,7 @@
   --color-tiger-orange-950: #241400;
 }
 
+/* ── Base layer ──────────────────────────────────────────────────────── */
 @layer base {
   * {
     @apply border-border outline-ring/50;
