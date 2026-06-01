@@ -46,7 +46,7 @@ export default function PackageForm({
       if (onSuccess) {
         onSuccess()
       } else {
-        router.push('/dashboard/packages')
+        router.push('/packages')
       }
     }
   }, [state, onSuccess, router])

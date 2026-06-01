@@ -5,10 +5,11 @@ import { logoutAction } from '@/app/actions/auth'
 import NavLink from '@/components/NavLink'
 
 const navLinks = [
-  { href: '/dashboard/packages', label: 'Pakiety' },
-  { href: '/dashboard/clients',  label: 'Klienci' },
-  { href: '/dashboard/calendar', label: 'Kalendarz' },
-  { href: '/dashboard/assistant',label: 'Asystent' },
+  { href: '/dashboard', label: 'Panel' },
+  { href: '/packages',  label: 'Pakiety' },
+  { href: '/clients',   label: 'Klienci' },
+  { href: '/calendar',  label: 'Kalendarz' },
+  { href: '/assistant', label: 'Asystent' },
 ]
 
 export default async function DashboardLayout({
