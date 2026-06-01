@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest'
-import { packageSchema } from './packageSchema'
+import { packageSchema } from './schema'
 
 describe('packageSchema', () => {
   it('accepts valid input', () => {
@@ -10,25 +9,25 @@ describe('packageSchema', () => {
   it('rejects empty name', () => {
     const result = packageSchema.safeParse({ name: '', visit_count: '10', price: '800' })
     expect(result.success).toBe(false)
-    if (!result.success) expect(result.error.flatten().fieldErrors.name).toBeDefined()
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'name')).toBe(true)
   })
 
   it('rejects negative visit_count', () => {
     const result = packageSchema.safeParse({ name: 'X', visit_count: '-1', price: '800' })
     expect(result.success).toBe(false)
-    if (!result.success) expect(result.error.flatten().fieldErrors.visit_count).toBeDefined()
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'visit_count')).toBe(true)
   })
 
   it('rejects zero visit_count', () => {
     const result = packageSchema.safeParse({ name: 'X', visit_count: '0', price: '800' })
     expect(result.success).toBe(false)
-    if (!result.success) expect(result.error.flatten().fieldErrors.visit_count).toBeDefined()
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'visit_count')).toBe(true)
   })
 
   it('rejects negative price', () => {
     const result = packageSchema.safeParse({ name: 'X', visit_count: '10', price: '-5' })
     expect(result.success).toBe(false)
-    if (!result.success) expect(result.error.flatten().fieldErrors.price).toBeDefined()
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'price')).toBe(true)
   })
 
   it('accepts zero price (free package)', () => {

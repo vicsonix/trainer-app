@@ -3,7 +3,7 @@ import { Package, Users, CalendarDays, Bot } from 'lucide-react'
 const sections = [
   {
     label: 'Pakiety',
-    href: '/dashboard/packages',
+    href: '/packages',
     icon: Package,
     iconBg: 'bg-lobster-pink-100 dark:bg-lobster-pink-900/40',
     iconColor: 'text-lobster-pink-600 dark:text-lobster-pink-400',
@@ -12,7 +12,7 @@ const sections = [
   },
   {
     label: 'Klienci',
-    href: '/dashboard/clients',
+    href: '/clients',
     icon: Users,
     iconBg: 'bg-jungle-teal-100 dark:bg-jungle-teal-900/40',
     iconColor: 'text-jungle-teal-600 dark:text-jungle-teal-400',
@@ -21,7 +21,7 @@ const sections = [
   },
   {
     label: 'Kalendarz',
-    href: '/dashboard/calendar',
+    href: '/calendar',
     icon: CalendarDays,
     iconBg: 'bg-tiger-orange-100 dark:bg-tiger-orange-900/40',
     iconColor: 'text-tiger-orange-600 dark:text-tiger-orange-400',
@@ -30,7 +30,7 @@ const sections = [
   },
   {
     label: 'Asystent',
-    href: '/dashboard/assistant',
+    href: '/assistant',
     icon: Bot,
     iconBg: 'bg-soft-linen-200 dark:bg-carbon-black-800',
     iconColor: 'text-carbon-black-600 dark:text-carbon-black-300',

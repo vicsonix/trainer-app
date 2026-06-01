@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
@@ -25,6 +25,9 @@ export default function PackageForm({
   onSuccess,
 }: PackageFormProps) {
   const router = useRouter()
+  const onSuccessRef = useRef(onSuccess)
+  const routerRef = useRef(router)
+  useEffect(() => { onSuccessRef.current = onSuccess; routerRef.current = router })
   const [state, formAction, pending] = useActionState(action, null)
 
   const initialVisits = defaultVisits ?? defaultValues?.visit_count ?? 10
@@ -42,14 +45,13 @@ export default function PackageForm({
   useEffect(() => {
     if (state && 'success' in state && state.success) {
       toast('Pakiet zapisany')
-      router.refresh()
-      if (onSuccess) {
-        onSuccess()
+      if (onSuccessRef.current) {
+        onSuccessRef.current()
       } else {
-        router.push('/dashboard/packages')
+        routerRef.current.push('/packages')
       }
     }
-  }, [state, onSuccess, router])
+  }, [state])
 
   return (
     <form action={formAction} className="flex flex-col gap-4">

@@ -5,10 +5,11 @@ import { logoutAction } from '@/app/actions/auth'
 import NavLink from '@/components/NavLink'
 
 const navLinks = [
-  { href: '/dashboard/packages', label: 'Pakiety' },
-  { href: '/dashboard/clients',  label: 'Klienci' },
-  { href: '/dashboard/calendar', label: 'Kalendarz' },
-  { href: '/dashboard/assistant',label: 'Asystent' },
+  { href: '/dashboard', label: 'Panel' },
+  { href: '/packages',  label: 'Pakiety' },
+  { href: '/clients',   label: 'Klienci' },
+  { href: '/calendar',  label: 'Kalendarz' },
+  { href: '/assistant', label: 'Asystent' },
 ]
 
 export default async function DashboardLayout({
@@ -86,9 +87,9 @@ export default async function DashboardLayout({
       </header>
 
       {/* ── Mobile bottom nav ─────────────────────────────────────────── */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-10 flex border-t border-soft-linen-200 dark:border-carbon-black-800 bg-white/80 dark:bg-carbon-black-900/80 backdrop-blur-sm">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-10 flex border-t border-soft-linen-200 dark:border-carbon-black-800 bg-white/80 dark:bg-carbon-black-900/80 backdrop-blur-sm safe-area-inset-bottom">
         {navLinks.map(({ href, label }) => (
-          <NavLink key={href} href={href} label={label} />
+          <NavLink key={href} href={href} label={label} variant="bottom-bar" />
         ))}
       </nav>
 
