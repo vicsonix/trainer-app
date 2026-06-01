@@ -475,20 +475,20 @@ No database migrations needed — `clients` table is already defined in `supabas
 
 #### Automated
 
-- [x] 2.1 Tests pass: `npm run test`
-- [x] 2.2 Lint passes: `npm run lint`
-- [x] 2.3 Build passes: `npm run build`
+- [x] 2.1 Tests pass: `npm run test` — 7969cf4
+- [x] 2.2 Lint passes: `npm run lint` — 7969cf4
+- [x] 2.3 Build passes: `npm run build` — 7969cf4
 
 #### Manual
 
-- [ ] 2.4 `src/components/ui/textarea.tsx` and `src/components/ui/select.tsx` exist
+- [x] 2.4 `src/components/ui/textarea.tsx` and `src/components/ui/select.tsx` exist — 7969cf4
 
 ### Phase 3: Stateless Display Layer
 
 #### Automated
 
-- [ ] 3.1 Build passes: `npm run build`
-- [ ] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build`
+- [x] 3.2 Lint passes: `npm run lint`
 
 #### Manual
 
