@@ -466,10 +466,10 @@ No database migrations needed — `clients` table is already defined in `supabas
 
 #### Manual
 
-- [ ] 1.3 Navigate to `/packages` — packages list renders; "Pakiety" nav item active
-- [ ] 1.4 Navigate to `/dashboard` — overview grid renders; all four card links go to sibling routes
-- [ ] 1.5 Edit a package and save — redirected to `/packages`, not `/dashboard/packages`
-- [ ] 1.6 No 404 errors in browser console
+- [x] 1.3 Navigate to `/packages` — packages list renders; "Pakiety" nav item active — 1e1103c
+- [x] 1.4 Navigate to `/dashboard` — overview grid renders; all four card links go to sibling routes — 1e1103c
+- [x] 1.5 Edit a package and save — redirected to `/packages`, not `/dashboard/packages` — 1e1103c
+- [x] 1.6 No 404 errors in browser console — 1e1103c
 
 ### Phase 2: ShadCN Components + Data Layer
 
@@ -487,31 +487,31 @@ No database migrations needed — `clients` table is already defined in `supabas
 
 #### Automated
 
-- [x] 3.1 Build passes: `npm run build`
-- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.1 Build passes: `npm run build` — 8f7a5f9
+- [x] 3.2 Lint passes: `npm run lint` — 8f7a5f9
 
 #### Manual
 
-- [ ] 3.3 `/clients` renders empty state with no clients in DB
-- [ ] 3.4 Client card renders correctly after seeding a row in Supabase Studio
-- [ ] 3.5 "Klienci" nav item highlights in jungle-teal on `/clients`
+- [x] 3.3 `/clients` renders empty state with no clients in DB — 8f7a5f9
+- [x] 3.4 Client card renders correctly after seeding a row in Supabase Studio — 8f7a5f9
+- [x] 3.5 "Klienci" nav item highlights in jungle-teal on `/clients` — 8f7a5f9
 
 ### Phase 4: Interactive Layer + Full Integration
 
 #### Automated
 
-- [ ] 4.1 Build passes: `npm run build`
-- [ ] 4.2 Lint passes: `npm run lint`
-- [ ] 4.3 All tests pass: `npm run test`
+- [x] 4.1 Build passes: `npm run build`
+- [x] 4.2 Lint passes: `npm run lint`
+- [x] 4.3 All tests pass: `npm run test`
 
 #### Manual
 
-- [ ] 4.4 Create client — toast, modal closes, card renders
-- [ ] 4.5 Inline package add from dropdown — PackageFormModal opens; after creation package appears in Select
-- [ ] 4.6 Edit client — card updates after save
-- [ ] 4.7 Delete client — card removed, toast appears
-- [ ] 4.8 Empty state CTA opens create modal
-- [ ] 4.9 No-packages hint text visible in dropdown when package list is empty
-- [ ] 4.10 `interview_notes` multi-paragraph input accepted without truncation
-- [ ] 4.11 `plan_url` validation: invalid URL shows error; blank shows no error
-- [ ] 4.12 Mobile layout: fields stack vertically, form usable on small screen
+- [x] 4.4 Create client — toast, modal closes, card renders
+- [x] 4.5 Inline package add from dropdown — PackageFormModal opens; after creation package appears in Select
+- [x] 4.6 Edit client — card updates after save
+- [x] 4.7 Delete client — card removed, toast appears
+- [x] 4.8 Empty state CTA opens create modal
+- [x] 4.9 No-packages hint text visible in dropdown when package list is empty
+- [x] 4.10 `interview_notes` multi-paragraph input accepted without truncation
+- [x] 4.11 `plan_url` validation: invalid URL shows error; blank shows no error
+- [x] 4.12 Mobile layout: fields stack vertically, form usable on small screen

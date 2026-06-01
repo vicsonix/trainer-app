@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button'
+
 interface ClientEmptyStateProps {
   onCreateClick: () => void
 }
@@ -14,12 +16,9 @@ export default function ClientEmptyState({ onCreateClick }: ClientEmptyStateProp
         </p>
       </div>
 
-      <button
-        onClick={onCreateClick}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-jungle-teal-500 to-jungle-teal-600 hover:from-jungle-teal-600 hover:to-jungle-teal-700 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-all"
-      >
+      <Button variant="gradient" size="lg" onClick={onCreateClick}>
         Dodaj pierwszego klienta
-      </button>
+      </Button>
     </div>
   )
 }

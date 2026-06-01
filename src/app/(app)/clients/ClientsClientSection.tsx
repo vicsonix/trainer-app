@@ -1,26 +1,31 @@
 'use client'
 
+import { useState } from 'react'
 import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { ClientListItem, PackageOption } from './page'
 import ClientCard from './ClientCard'
 import ClientEmptyState from './ClientEmptyState'
+import ClientFormModal from './ClientFormModal'
 
 interface ClientsClientSectionProps {
   clients: ClientListItem[]
   packages: PackageOption[]
 }
 
-export default function ClientsClientSection({ clients }: ClientsClientSectionProps) {
+export default function ClientsClientSection({ clients, packages }: ClientsClientSectionProps) {
+  const [modalOpen, setModalOpen] = useState(false)
+
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-jungle-teal-600 to-jungle-teal-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-lobster-pink-600 to-lobster-pink-400 bg-clip-text text-transparent">
               Klienci
             </h1>
             {clients.length > 0 && (
-              <span className="rounded-full bg-jungle-teal-100 dark:bg-jungle-teal-900/50 px-2.5 py-0.5 text-xs font-semibold text-jungle-teal-600 dark:text-jungle-teal-300">
+              <span className="rounded-full bg-lobster-pink-100 dark:bg-lobster-pink-900/50 px-2.5 py-0.5 text-xs font-semibold text-lobster-pink-600 dark:text-lobster-pink-300">
                 {clients.length}
               </span>
             )}
@@ -30,17 +35,14 @@ export default function ClientsClientSection({ clients }: ClientsClientSectionPr
           </p>
         </div>
 
-        <button
-          disabled
-          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-jungle-teal-500 to-jungle-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm opacity-50 cursor-not-allowed"
-        >
+        <Button variant="gradient" onClick={() => setModalOpen(true)}>
           <Plus size={15} />
           Dodaj klienta
-        </button>
+        </Button>
       </div>
 
       {clients.length === 0 ? (
-        <ClientEmptyState onCreateClick={() => {}} />
+        <ClientEmptyState onCreateClick={() => setModalOpen(true)} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {clients.map((client) => (
@@ -51,11 +53,17 @@ export default function ClientsClientSection({ clients }: ClientsClientSectionPr
               last_name={client.last_name}
               phone={client.phone}
               email={client.email}
+              package_id={client.package_id}
+              interview_notes={client.interview_notes}
+              plan_url={client.plan_url}
               packages={client.packages}
+              allPackages={packages}
             />
           ))}
         </div>
       )}
+
+      <ClientFormModal open={modalOpen} onOpenChange={setModalOpen} packages={packages} />
     </>
   )
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import PackageCard from './PackageCard'
 import PackageEmptyState from './PackageEmptyState'
 import PackageFormModal from './PackageFormModal'
@@ -46,13 +47,10 @@ export default function PackagesClientSection({ packages }: PackagesClientSectio
           </p>
         </div>
 
-        <button
-          onClick={() => openModal()}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-lobster-pink-500 to-lobster-pink-600 hover:from-lobster-pink-600 hover:to-lobster-pink-700 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all"
-        >
+        <Button variant="gradient" onClick={() => openModal()}>
           <Plus size={15} />
           Dodaj pakiet
-        </button>
+        </Button>
       </div>
 
       {packages.length === 0 ? (
