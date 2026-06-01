@@ -1,8 +1,18 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import type { ZodIssue } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-import { packageSchema } from './packageSchema'
+import { packageSchema } from './schema'
+
+function issuesByField(issues: ZodIssue[]) {
+  const out: Record<string, string[]> = {}
+  for (const issue of issues) {
+    const key = issue.path[0]
+    if (typeof key === 'string') (out[key] ??= []).push(issue.message)
+  }
+  return out
+}
 
 export type PackageFormState =
   | { errors: { name?: string[]; visit_count?: string[]; price?: string[]; _form?: string[] } }
@@ -21,7 +31,7 @@ export async function createPackageAction(
   })
 
   if (!result.success) {
-    return { errors: result.error.flatten().fieldErrors }
+    return { errors: issuesByField(result.error.issues) }
   }
 
   const supabase = await createClient()
@@ -56,7 +66,7 @@ export async function updatePackageAction(
   })
 
   if (!result.success) {
-    return { errors: result.error.flatten().fieldErrors }
+    return { errors: issuesByField(result.error.issues) }
   }
 
   const supabase = await createClient()

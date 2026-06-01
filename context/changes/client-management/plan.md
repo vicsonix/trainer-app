@@ -461,8 +461,8 @@ No database migrations needed — `clients` table is already defined in `supabas
 
 #### Automated
 
-- [x] 1.1 Build passes: `npm run build`
-- [x] 1.2 Lint passes: `npm run lint`
+- [x] 1.1 Build passes: `npm run build` — 1e1103c
+- [x] 1.2 Lint passes: `npm run lint` — 1e1103c
 
 #### Manual
 
@@ -475,9 +475,9 @@ No database migrations needed — `clients` table is already defined in `supabas
 
 #### Automated
 
-- [ ] 2.1 Tests pass: `npm run test`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 Build passes: `npm run build`
+- [x] 2.1 Tests pass: `npm run test`
+- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.3 Build passes: `npm run build`
 
 #### Manual
 
