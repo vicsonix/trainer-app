@@ -44,13 +44,31 @@ const sectionStyles: Record<string, { border: string; text: string; bg: string }
 interface NavLinkProps {
   href: string
   label: string
+  variant?: 'sidebar' | 'bottom-bar'
 }
 
-export default function NavLink({ href, label }: NavLinkProps) {
+export default function NavLink({ href, label, variant = 'sidebar' }: NavLinkProps) {
   const pathname = usePathname()
   const isActive = pathname.startsWith(href)
   const styles = sectionStyles[href]
   const Icon = sectionIcons[href]
+
+  if (variant === 'bottom-bar') {
+    return (
+      <Link
+        href={href}
+        className={cn(
+          'flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs font-medium border-t-2 transition-colors',
+          isActive && styles
+            ? `${styles.border} ${styles.text}`
+            : 'border-transparent text-carbon-black-400 dark:text-carbon-black-500'
+        )}
+      >
+        {Icon && <Icon size={20} className="shrink-0" />}
+        <span>{label}</span>
+      </Link>
+    )
+  }
 
   return (
     <Link
