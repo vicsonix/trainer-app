@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-05-30
+updated: 2026-06-01
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -32,7 +32,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | F-01 | ai-streaming-route        | (foundation) LLM provider wired; streaming API route in place                            | —                       | FR-015, FR-016, FR-017                 | done     |
 | S-01 | auth-registration-login   | register an account and log in with email + password                                     | auth scaffold (present) | FR-001, FR-002                         | done     |
 | S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | done     |
-| S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | proposed |
+| S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | done     |
 | S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | proposed |
 | S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | proposed |
 | S-06 | ai-assistant              | ask natural-language questions about a client or general stats                           | S-04, F-01              | FR-015, FR-016, FR-017, US-02          | proposed |
@@ -110,7 +110,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Interview notes freetext is the raw input consumed by the AI assistant (S-06). If the field is constrained (e.g., character limit, sanitisation that strips content), AI context quality degrades; keep it unconstrained in v1 per PRD Business Logic.
-- **Status:** proposed
+- **Status:** done
 
 ### S-04: Calendar and appointments
 
@@ -180,3 +180,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **S-01: trainer can register a new account and log in with email + password; session persists across browser restarts.** — Archived 2026-05-28 → `context/archive/2026-05-26-auth-registration-login/`. Lesson: —.
 - **F-01: (foundation) LLM provider wired; streaming API route in place** — Archived 2026-05-30 → `context/archive/2026-05-28-ai-streaming-route/`. Lesson: —.
 - **S-02: trainer can add a training package (name, number of visits, price), edit it, and delete it.** — Archived 2026-05-30 → `context/archive/2026-05-30-package-management/`. Lesson: —.
+- **S-03: trainer can add a client (name, contact info), assign a package, record freetext interview notes and training goals, add a training plan link, and edit all of the above.** — Archived 2026-06-01 → `context/archive/2026-06-01-client-management/`. Lesson: —.
