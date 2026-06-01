@@ -1,7 +1,7 @@
 ---
 change_id: client-management
 title: Add client management with interview notes and package assignment
-status: implementing
+status: implemented
 created: 2026-06-01
 updated: 2026-06-01
 archived_at: null
