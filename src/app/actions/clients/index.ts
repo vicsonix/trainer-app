@@ -112,17 +112,20 @@ export async function updateClientAction(
   return { success: true }
 }
 
-export async function deleteClientAction(id: string): Promise<void> {
+export async function deleteClientAction(id: string): Promise<{ error?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) return
+  if (!user) return { error: 'Sesja wygasła' }
 
-  await supabase
+  const { error } = await supabase
     .from('clients')
     .delete()
     .eq('id', id)
     .eq('trainer_id', user.id)
 
+  if (error) return { error: 'Nie udało się usunąć klienta' }
+
   revalidatePath('/clients')
+  return {}
 }

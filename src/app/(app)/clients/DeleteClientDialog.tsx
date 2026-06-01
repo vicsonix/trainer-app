@@ -26,7 +26,11 @@ export default function DeleteClientDialog({ clientId, clientName }: DeleteClien
 
   async function handleDelete() {
     try {
-      await deleteClientAction(clientId)
+      const result = await deleteClientAction(clientId)
+      if (result.error) {
+        toast.error(result.error)
+        return
+      }
       toast('Klient usunięty')
       router.refresh()
     } catch {

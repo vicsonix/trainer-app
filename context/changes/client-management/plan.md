@@ -265,7 +265,7 @@ Implement the Server Component entry point and the two display-only Client Compo
 
 **Contract**:
 - Props: `{ id, first_name, last_name, phone, email, packages: PackageOption | null }` — `interview_notes` and `plan_url` are not rendered on the card.
-- Top accent bar: `bg-gradient-to-r from-jungle-teal-500 to-jungle-teal-400` (1px high) — matches the card pattern in `lessons.md`.
+- Top accent bar: `bg-gradient-to-r from-lobster-pink-500 via-lobster-pink-400 to-tiger-orange-400` (1px high) — changed during UX review to match PackageCard and keep teal as a data-level accent only.
 - Full name as the primary heading: `{first_name} {last_name}`.
 - Contact row: render `phone` and `email` conditionally — suppress if null.
 - Package badge: if `packages` is non-null, jungle-teal pill showing `{packages.name} · {packages.visit_count} wizyt`; if null, muted pill showing "Brak pakietu".

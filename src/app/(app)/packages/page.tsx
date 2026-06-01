@@ -3,10 +3,12 @@ import PackagesClientSection from './PackagesClientSection'
 
 export default async function PackagesPage() {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
   const { data } = await supabase
     .from('packages')
     .select('*, clients(count)')
+    .eq('trainer_id', user!.id)
     .order('created_at', { ascending: false })
 
   const packages = (data ?? []).map((pkg) => ({

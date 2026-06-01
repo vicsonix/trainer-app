@@ -21,15 +21,18 @@ export interface ClientListItem {
 
 export default async function ClientsPage() {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
   const [{ data: clientsData }, { data: packagesData }] = await Promise.all([
     supabase
       .from('clients')
       .select('*, packages(id, name, visit_count)')
+      .eq('trainer_id', user!.id)
       .order('created_at', { ascending: false }),
     supabase
       .from('packages')
       .select('id, name, visit_count')
+      .eq('trainer_id', user!.id)
       .order('name', { ascending: true }),
   ])
 

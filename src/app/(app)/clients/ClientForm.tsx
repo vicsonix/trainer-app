@@ -53,7 +53,6 @@ export default function ClientForm({ action, defaultValues, packages, onSuccess 
   useEffect(() => {
     if (state && 'success' in state && state.success) {
       toast('Klient zapisany')
-      routerRef.current.refresh()
       if (onSuccessRef.current) {
         onSuccessRef.current()
       } else {
