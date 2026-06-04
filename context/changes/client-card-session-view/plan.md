@@ -170,9 +170,9 @@ No performance impact — the changes are purely presentational (CSS class logic
 
 #### Manual
 
-- [ ] 1.3 Scheduled events with >2 sessions show neutral badge; ≤2 show red badge
-- [ ] 1.4 Cancelled/no-show/completed events show no badge
-- [ ] 1.5 Short cards (30 min) in time-grid hide the badge; 60-min cards show it
+- [x] 1.3 Scheduled events with >2 sessions show neutral badge; ≤2 show red badge — 78f6cc9
+- [x] 1.4 Cancelled/no-show/completed events show no badge — 78f6cc9
+- [x] 1.5 Short cards (30 min) in time-grid hide the badge; 60-min cards show it — 78f6cc9
 
 ### Phase 2: Mobile Bottom-Sheet for Appointment Detail Modal
 
