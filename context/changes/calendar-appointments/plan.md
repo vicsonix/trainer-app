@@ -664,9 +664,9 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Automated
 
-- [x] 5.1 `npm run build` (full production build) succeeds
-- [x] 5.2 `npm run lint` passes
-- [x] 5.3 `npx tsc --noEmit` passes
+- [x] 5.1 `npm run build` (full production build) succeeds — 0a786c6
+- [x] 5.2 `npm run lint` passes — 0a786c6
+- [x] 5.3 `npx tsc --noEmit` passes — 0a786c6
 
 #### Manual
 
