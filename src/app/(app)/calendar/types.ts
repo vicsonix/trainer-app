@@ -11,6 +11,7 @@ export type CalendarEvent = {
   notes: string | null
   // Package visit: remainingSessions and packageName are set; price is the per-session rate derived from the package
   // One-off session: remainingSessions and packageName are null; price is the explicit appointment charge
+  scheduledSessions: number | null
   remainingSessions: number | null
   packageName: string | null
   packageId: string | null

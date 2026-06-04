@@ -136,9 +136,19 @@ export default function MonthView({ month, events, today, onSlotClick, onEventCl
                       )}>
                         {event.clientName}
                       </span>
-                      {event.remainingSessions !== null && event.remainingSessions <= 2 && event.status === 'scheduled' && (
-                        <span className="ml-auto shrink-0 rounded-full bg-destructive px-1 text-[10px] font-medium text-white">
-                          {event.remainingSessions}
+                      {event.scheduledSessions !== null && event.status === 'scheduled' && (
+                        <span className="ml-auto flex shrink-0 items-center gap-0.5">
+                          <span className="rounded-full bg-jungle-teal-500 px-1 text-[10px] font-medium text-white">
+                            {event.scheduledSessions}
+                          </span>
+                          {event.remainingSessions !== null && (
+                            <span className={cn(
+                              'rounded-full px-1 text-[10px] font-medium text-white',
+                              event.remainingSessions <= 2 ? 'bg-destructive' : 'bg-primary'
+                            )}>
+                              {event.remainingSessions}
+                            </span>
+                          )}
                         </span>
                       )}
                     </div>

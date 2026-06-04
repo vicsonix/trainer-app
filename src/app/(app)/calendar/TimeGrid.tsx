@@ -197,10 +197,20 @@ export default function TimeGrid({ days, events, today, onSlotClick, onEventClic
                         {subtitle}
                       </p>
                     )}
-                    {event.remainingSessions !== null && event.remainingSessions <= 2 && height > SLOT_HEIGHT * 1.5 && (
-                      <span className={cn('mt-1 inline-block rounded-full px-1.5 text-[10px] font-semibold', colors.time)}>
-                        {event.remainingSessions} wizyt
-                      </span>
+                    {event.scheduledSessions !== null && height > SLOT_HEIGHT * 1.5 && (
+                      <div className="mt-1 flex items-center gap-1">
+                        <span className="inline-block rounded-full bg-jungle-teal-500 px-1.5 text-[10px] font-semibold text-white">
+                          {event.scheduledSessions} zajęte
+                        </span>
+                        {event.remainingSessions !== null && (
+                          <span className={cn(
+                            'inline-block rounded-full px-1.5 text-[10px] font-semibold text-white',
+                            event.remainingSessions <= 2 ? 'bg-destructive' : 'bg-primary'
+                          )}>
+                            {event.remainingSessions} dostępne
+                          </span>
+                        )}
+                      </div>
                     )}
                   </button>
                 )

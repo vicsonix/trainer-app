@@ -270,14 +270,21 @@ function ModalContent({ event, tz, onClose }: ContentProps) {
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">Pakiet:</span>
                 <span className="text-sm font-medium">{event.packageName}</span>
-                {event.remainingSessions !== null && (
-                  <span className={cn(
-                    'ml-auto rounded-full px-2 py-0.5 text-xs font-semibold text-white',
-                    event.remainingSessions <= 2 ? 'bg-destructive' : 'bg-primary'
-                  )}>
-                    {event.remainingSessions} wizyt
-                  </span>
-                )}
+                <span className="ml-auto flex items-center gap-1">
+                  {event.scheduledSessions !== null && (
+                    <span className="rounded-full bg-jungle-teal-500 px-2 py-0.5 text-xs font-semibold text-white">
+                      {event.scheduledSessions} zajęte
+                    </span>
+                  )}
+                  {event.remainingSessions !== null && (
+                    <span className={cn(
+                      'rounded-full px-2 py-0.5 text-xs font-semibold text-white',
+                      event.remainingSessions <= 2 ? 'bg-destructive' : 'bg-primary'
+                    )}>
+                      {event.remainingSessions} dostępne
+                    </span>
+                  )}
+                </span>
               </div>
             )}
 
@@ -399,7 +406,7 @@ export default function AppointmentDetailModal({ open, onOpenChange, event }: Pr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg" variant="sheet">
         {/* Mount fresh content for each event; unmount on close so state resets */}
         {open && event && (
           <ModalContent
