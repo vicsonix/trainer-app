@@ -555,30 +555,30 @@ Same message-saving logic as ChatPanel (track `currentConversationId`, save on `
 
 #### Automated
 
-- [x] 1.1 `npm run build:worker && wrangler deploy --dry-run` exits 0 with bundle < 3 MiB
-- [x] 1.2 `npm run lint` passes
-- [x] 1.3 `npx tsc --noEmit` passes with no new errors
-- [x] 1.4 `npm run test` passes (existing tests unaffected)
+- [x] 1.1 `npm run build:worker && wrangler deploy --dry-run` exits 0 with bundle < 3 MiB — a437939
+- [x] 1.2 `npm run lint` passes — a437939
+- [x] 1.3 `npx tsc --noEmit` passes with no new errors — a437939
+- [x] 1.4 `npm run test` passes (existing tests unaffected) — a437939
 
 #### Manual
 
-- [x] 1.5 `POST /api/ai/chat` returns AI SDK data stream format (not custom SSE)
-- [x] 1.6 Response contains trainer context in the reply
-- [x] 1.7 Unauthenticated request returns 401
+- [x] 1.5 `POST /api/ai/chat` returns AI SDK data stream format (not custom SSE) — a437939
+- [x] 1.6 Response contains trainer context in the reply — a437939
+- [x] 1.7 Unauthenticated request returns 401 — a437939
 
 ### Phase 2: Tool Definitions
 
 #### Automated
 
-- [ ] 2.1 `npx tsc --noEmit` passes
-- [ ] 2.2 `npm run lint` passes
-- [ ] 2.3 `npm run test` passes
+- [x] 2.1 `npx tsc --noEmit` passes
+- [x] 2.2 `npm run lint` passes
+- [x] 2.3 `npm run test` passes
 
 #### Manual
 
-- [ ] 2.4 "List my clients" triggers `list_clients` tool call in stream
-- [ ] 2.5 Booking request triggers `create_appointment` tool with `approval-requested` state
-- [ ] 2.6 "Tell me about [client name]" triggers `get_client` with correct remaining-visit count
+- [x] 2.4 "List my clients" triggers `list_clients` tool call in stream
+- [x] 2.5 Booking request triggers `create_appointment` tool with `approval-requested` state
+- [x] 2.6 "Tell me about [client name]" triggers `get_client` with correct remaining-visit count
 
 ### Phase 3: UI Layer
 
