@@ -13,9 +13,10 @@ type Props = {
   onSlotClick: (datetime: Date) => void
   onEventClick: (event: CalendarEvent) => void
   hideHeader?: boolean
+  scrollHeight?: string
 }
 
-export default function DayView({ day, events, today, onSlotClick, onEventClick, hideHeader = false }: Props) {
+export default function DayView({ day, events, today, onSlotClick, onEventClick, hideHeader = false, scrollHeight }: Props) {
   const isToday  = isSameDay(day, today)
   const jsDate   = new Date(day.year, day.month - 1, day.day)
   const dayLabel = new Intl.DateTimeFormat('pl-PL', { weekday: 'long' }).format(jsDate)
@@ -24,11 +25,11 @@ export default function DayView({ day, events, today, onSlotClick, onEventClick,
     <div className="rounded-lg border border-border overflow-hidden">
       <div
         className="overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border"
-        style={{ height: 'calc(100vh - 260px)', minHeight: '400px' }}
+        style={{ height: scrollHeight ?? 'calc(100vh - 260px)', minHeight: scrollHeight ? undefined : '400px' }}
       >
         {!hideHeader && (
           <div className="sticky top-0 z-20 flex border-b border-border bg-card">
-            <div className="w-14 shrink-0 border-r border-border flex items-center justify-center">
+            <div className="w-10 shrink-0 border-r border-border flex items-center justify-center">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50">
                 GMT+2
               </span>

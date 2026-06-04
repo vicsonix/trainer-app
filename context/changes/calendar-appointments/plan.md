@@ -614,9 +614,9 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Manual
 
-- [ ] 1.2 `npx supabase db push` applies migration without error
-- [ ] 1.3 Supabase Studio shows `ends_at` and `notes` columns on appointments table
-- [ ] 1.4 Existing appointments have `ends_at = starts_at + 1 hour`
+- [x] 1.2 `npx supabase db push` applies migration without error
+- [x] 1.3 Supabase Studio shows `ends_at` and `notes` columns on appointments table
+- [x] 1.4 Existing appointments have `ends_at = starts_at + 1 hour`
 
 ### Phase 2: Appointment Server Actions
 
@@ -627,7 +627,7 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Manual
 
-- [ ] 2.3 Zod schema rejects missing `client_id` and invalid `duration` values
+- [x] 2.3 Zod schema rejects missing `client_id` and invalid `duration` values
 
 ### Phase 3: Custom Calendar Components
 
@@ -638,11 +638,11 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Manual
 
-- [ ] 3.3 Calendar renders without crashing with an empty events array
-- [ ] 3.4 Month/week/day views display correctly with correct day labels
-- [ ] 3.5 Prev/next/today navigation moves the calendar date
-- [ ] 3.6 Mobile viewport (`<640px`) auto-shows day view on mount
-- [ ] 3.7 Slot click and event click handlers fire correctly (no cross-firing)
+- [x] 3.3 Calendar renders without crashing with an empty events array
+- [x] 3.4 Month/week/day views display correctly with correct day labels
+- [x] 3.5 Prev/next/today navigation moves the calendar date
+- [x] 3.6 Mobile viewport (`<640px`) auto-shows day view on mount
+- [x] 3.7 Slot click and event click handlers fire correctly (no cross-firing)
 
 ### Phase 4: Appointment Modals
 
@@ -653,12 +653,12 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Manual
 
-- [ ] 4.3 Slot click opens create modal with date pre-filled
-- [ ] 4.4 Creating appointment via modal works end-to-end; event appears in calendar
-- [ ] 4.5 Missing client field shows inline error; does not submit
-- [ ] 4.6 Event click opens detail modal with correct client name and remaining sessions
-- [ ] 4.7 Edit mode pre-fills all fields; successful update reflects in the calendar
-- [ ] 4.8 Delete confirmation removes the event from the calendar
+- [x] 4.3 Slot click opens create modal with date pre-filled
+- [x] 4.4 Creating appointment via modal works end-to-end; event appears in calendar
+- [x] 4.5 Missing client field shows inline error; does not submit
+- [x] 4.6 Event click opens detail modal with correct client name and remaining sessions
+- [x] 4.7 Edit mode pre-fills all fields; successful update reflects in the calendar
+- [x] 4.8 Delete confirmation removes the event from the calendar
 
 ### Phase 5: Calendar Page Assembly
 
@@ -670,22 +670,22 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Manual
 
-- [ ] 5.4 `/calendar` renders with real appointment data from Supabase
-- [ ] 5.5 Full create → view → click → edit → delete flow works without page reload
-- [ ] 5.6 Remaining sessions count matches `package.visit_count - appointment count`
-- [ ] 5.7 Mobile viewport (`<640px`) auto-shows day view
+- [x] 5.4 `/calendar` renders with real appointment data from Supabase
+- [x] 5.5 Full create → view → click → edit → delete flow works without page reload
+- [x] 5.6 Remaining sessions count matches `package.visit_count - appointment count`
+- [x] 5.7 Mobile viewport (`<640px`) auto-shows day view
 
 ### Phase 6: Testing
 
 #### Automated
 
-- [ ] 6.1 `npm run test` passes all unit tests including `appointments.test.ts`
-- [ ] 6.2 `npx playwright test` passes `calendar.spec.ts`
+- [x] 6.1 `npm run test` passes all unit tests including `appointments.test.ts`
+- [x] 6.2 `npx playwright test` passes `calendar.spec.ts`
 
 #### Manual
 
-- [ ] 6.3 Each test name clearly describes the risk it covers
-- [ ] 6.4 E2E test failure output identifies which specific step failed
+- [x] 6.3 Each test name clearly describes the risk it covers
+- [x] 6.4 E2E test failure output identifies which specific step failed
 
 ### Phase 7: Overlap Guard + Appointment Status
 
@@ -696,8 +696,8 @@ The migration adds `ends_at` with a `DEFAULT`, so existing appointment rows are 
 
 #### Manual
 
-- [ ] 7.3 `npx supabase db push` applies status migration without error
-- [ ] 7.4 Creating an overlapping appointment shows the conflict error message
-- [ ] 7.5 Editing an appointment to overlap another also shows the conflict error
-- [ ] 7.6 Status badge and quick-change buttons work correctly in the detail modal
-- [ ] 7.7 Calendar chips show correct visual state for all four statuses
+- [x] 7.3 `npx supabase db push` applies status migration without error
+- [x] 7.4 Creating an overlapping appointment shows the conflict error message
+- [x] 7.5 Editing an appointment to overlap another also shows the conflict error
+- [x] 7.6 Status badge and quick-change buttons work correctly in the detail modal
+- [x] 7.7 Calendar chips show correct visual state for all four statuses

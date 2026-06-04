@@ -25,7 +25,11 @@ export default function CalendarView({ events, onSlotClick, onEventClick }: Prop
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)')
-    const sync = (matches: boolean) => setIsMobile(matches)
+    const sync = (matches: boolean) => {
+      setIsMobile(matches)
+      // 'week' view is not available on mobile — fall back to 'day'
+      if (matches) setView(prev => prev === 'week' ? 'day' : prev)
+    }
     const handler = (e: MediaQueryListEvent) => sync(e.matches)
     mq.addEventListener('change', handler)
     sync(mq.matches)
@@ -72,54 +76,48 @@ export default function CalendarView({ events, onSlotClick, onEventClick }: Prop
       const d = fromJsDate(e.startsAt)
       return d.year === currentDate.year && d.month === currentDate.month
     })
-    const monthLabel = new Intl.DateTimeFormat('pl-PL', { month: 'long', year: 'numeric' }).format(
+    // Short month label fits alongside the tab group on one line
+    const monthLabel = new Intl.DateTimeFormat('pl-PL', { month: 'short', year: 'numeric' }).format(
       new Date(currentDate.year, currentDate.month - 1, currentDate.day)
     )
 
     const MOBILE_VIEWS: { value: CalendarView; label: string }[] = [
       { value: 'month', label: 'Miesiąc' },
-      { value: 'week',  label: 'Tydzień' },
       { value: 'day',   label: 'Dzień' },
     ]
 
-    function mobileNavigate(dir: 1 | -1) {
-      setCurrentDate(prev =>
-        view === 'month'
-          ? prev.add({ months: dir })
-          : prev.add({ weeks: dir })
-      )
-    }
-
     return (
-      <div className="flex flex-col gap-3">
-        {/* Row 1: period navigation — prev / label / next */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => mobileNavigate(-1)}
-            aria-label="Poprzedni"
-            className="p-1 text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <span className="text-sm font-semibold capitalize">{monthLabel}</span>
-          <button
-            onClick={() => mobileNavigate(1)}
-            aria-label="Następny"
-            className="p-1 text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
+      <div className="flex flex-col gap-2">
+        {/* Single header row: month nav on left, [Dziś|Miesiąc|Dzień] tabs on right */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={() => setCurrentDate(prev => prev.add({ months: -1 }))}
+              aria-label="Poprzedni miesiąc"
+              className="rounded p-1 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ChevronLeft size={14} />
+            </button>
+            <span className="min-w-[72px] text-center text-xs font-semibold capitalize">
+              {monthLabel}
+            </span>
+            <button
+              onClick={() => setCurrentDate(prev => prev.add({ months: 1 }))}
+              aria-label="Następny miesiąc"
+              className="rounded p-1 text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ChevronRight size={14} />
+            </button>
+          </div>
 
-        {/* Row 2: today shortcut + view switcher (full width avoids overflow) */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => setCurrentDate(today(getLocalTimeZone()))}
-            className="text-xs font-semibold text-primary"
-          >
-            Dziś
-          </button>
           <div className="flex rounded-lg border border-border overflow-hidden">
+            {/* Dziś is an action, not a view — sits alongside the view tabs */}
+            <button
+              onClick={() => setCurrentDate(today(getLocalTimeZone()))}
+              className="border-r border-border px-2.5 py-1 text-xs font-semibold text-primary transition-colors hover:bg-muted"
+            >
+              Dziś
+            </button>
             {MOBILE_VIEWS.map(v => (
               <button
                 key={v.value}
@@ -136,7 +134,7 @@ export default function CalendarView({ events, onSlotClick, onEventClick }: Prop
           </div>
         </div>
 
-        {/* Month view */}
+        {/* Month view — compact dots, tap day → switches to day view */}
         {view === 'month' && (
           <MonthView
             month={currentDate}
@@ -144,18 +142,19 @@ export default function CalendarView({ events, onSlotClick, onEventClick }: Prop
             today={todayDate}
             onSlotClick={date => { setCurrentDate(date); setView('day') }}
             onEventClick={onEventClick}
+            isMobile
           />
         )}
 
-        {/* Week / Day: day strip + single-day time grid */}
-        {(view === 'week' || view === 'day') && (
+        {/* Day view: 3-day strip + height-constrained time grid */}
+        {view === 'day' && (
           <>
             <MobileDayStrip
               currentDate={currentDate}
               today={todayDate}
               onSelectDay={setCurrentDate}
-              onPrevWeek={() => setCurrentDate(prev => prev.add({ weeks: -1 }))}
-              onNextWeek={() => setCurrentDate(prev => prev.add({ weeks: 1 }))}
+              onPrevDay={() => setCurrentDate(prev => prev.add({ days: -1 }))}
+              onNextDay={() => setCurrentDate(prev => prev.add({ days: 1 }))}
             />
             <DayView
               day={currentDate}
@@ -164,6 +163,7 @@ export default function CalendarView({ events, onSlotClick, onEventClick }: Prop
               onSlotClick={onSlotClick}
               onEventClick={onEventClick}
               hideHeader
+              scrollHeight="calc(100dvh - 310px)"
             />
           </>
         )}

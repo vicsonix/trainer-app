@@ -5,6 +5,7 @@ import { CalendarDate } from '@internationalized/date'
 import type { CalendarEvent } from './types'
 import { getTimeSlots, toJsDate, fromJsDate, isSameDay } from './utils/dates'
 import { positionEvents } from './utils/eventPositioning'
+import { useLongPress } from './utils/useLongPress'
 import { cn } from '@/lib/utils'
 
 export const SLOT_HEIGHT = 48
@@ -25,10 +26,10 @@ function formatTime(date: Date) {
 // Design pattern from Vanguard: dark card bg with subtle colour tint + vivid left accent bar
 // + matching vivid time text. Name stays in foreground colour for legibility in both themes.
 const EVENT_COLORS = [
-  { hover: 'hover:bg-lobster-pink-500/10', accent: 'border-l-lobster-pink-500', time: 'text-lobster-pink-500 dark:text-lobster-pink-400' },
-  { hover: 'hover:bg-jungle-teal-500/10',  accent: 'border-l-jungle-teal-500',  time: 'text-jungle-teal-600  dark:text-jungle-teal-400'  },
-  { hover: 'hover:bg-tiger-orange-500/10', accent: 'border-l-tiger-orange-500', time: 'text-tiger-orange-600 dark:text-tiger-orange-400' },
-  { hover: 'hover:bg-soft-linen-500/10',   accent: 'border-l-soft-linen-500',   time: 'text-soft-linen-600  dark:text-soft-linen-400'   },
+  { accent: 'border-l-lobster-pink-500', time: 'text-lobster-pink-500 dark:text-lobster-pink-400' },
+  { accent: 'border-l-jungle-teal-500',  time: 'text-jungle-teal-600  dark:text-jungle-teal-400'  },
+  { accent: 'border-l-tiger-orange-500', time: 'text-tiger-orange-600 dark:text-tiger-orange-400' },
+  { accent: 'border-l-soft-linen-500',   time: 'text-soft-linen-600  dark:text-soft-linen-400'   },
 ] as const
 
 function clientColorScheme(clientId: string) {
@@ -72,23 +73,56 @@ function CurrentTimeIndicator({ days, today }: { days: CalendarDate[]; today: Ca
   )
 }
 
+// Each slot is its own component so the useLongPress hook can be called at the top level.
+function SlotButton({
+  slot,
+  slotIdx,
+  onTrigger,
+}: {
+  slot: string
+  slotIdx: number
+  onTrigger: () => void
+}) {
+  const { handlers, longPressing } = useLongPress(onTrigger)
+
+  return (
+    <button
+      aria-label={slot}
+      {...handlers}
+      className={cn(
+        'block w-full p-0 border-b transition-colors',
+        slotIdx % 2 === 0 ? 'border-border/30' : 'border-border',
+        longPressing ? 'bg-primary/20' : 'hover:bg-muted/50',
+      )}
+      style={{ height: SLOT_HEIGHT }}
+    />
+  )
+}
+
 // Pure content — no scroll container. WeekView/DayView own the scroll + sticky headers.
 export default function TimeGrid({ days, events, today, onSlotClick, onEventClick }: TimeGridProps) {
   const slots = getTimeSlots()
 
   return (
-    <div className="flex pt-3">
-      {/* Time labels */}
-      <div className="w-14 shrink-0 border-r border-border">
-        {slots.map((slot, i) => (
-          <div key={slot} className="relative" style={{ height: SLOT_HEIGHT }}>
-            {i % 2 === 0 && (
-              <span className="absolute right-2 -top-2 select-none text-[11px] leading-none text-muted-foreground">
-                {slot}
-              </span>
-            )}
-          </div>
-        ))}
+    <div className="flex">
+      {/* Time labels — absolutely positioned using the same pixel math as events
+          so labels never drift from grid lines regardless of button UA defaults */}
+      <div
+        className="relative w-10 shrink-0 border-r border-border"
+        style={{ height: slots.length * SLOT_HEIGHT }}
+      >
+        {slots.map((slot, i) => {
+          if (i % 2 !== 0) return null
+          return (
+            <span
+              key={slot}
+              className="absolute right-2 select-none text-[11px] leading-none text-muted-foreground"
+              style={{ top: i === 0 ? 2 : i * SLOT_HEIGHT - 11 }}
+            >
+              {slot}
+            </span>
+          )
+        })}
       </div>
 
       {/* Day columns */}
@@ -108,15 +142,11 @@ export default function TimeGrid({ days, events, today, onSlotClick, onEventClic
               {slots.map((slot, slotIdx) => {
                 const [h, m] = slot.split(':').map(Number)
                 return (
-                  <button
+                  <SlotButton
                     key={slot}
-                    aria-label={slot}
-                    onClick={() => onSlotClick(toJsDate(day, h, m))}
-                    className={cn(
-                      'w-full border-b transition-colors hover:bg-muted/50',
-                      slotIdx % 2 === 0 ? 'border-border' : 'border-border/30'
-                    )}
-                    style={{ height: SLOT_HEIGHT }}
+                    slot={slot}
+                    slotIdx={slotIdx}
+                    onTrigger={() => onSlotClick(toJsDate(day, h, m))}
                   />
                 )
               })}
@@ -141,10 +171,10 @@ export default function TimeGrid({ days, events, today, onSlotClick, onEventClic
                     key={event.id}
                     onClick={e => { e.stopPropagation(); onEventClick(event) }}
                     className={cn(
-                      'absolute z-10 overflow-hidden rounded-sm border-l-2 bg-background p-2 text-left transition-colors',
+                      'absolute z-10 overflow-hidden rounded-sm border border-border border-l-2 p-2 text-left transition-colors',
                       isCompleted
-                        ? 'bg-green-500/15 hover:bg-green-500/25 border-l-green-500'
-                        : cn(colors.hover, colors.accent),
+                        ? 'bg-green-100 hover:bg-green-200 dark:bg-green-950 dark:hover:bg-green-900 border-l-green-500'
+                        : cn('bg-card hover:bg-event-hover', colors.accent),
                       event.status === 'cancelled' && 'opacity-40',
                       event.status === 'no_show'   && 'opacity-50',
                     )}
@@ -152,7 +182,7 @@ export default function TimeGrid({ days, events, today, onSlotClick, onEventClic
                   >
                     <p className={cn(
                       'truncate text-[10px] leading-none font-semibold mb-1',
-                      isCompleted ? 'text-green-600 dark:text-green-400' : colors.time
+                      isCompleted ? 'text-green-700 dark:text-green-400' : colors.time
                     )}>
                       {formatTime(event.startsAt)} – {formatTime(event.endsAt)}
                     </p>

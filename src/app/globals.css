@@ -21,6 +21,7 @@
   --border: #ded3ba;
   --input: #cebe97;
   --ring: #db5764;
+  --event-hover: #f0f0f0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,6 +44,7 @@
     --border: #4a4d4f;
     --input: #313335;
     --ring: #d22d3d;
+    --event-hover: #252829;
   }
 }
 
@@ -67,6 +69,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-event-hover: var(--event-hover);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);

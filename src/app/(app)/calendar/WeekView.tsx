@@ -28,7 +28,7 @@ export default function WeekView({ week, events, today, onSlotClick, onEventClic
       >
         {/* Sticky day-header row — inside the scroll so scrollbar width is shared */}
         <div className="sticky top-0 z-20 flex border-b border-border bg-card">
-          <div className="w-14 shrink-0 border-r border-border flex items-center justify-center">
+          <div className="w-10 shrink-0 border-r border-border flex items-center justify-center">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50">
               GMT+2
             </span>

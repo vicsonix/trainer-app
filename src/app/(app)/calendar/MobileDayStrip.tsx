@@ -2,43 +2,51 @@
 
 import { CalendarDate } from '@internationalized/date'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getWeekDays, isSameDay } from './utils/dates'
+import { addDays, isSameDay } from './utils/dates'
 import { cn } from '@/lib/utils'
-
-const DAY_ABBR = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd']
 
 type Props = {
   currentDate: CalendarDate
   today: CalendarDate
   onSelectDay: (day: CalendarDate) => void
-  onPrevWeek: () => void
-  onNextWeek: () => void
+  onPrevDay: () => void
+  onNextDay: () => void
 }
 
-export default function MobileDayStrip({ currentDate, today, onSelectDay, onPrevWeek, onNextWeek }: Props) {
-  const days = getWeekDays(currentDate)
+export default function MobileDayStrip({ currentDate, today, onSelectDay, onPrevDay, onNextDay }: Props) {
+  const days = [
+    addDays(currentDate, -1),
+    currentDate,
+    addDays(currentDate, 1),
+  ]
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       <button
-        onClick={onPrevWeek}
+        onClick={onPrevDay}
         className="shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted"
-        aria-label="Poprzedni tydzień"
+        aria-label="Poprzedni dzień"
       >
         <ChevronLeft size={18} />
       </button>
 
-      <div className="flex flex-1 justify-between gap-1 overflow-x-auto py-1 [&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-1 justify-around gap-2 py-1">
         {days.map((day, i) => {
           const isSelected = isSameDay(day, currentDate)
           const isToday    = isSameDay(day, today)
+          const jsDate     = new Date(day.year, day.month - 1, day.day)
+          const abbr       = jsDate
+            .toLocaleDateString('pl-PL', { weekday: 'short' })
+            .replace('.', '')
+            .slice(0, 2)
+            .toUpperCase()
 
           return (
             <button
               key={i}
               onClick={() => onSelectDay(day)}
               className={cn(
-                'flex min-w-[44px] flex-col items-center justify-center rounded-xl px-2 py-2 transition-colors',
+                'flex min-w-[64px] flex-1 flex-col items-center justify-center rounded-xl px-2 py-2 transition-colors',
                 isSelected
                   ? 'bg-primary text-primary-foreground'
                   : isToday
@@ -46,7 +54,7 @@ export default function MobileDayStrip({ currentDate, today, onSelectDay, onPrev
                   : 'bg-muted/40 text-foreground hover:bg-muted'
               )}
             >
-              <span className="text-[11px] font-medium leading-none">{DAY_ABBR[i]}</span>
+              <span className="text-[11px] font-medium leading-none">{abbr}</span>
               <span className="mt-1 text-base font-bold leading-none">{day.day}</span>
             </button>
           )
@@ -54,9 +62,9 @@ export default function MobileDayStrip({ currentDate, today, onSelectDay, onPrev
       </div>
 
       <button
-        onClick={onNextWeek}
+        onClick={onNextDay}
         className="shrink-0 rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted"
-        aria-label="Następny tydzień"
+        aria-label="Następny dzień"
       >
         <ChevronRight size={18} />
       </button>
