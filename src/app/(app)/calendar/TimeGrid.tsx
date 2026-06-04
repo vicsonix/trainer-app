@@ -110,6 +110,7 @@ export default function TimeGrid({ days, events, today, onSlotClick, onEventClic
                 return (
                   <button
                     key={slot}
+                    aria-label={slot}
                     onClick={() => onSlotClick(toJsDate(day, h, m))}
                     className={cn(
                       'w-full border-b transition-colors hover:bg-muted/50',

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { CalendarDate, today, getLocalTimeZone } from '@internationalized/date'
 import type { CalendarView, CalendarEvent } from './types'
 import { getWeekDays, fromJsDate, isSameDay } from './utils/dates'
@@ -81,33 +82,57 @@ export default function CalendarView({ events, onSlotClick, onEventClick }: Prop
       { value: 'day',   label: 'Dzień' },
     ]
 
+    function mobileNavigate(dir: 1 | -1) {
+      setCurrentDate(prev =>
+        view === 'month'
+          ? prev.add({ months: dir })
+          : prev.add({ weeks: dir })
+      )
+    }
+
     return (
       <div className="flex flex-col gap-3">
-        {/* Compact header: label + today + view switcher */}
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-medium capitalize text-muted-foreground">{monthLabel}</span>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setCurrentDate(today(getLocalTimeZone()))}
-              className="text-xs font-semibold text-primary"
-            >
-              Dziś
-            </button>
-            <div className="flex rounded-lg border border-border overflow-hidden">
-              {MOBILE_VIEWS.map(v => (
-                <button
-                  key={v.value}
-                  onClick={() => setView(v.value)}
-                  className={`px-2.5 py-1 text-xs transition-colors ${
-                    view === v.value
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-background text-foreground hover:bg-muted'
-                  }`}
-                >
-                  {v.label}
-                </button>
-              ))}
-            </div>
+        {/* Row 1: period navigation — prev / label / next */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => mobileNavigate(-1)}
+            aria-label="Poprzedni"
+            className="p-1 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ChevronLeft size={16} />
+          </button>
+          <span className="text-sm font-semibold capitalize">{monthLabel}</span>
+          <button
+            onClick={() => mobileNavigate(1)}
+            aria-label="Następny"
+            className="p-1 text-muted-foreground transition-colors hover:text-foreground"
+          >
+            <ChevronRight size={16} />
+          </button>
+        </div>
+
+        {/* Row 2: today shortcut + view switcher (full width avoids overflow) */}
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setCurrentDate(today(getLocalTimeZone()))}
+            className="text-xs font-semibold text-primary"
+          >
+            Dziś
+          </button>
+          <div className="flex rounded-lg border border-border overflow-hidden">
+            {MOBILE_VIEWS.map(v => (
+              <button
+                key={v.value}
+                onClick={() => setView(v.value)}
+                className={`px-2.5 py-1 text-xs transition-colors ${
+                  view === v.value
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-background text-foreground hover:bg-muted'
+                }`}
+              >
+                {v.label}
+              </button>
+            ))}
           </div>
         </div>
 
