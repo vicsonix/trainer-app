@@ -26,12 +26,22 @@ create table public.clients (
 );
 
 -- appointments: individual sessions in the trainer's calendar
+-- package_id links to a package visit (null = one-off session charged via price)
+-- price is set explicitly for one-off sessions; for package visits it is derived from package.price / package.visit_count
 create table public.appointments (
   id         uuid primary key default gen_random_uuid(),
   trainer_id uuid not null references auth.users(id) on delete cascade,
   client_id  uuid not null references public.clients(id) on delete cascade,
+  package_id uuid references public.packages(id) on delete set null,
   starts_at  timestamptz not null,
-  created_at timestamptz not null default now()
+  ends_at    timestamptz not null,
+  notes      text,
+  price      numeric(10, 2),
+  status     text        not null default 'scheduled'
+               constraint appointments_status_check
+                 check (status in ('scheduled', 'completed', 'cancelled', 'no_show')),
+  created_at timestamptz not null default now(),
+  constraint chk_ends_after_starts check (ends_at > starts_at)
 );
 
 -- Row Level Security: each trainer sees only their own data

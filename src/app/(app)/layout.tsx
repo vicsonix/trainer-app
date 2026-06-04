@@ -94,7 +94,7 @@ export default async function DashboardLayout({
       </nav>
 
       {/* ── Main content ──────────────────────────────────────────────── */}
-      <main className="flex-1 md:pl-56 pt-14 md:pt-0 pb-16 md:pb-0">
+      <main className="flex-1 min-w-0 md:pl-56 pt-14 md:pt-0 pb-16 md:pb-0">
         {children}
       </main>
     </div>
