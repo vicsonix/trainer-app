@@ -105,8 +105,8 @@ Widok podsumowania miesięcznego: liczba odbytych wizyt, szacowany przychód. Pr
 ### Kalendarz i wizyty
 
 - FR-010: Trener może dodać wizytę do kalendarza (data, godzina, przypisany klient). Priority: must-have
-- FR-011: Trener może przeglądać kalendarz w widoku tygodniowym. Priority: must-have
-  > Socratic: Kontrargument: "potrzeba widoku miesięcznego." Odrzucony — trener planuje tygodniowo.
+- FR-011: Trener może przeglądać kalendarz w widoku miesięcznym, tygodniowym i dziennym oraz przełączać się między nimi. Priority: must-have
+  > Socratic: Widok tygodniowy to domyślny i najważniejszy — trener planuje tygodniowo. Widoki miesięczny i dzienny dodane w S-04 na żądanie, aby umożliwić szybki przegląd miesiąca i szczegółowy widok dnia.
 - FR-012: Trener może kliknąć na wizytę i zobaczyć pełną kartę klienta. Priority: must-have
   > Socratic: Brak kontrargumentu — to core value flow.
 - FR-013: Trener może edytować i usunąć wizytę. Priority: must-have
