@@ -51,20 +51,28 @@ export default async function CalendarPage() {
   const appointments = (apptData ?? []) as unknown as ApptRow[]
   const clientRows  = (clientData ?? []) as unknown as ClientRow[]
 
-  // Count appointments per package_id (only package visits count against package)
-  const sessionCountByPackageId: Record<string, number> = {}
+  // Completed appointments consume a package slot; cancelled/rescheduled ones do not
+  const completedCountByPackageId: Record<string, number> = {}
+  const scheduledCountByPackageId: Record<string, number> = {}
   for (const appt of appointments) {
-    if (appt.package_id) {
-      sessionCountByPackageId[appt.package_id] = (sessionCountByPackageId[appt.package_id] ?? 0) + 1
+    if (!appt.package_id) continue
+    if (appt.status === 'completed') {
+      completedCountByPackageId[appt.package_id] = (completedCountByPackageId[appt.package_id] ?? 0) + 1
+    } else if (appt.status === 'scheduled') {
+      scheduledCountByPackageId[appt.package_id] = (scheduledCountByPackageId[appt.package_id] ?? 0) + 1
     }
   }
 
   const events: CalendarEvent[] = appointments.map(appt => {
     const client = appt.clients
     const pkg    = client?.packages ?? null
+    const scheduledSessions =
+      pkg && appt.package_id
+        ? (scheduledCountByPackageId[appt.package_id] ?? 0)
+        : null
     const remainingSessions =
       pkg && appt.package_id
-        ? pkg.visit_count - (sessionCountByPackageId[appt.package_id] ?? 0)
+        ? pkg.visit_count - (completedCountByPackageId[appt.package_id] ?? 0) - (scheduledCountByPackageId[appt.package_id] ?? 0)
         : null
 
     return {
@@ -74,6 +82,7 @@ export default async function CalendarPage() {
       startsAt:          new Date(appt.starts_at),
       endsAt:            new Date(appt.ends_at),
       notes:             appt.notes,
+      scheduledSessions,
       remainingSessions,
       packageName:       pkg?.name ?? null,
       packageId:         appt.package_id,
