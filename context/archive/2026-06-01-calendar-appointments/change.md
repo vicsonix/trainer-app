@@ -1,10 +1,10 @@
 ---
 change_id: calendar-appointments
 title: Calendar appointments feature (S-04)
-status: implemented
+status: archived
 created: 2026-06-01
 updated: 2026-06-04
-archived_at: null
+archived_at: 2026-06-04T14:16:52Z
 ---
 
 ## Notes

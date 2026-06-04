@@ -252,5 +252,5 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **F-01: (foundation) LLM provider wired; streaming API route in place** — Archived 2026-05-30 → `context/archive/2026-05-28-ai-streaming-route/`. Lesson: —.
 - **S-02: trainer can add a training package (name, number of visits, price), edit it, and delete it.** — Archived 2026-05-30 → `context/archive/2026-05-30-package-management/`. Lesson: —.
 - **S-03: trainer can add a client (name, contact info), assign a package, record freetext interview notes and training goals, add a training plan link, and edit all of the above.** — Archived 2026-06-01 → `context/archive/2026-06-01-client-management/`. Lesson: —.
-- **S-04: trainer can add an appointment to the weekly calendar, view the current week, and edit or delete any appointment.** — Archived 2026-06-04 → `context/archive/`. Lesson: —.
+- **S-04: trainer can add an appointment to the weekly calendar, view the current week, and edit or delete any appointment.** — Archived 2026-06-04 → `context/archive/2026-06-01-calendar-appointments/`. Lesson: —.
 - **S-05: tap an appointment and see the full client card with remaining package visits** — Archived 2026-06-04 → `context/archive/2026-06-04-client-card-session-view/`. Lesson: —.
