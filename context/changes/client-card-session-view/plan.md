@@ -165,8 +165,8 @@ No performance impact — the changes are purely presentational (CSS class logic
 
 #### Automated
 
-- [x] 1.1 `npm run build` passes with no TypeScript errors
-- [x] 1.2 `npm run lint` passes (0 errors; 2 pre-existing warnings unrelated to this change)
+- [x] 1.1 `npm run build` passes with no TypeScript errors — 78f6cc9
+- [x] 1.2 `npm run lint` passes (0 errors; 2 pre-existing warnings unrelated to this change) — 78f6cc9
 
 #### Manual
 
@@ -178,12 +178,12 @@ No performance impact — the changes are purely presentational (CSS class logic
 
 #### Automated
 
-- [ ] 2.1 `npm run build` passes with no TypeScript errors
-- [ ] 2.2 `npm run lint` passes
+- [x] 2.1 `npm run build` passes with no TypeScript errors
+- [x] 2.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 2.3 Mobile viewport (375px): modal slides up as bottom sheet with rounded top corners
-- [ ] 2.4 Backdrop tap and Escape both dismiss the sheet
-- [ ] 2.5 Desktop viewport: modal remains centred, no visual change
-- [ ] 2.6 All modal interactions (edit, delete, status change) work on both viewports
+- [x] 2.3 Mobile viewport (375px): modal slides up as bottom sheet with rounded top corners
+- [x] 2.4 Backdrop tap and Escape both dismiss the sheet
+- [x] 2.5 Desktop viewport: modal remains centred, no visual change
+- [x] 2.6 All modal interactions (edit, delete, status change) work on both viewports

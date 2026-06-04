@@ -406,7 +406,7 @@ export default function AppointmentDetailModal({ open, onOpenChange, event }: Pr
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg" variant="sheet">
         {/* Mount fresh content for each event; unmount on close so state resets */}
         {open && event && (
           <ModalContent
