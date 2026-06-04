@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-06-01
+updated: 2026-06-04
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -34,7 +34,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | done     |
 | S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | done     |
 | S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | proposed |
-| S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | proposed |
+| S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | done     |
 | S-06 | ai-assistant              | ask natural-language questions about a client or general stats                           | S-04, F-01              | FR-015, FR-016, FR-017, US-02          | proposed |
 
 ## Streams
@@ -134,7 +134,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Acceptance criterion: client card must load within 2 seconds on a mobile network (NFR). The Supabase query fetching client + package + visit count should fit in one round-trip; verify under realistic network conditions before closing this slice.
-- **Status:** proposed
+- **Status:** done
 
 ### S-06: AI assistant
 
@@ -181,3 +181,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **F-01: (foundation) LLM provider wired; streaming API route in place** — Archived 2026-05-30 → `context/archive/2026-05-28-ai-streaming-route/`. Lesson: —.
 - **S-02: trainer can add a training package (name, number of visits, price), edit it, and delete it.** — Archived 2026-05-30 → `context/archive/2026-05-30-package-management/`. Lesson: —.
 - **S-03: trainer can add a client (name, contact info), assign a package, record freetext interview notes and training goals, add a training plan link, and edit all of the above.** — Archived 2026-06-01 → `context/archive/2026-06-01-client-management/`. Lesson: —.
+- **S-05: tap an appointment and see the full client card with remaining package visits** — Archived 2026-06-04 → `context/archive/2026-06-04-client-card-session-view/`. Lesson: —.
