@@ -33,11 +33,11 @@ export default function PackagesClientSection({ packages }: PackagesClientSectio
       <div className="mb-8 flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-lobster-pink-600 to-lobster-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold tracking-tight">
               Pakiety
             </h1>
             {packages.length > 0 && (
-              <span className="rounded-full bg-lobster-pink-100 dark:bg-lobster-pink-900/50 px-2.5 py-0.5 text-xs font-semibold text-lobster-pink-600 dark:text-lobster-pink-300">
+              <span className="rounded-full bg-soft-linen-100 dark:bg-carbon-black-800 px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
                 {packages.length}
               </span>
             )}

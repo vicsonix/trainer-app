@@ -3,6 +3,8 @@ import { Dumbbell } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { logoutAction } from '@/app/actions/auth'
 import NavLink from '@/components/NavLink'
+import { ChatWrapper } from '@/components/ChatWrapper'
+import { MobileHeader } from '@/components/MobileHeader'
 
 const navLinks = [
   { href: '/dashboard', label: 'Panel' },
@@ -11,6 +13,8 @@ const navLinks = [
   { href: '/calendar',  label: 'Kalendarz' },
   { href: '/assistant', label: 'Asystent' },
 ]
+
+const mobileNavLinks = navLinks.filter(({ href }) => href !== '/assistant')
 
 export default async function DashboardLayout({
   children,
@@ -68,27 +72,12 @@ export default async function DashboardLayout({
         </div>
       </aside>
 
-      {/* ── Mobile top bar ────────────────────────────────────────────── */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-10 flex items-center justify-between px-4 py-3 bg-white/80 dark:bg-carbon-black-900/80 backdrop-blur-md border-b border-soft-linen-200 dark:border-carbon-black-800">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-lobster-pink-400 to-lobster-pink-700 flex items-center justify-center shadow-sm">
-            <Dumbbell size={13} className="text-white" />
-          </div>
-          <span className="text-sm font-semibold tracking-tight">Trainer</span>
-        </div>
-        <form action={logoutAction}>
-          <button
-            type="submit"
-            className="rounded-md border border-soft-linen-300 px-3 py-1.5 text-xs font-medium text-carbon-black-600 hover:bg-soft-linen-100 dark:border-carbon-black-700 dark:text-carbon-black-300 dark:hover:bg-carbon-black-800 transition-colors"
-          >
-            Wyloguj
-          </button>
-        </form>
-      </header>
+      {/* ── Mobile top bar (with chat trigger) ───────────────────────── */}
+      <MobileHeader />
 
       {/* ── Mobile bottom nav ─────────────────────────────────────────── */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-10 flex border-t border-soft-linen-200 dark:border-carbon-black-800 bg-white/80 dark:bg-carbon-black-900/80 backdrop-blur-sm safe-area-inset-bottom">
-        {navLinks.map(({ href, label }) => (
+        {mobileNavLinks.map(({ href, label }) => (
           <NavLink key={href} href={href} label={label} variant="bottom-bar" />
         ))}
       </nav>
@@ -97,6 +86,8 @@ export default async function DashboardLayout({
       <main className="flex-1 min-w-0 md:pl-56 pt-14 md:pt-0 pb-16 md:pb-0">
         {children}
       </main>
+
+      <ChatWrapper />
     </div>
   )
 }

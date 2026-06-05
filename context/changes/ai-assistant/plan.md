@@ -570,31 +570,31 @@ Same message-saving logic as ChatPanel (track `currentConversationId`, save on `
 
 #### Automated
 
-- [x] 2.1 `npx tsc --noEmit` passes
-- [x] 2.2 `npm run lint` passes
-- [x] 2.3 `npm run test` passes
+- [x] 2.1 `npx tsc --noEmit` passes — 368fa63
+- [x] 2.2 `npm run lint` passes — 368fa63
+- [x] 2.3 `npm run test` passes — 368fa63
 
 #### Manual
 
-- [x] 2.4 "List my clients" triggers `list_clients` tool call in stream
-- [x] 2.5 Booking request triggers `create_appointment` tool with `approval-requested` state
-- [x] 2.6 "Tell me about [client name]" triggers `get_client` with correct remaining-visit count
+- [x] 2.4 "List my clients" triggers `list_clients` tool call in stream — 368fa63
+- [x] 2.5 Booking request triggers `create_appointment` tool with `approval-requested` state — 368fa63
+- [x] 2.6 "Tell me about [client name]" triggers `get_client` with correct remaining-visit count — 368fa63
 
 ### Phase 3: UI Layer
 
 #### Automated
 
-- [ ] 3.1 `npx tsc --noEmit` passes
-- [ ] 3.2 `npm run lint` passes
+- [x] 3.1 `npx tsc --noEmit` passes
+- [x] 3.2 `npm run lint` passes
 
 #### Manual
 
-- [ ] 3.3 Floating button visible on all app pages except `/assistant`
-- [ ] 3.4 Panel opens/closes; typing indicator visible during stream
-- [ ] 3.5 Polish confirmation card appears for write actions; Approve executes, Cancel cancels
-- [ ] 3.6 Failed write shows natural-language error (not raw JSON)
-- [ ] 3.7 `/assistant` page loads with full-screen chat
-- [ ] 3.8 Works on mobile (button above bottom nav; panel clears nav)
+- [x] 3.3 Floating button visible on all app pages except `/assistant`
+- [x] 3.4 Panel opens/closes; typing indicator visible during stream
+- [x] 3.5 Polish confirmation card appears for write actions; Approve executes, Cancel cancels
+- [x] 3.6 Failed write shows natural-language error (not raw JSON)
+- [x] 3.7 `/assistant` page loads with full-screen chat
+- [x] 3.8 Works on mobile (button above bottom nav; panel clears nav)
 
 ### Phase 4: Vector Search
 
