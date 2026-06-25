@@ -631,16 +631,16 @@ Same message-saving logic as ChatPanel (track `currentConversationId`, save on `
 
 #### Automated
 
-- [x] 6.1 `npm run db:push` applies conversations migration cleanly
-- [x] 6.2 `npx tsc --noEmit` passes
-- [x] 6.3 `npm run lint` passes
-- [x] 6.4 `npm run test` passes
+- [x] 6.1 `npm run db:push` applies conversations migration cleanly — b64d86c
+- [x] 6.2 `npx tsc --noEmit` passes — b64d86c
+- [x] 6.3 `npm run lint` passes — b64d86c
+- [x] 6.4 `npm run test` passes — b64d86c
 
 #### Manual
 
-- [x] 6.5 Opening the panel shows messages from the most recent conversation
-- [x] 6.6 Messages persist across page reload
-- [x] 6.7 `/assistant` sidebar lists past conversations
-- [x] 6.8 Clicking a past thread loads it; New conversation clears and starts fresh
-- [x] 6.9 Thread auto-titled from first message; rename and delete work
-- [x] 6.10 Mobile thread list opens as sheet/drawer
+- [x] 6.5 Opening the panel shows messages from the most recent conversation — b64d86c
+- [x] 6.6 Messages persist across page reload — b64d86c
+- [x] 6.7 `/assistant` sidebar lists past conversations — b64d86c
+- [x] 6.8 Clicking a past thread loads it; New conversation clears and starts fresh — b64d86c
+- [x] 6.9 Thread auto-titled from first message; rename and delete work — b64d86c
+- [x] 6.10 Mobile thread list opens as sheet/drawer — b64d86c

@@ -1,9 +1,9 @@
 ---
 change_id: ai-assistant
 title: AI assistant integration for trainer app (S-06)
-status: implementing
+status: implemented
 created: 2026-06-04
-updated: 2026-06-05
+updated: 2026-06-25
 archived_at: null
 ---
 
