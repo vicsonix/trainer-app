@@ -113,7 +113,7 @@ export default async function CalendarPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-3 sm:py-8">
       <div className="mb-3 sm:mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight bg-gradient-to-r from-lobster-pink-600 to-lobster-pink-400 bg-clip-text text-transparent">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
           Kalendarz
         </h1>
         <p className="text-sm text-muted-foreground mt-0.5">

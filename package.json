@@ -20,11 +20,13 @@
     "db:migration": "supabase migration new"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.100.1",
+    "@ai-sdk/anthropic": "^3.0.81",
+    "@ai-sdk/react": "^3.0.198",
     "@axiomhq/js": "^1.6.1",
     "@internationalized/date": "^3.12.2",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.0",
+    "ai": "^6.0.196",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.17.0",
@@ -33,6 +35,8 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"

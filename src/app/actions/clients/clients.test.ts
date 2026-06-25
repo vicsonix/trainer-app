@@ -29,10 +29,15 @@ const VALID_FORM: Record<string, string> = {
   plan_url:        '',
 }
 
-type MockQueryResult = { error: null | { message: string } }
+type MockQueryResult = { data?: any; error: null | { message: string } }
 
-function buildQueryChain(resolveWith: MockQueryResult = { error: null }) {
-  const insertFn = vi.fn().mockResolvedValue(resolveWith)
+const DEFAULT_CLIENT_DATA = { id: CLIENT_ID, first_name: 'Jan', last_name: 'Kowalski', interview_notes: null }
+
+function buildQueryChain(resolveWith: MockQueryResult = { data: DEFAULT_CLIENT_DATA, error: null }) {
+  const singleFn = vi.fn().mockResolvedValue(resolveWith)
+  const selectFn = vi.fn().mockReturnValue({ single: singleFn })
+
+  const insertFn = vi.fn()
   const updateFn = vi.fn()
   const deleteFn = vi.fn()
   const eqFn    = vi.fn()
@@ -42,16 +47,18 @@ function buildQueryChain(resolveWith: MockQueryResult = { error: null }) {
     update: updateFn,
     delete: deleteFn,
     eq:     eqFn,
+    select: selectFn,
     then:   (resolve: any, reject?: any) => Promise.resolve(resolveWith).then(resolve, reject),
     catch:  (fn: any) => Promise.resolve(resolveWith).catch(fn),
     finally:(fn: any) => Promise.resolve(resolveWith).finally(fn),
   }
 
+  insertFn.mockReturnValue(chain)
   updateFn.mockReturnValue(chain)
   deleteFn.mockReturnValue(chain)
   eqFn.mockReturnValue(chain)
 
-  return { chain, insertFn, updateFn, deleteFn, eqFn }
+  return { chain, insertFn, updateFn, deleteFn, eqFn, selectFn, singleFn }
 }
 
 function setupMockSupabase(opts: {

@@ -2,8 +2,21 @@
 
 import { revalidatePath } from 'next/cache'
 import type { ZodIssue } from 'zod'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/server'
 import { clientSchema } from './schema'
+import { embedText, clientToEmbeddingText } from '@/lib/embeddings'
+import { log } from '@/lib/logger'
+
+async function generateAndStoreEmbedding(
+  supabase: SupabaseClient,
+  clientId: string,
+  client: { first_name: string; last_name: string; interview_notes: string | null }
+): Promise<void> {
+  if (!process.env.VOYAGE_API_KEY) return
+  const embedding = await embedText(clientToEmbeddingText(client))
+  await supabase.from('clients').update({ embedding }).eq('id', clientId)
+}
 
 function issuesByField(issues: ZodIssue[]) {
   const out: Record<string, string[]> = {}
@@ -55,7 +68,7 @@ export async function createClientAction(
 
   if (!user) return { errors: { _form: ['Sesja wygasła'] } }
 
-  const { error } = await supabase.from('clients').insert({
+  const { data: newClient, error } = await supabase.from('clients').insert({
     trainer_id:      user.id,
     first_name:      result.data.first_name,
     last_name:       result.data.last_name,
@@ -64,11 +77,14 @@ export async function createClientAction(
     package_id:      result.data.package_id || null,
     interview_notes: result.data.interview_notes || null,
     plan_url:        result.data.plan_url || null,
-  })
+  }).select('id, first_name, last_name, interview_notes').single()
 
-  if (error) {
+  if (error || !newClient) {
     return { errors: { _form: ['Nie udało się zapisać klienta'] } }
   }
+
+  void generateAndStoreEmbedding(supabase, newClient.id, newClient)
+    .catch(err => log('error', 'embedding_failed', { clientId: newClient.id, error: String(err) }))
 
   revalidatePath('/clients')
   return { success: true }
@@ -90,7 +106,7 @@ export async function updateClientAction(
 
   if (!user) return { errors: { _form: ['Sesja wygasła'] } }
 
-  const { error } = await supabase
+  const { data: updatedClient, error } = await supabase
     .from('clients')
     .update({
       first_name:      result.data.first_name,
@@ -103,10 +119,15 @@ export async function updateClientAction(
     })
     .eq('id', id)
     .eq('trainer_id', user.id)
+    .select('id, first_name, last_name, interview_notes')
+    .single()
 
-  if (error) {
+  if (error || !updatedClient) {
     return { errors: { _form: ['Nie udało się zaktualizować klienta'] } }
   }
+
+  void generateAndStoreEmbedding(supabase, updatedClient.id, updatedClient)
+    .catch(err => log('error', 'embedding_failed', { clientId: updatedClient.id, error: String(err) }))
 
   revalidatePath('/clients')
   return { success: true }
