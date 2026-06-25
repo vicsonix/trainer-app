@@ -1,7 +1,7 @@
 ---
 change_id: testing-appointment-action-baseline
 title: Appointment action baseline — Vitest integration coverage for overlap, status, and ownership
-status: implementing
+status: implemented
 created: 2026-06-04
 updated: 2026-06-25
 archived_at: null
