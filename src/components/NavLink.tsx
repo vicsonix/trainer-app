@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Package, Users, CalendarDays, Bot } from 'lucide-react'
+import { LayoutDashboard, Package, Users, CalendarDays, Bot, BarChart2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const sectionIcons: Record<string, React.ElementType> = {
@@ -11,6 +11,7 @@ const sectionIcons: Record<string, React.ElementType> = {
   '/clients':   Users,
   '/calendar':  CalendarDays,
   '/assistant': Bot,
+  '/analytics': BarChart2,
 }
 
 const activeStyle = {
