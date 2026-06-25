@@ -12,6 +12,7 @@ const navLinks = [
   { href: '/clients',   label: 'Klienci' },
   { href: '/calendar',  label: 'Kalendarz' },
   { href: '/assistant', label: 'Asystent' },
+  { href: '/analytics', label: 'Analityka' },
 ]
 
 const mobileNavLinks = navLinks.filter(({ href }) => href !== '/assistant')
