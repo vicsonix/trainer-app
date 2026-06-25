@@ -125,6 +125,24 @@ describe('appointmentSchema', () => {
     expect(result.success).toBe(false)
     if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'duration')).toBe(true)
   })
+
+  it('rejects missing tz', () => {
+    const result = appointmentSchema.safeParse({ ...VALID_FORM, tz: '' })
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'tz')).toBe(true)
+  })
+
+  it('rejects invalid price format when non-empty', () => {
+    const result = appointmentSchema.safeParse({ ...VALID_FORM, price: '12.345' })
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'price')).toBe(true)
+  })
+
+  it('rejects non-UUID package_id when non-empty', () => {
+    const result = appointmentSchema.safeParse({ ...VALID_FORM, package_id: 'not-a-uuid' })
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'package_id')).toBe(true)
+  })
 })
 
 // ─── createAppointmentAction ─────────────────────────────────────────────────
