@@ -227,31 +227,31 @@ Bar: `<div className="flex-1 rounded-full bg-soft-linen-100 dark:bg-carbon-black
 
 #### Automated
 
-- [x] 1.1 TypeScript compiles with no errors (`npm run build` / `npx tsc --noEmit`)
-- [x] 1.2 ESLint passes (`npm run lint`)
+- [x] 1.1 TypeScript compiles with no errors (`npm run build` / `npx tsc --noEmit`) — 397760b
+- [x] 1.2 ESLint passes (`npm run lint`) — 397760b
 
 #### Manual
 
-- [x] 1.3 `/analytics` renders without a 500 error in dev
-- [x] 1.4 Nav sidebar and mobile bottom bar show "Analityka" with BarChart2 icon
-- [x] 1.5 Active link highlight applies correctly on `/analytics`
-- [x] 1.6 Switching `?period=` params in the URL produces different data (verify in dev)
+- [x] 1.3 `/analytics` renders without a 500 error in dev — 397760b
+- [x] 1.4 Nav sidebar and mobile bottom bar show "Analityka" with BarChart2 icon — 397760b
+- [x] 1.5 Active link highlight applies correctly on `/analytics` — 397760b
+- [x] 1.6 Switching `?period=` params in the URL produces different data (verify in dev) — 397760b
 
 ### Phase 2: Analytics UI
 
 #### Automated
 
-- [ ] 2.1 TypeScript compiles with no errors (`npm run build`)
-- [ ] 2.2 ESLint passes (`npm run lint`)
+- [x] 2.1 TypeScript compiles with no errors (`npm run build`)
+- [x] 2.2 ESLint passes (`npm run lint`)
 
 #### Manual
 
-- [ ] 2.3 Period selector tabs render; switching changes displayed counts
-- [ ] 2.4 Default period on first visit is "Ten miesiąc"
-- [ ] 2.5 Four stat cards display correct numbers for selected period
-- [ ] 2.6 Revenue footnote appears when any completed appointment lacks a price
-- [ ] 2.7 Package popularity list orders correctly; bar widths are proportional
-- [ ] 2.8 Empty states appear with links to `/calendar` when no data for period
-- [ ] 2.9 Page layout matches existing pages (container, header pattern)
-- [ ] 2.10 Dark mode renders correctly
-- [ ] 2.11 Mobile layout correct; bottom nav shows Analityka
+- [x] 2.3 Period selector tabs render; switching changes displayed counts
+- [x] 2.4 Default period on first visit is "Ten miesiąc"
+- [x] 2.5 Four stat cards display correct numbers for selected period
+- [x] 2.6 Revenue footnote appears when any completed appointment lacks a price
+- [x] 2.7 Package popularity list orders correctly; bar widths are proportional
+- [x] 2.8 Empty states appear with links to `/calendar` when no data for period
+- [x] 2.9 Page layout matches existing pages (container, header pattern)
+- [x] 2.10 Dark mode renders correctly
+- [x] 2.11 Mobile layout correct; bottom nav shows Analityka

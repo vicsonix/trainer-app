@@ -188,6 +188,18 @@ export async function updateAppointmentStatusAction(
 
   if (!user) return { error: 'Sesja wygasła' }
 
+  if (status === 'completed' || status === 'no_show') {
+    const { data: appt } = await supabase
+      .from('appointments')
+      .select('starts_at')
+      .eq('id', id)
+      .eq('trainer_id', user.id)
+      .single()
+    if (!appt || new Date(appt.starts_at) > new Date()) {
+      return { error: 'Nie można oznaczyć przyszłej wizyty jako odbytej' }
+    }
+  }
+
   const { error } = await supabase
     .from('appointments')
     .update({ status })

@@ -329,6 +329,10 @@ function ModalContent({ event, tz, onClose }: ContentProps) {
             <div className="flex flex-wrap gap-1.5">
               {(['completed', 'cancelled', 'no_show', 'scheduled'] as const)
                 .filter(s => s !== currentStatus)
+                .filter(s => {
+                  const isFuture = event.startsAt > new Date()
+                  return !(isFuture && (s === 'completed' || s === 'no_show'))
+                })
                 .map(s => (
                   <button
                     key={s}

@@ -224,7 +224,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 | S-03       | client-management        | Client management with interview notes and package assignment       | done                  | Archived                                      |
 | S-04       | calendar-appointments    | Weekly calendar with appointment CRUD                              | done                  | Archived                                      |
 | S-05       | client-card-session-view | Client card on appointment tap + package counter                   | done                  | Archived                                      |
-| S-06       | ai-assistant             | AI assistant with action tools (book, reschedule, add client)      | yes                   | Run `/10x-plan ai-assistant`                  |
+| S-06       | ai-assistant             | AI assistant with action tools (book, reschedule, add client)      | done                  | Archived                                      |
 | S-07       | trainer-analytics        | Analytics page: visits, cancellations, package usage, revenue      | yes                   | Run `/10x-plan trainer-analytics`             |
 | S-08       | dashboard-home-data      | Dashboard home with live appointments, stats, and recent activity  | yes                   | Run `/10x-plan dashboard-home-data`           |
 | S-09       | trainer-notifications    | In-app notifications for upcoming appointments and package expiry  | yes                   | Run `/10x-plan trainer-notifications`         |
