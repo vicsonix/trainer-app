@@ -241,17 +241,17 @@ Bar: `<div className="flex-1 rounded-full bg-soft-linen-100 dark:bg-carbon-black
 
 #### Automated
 
-- [x] 2.1 TypeScript compiles with no errors (`npm run build`)
-- [x] 2.2 ESLint passes (`npm run lint`)
+- [x] 2.1 TypeScript compiles with no errors (`npm run build`) — f164aaa
+- [x] 2.2 ESLint passes (`npm run lint`) — f164aaa
 
 #### Manual
 
-- [x] 2.3 Period selector tabs render; switching changes displayed counts
-- [x] 2.4 Default period on first visit is "Ten miesiąc"
-- [x] 2.5 Four stat cards display correct numbers for selected period
-- [x] 2.6 Revenue footnote appears when any completed appointment lacks a price
-- [x] 2.7 Package popularity list orders correctly; bar widths are proportional
-- [x] 2.8 Empty states appear with links to `/calendar` when no data for period
-- [x] 2.9 Page layout matches existing pages (container, header pattern)
-- [x] 2.10 Dark mode renders correctly
-- [x] 2.11 Mobile layout correct; bottom nav shows Analityka
+- [x] 2.3 Period selector tabs render; switching changes displayed counts — f164aaa
+- [x] 2.4 Default period on first visit is "Ten miesiąc" — f164aaa
+- [x] 2.5 Four stat cards display correct numbers for selected period — f164aaa
+- [x] 2.6 Revenue footnote appears when any completed appointment lacks a price — f164aaa
+- [x] 2.7 Package popularity list orders correctly; bar widths are proportional — f164aaa
+- [x] 2.8 Empty states appear with links to `/calendar` when no data for period — f164aaa
+- [x] 2.9 Page layout matches existing pages (container, header pattern) — f164aaa
+- [x] 2.10 Dark mode renders correctly — f164aaa
+- [x] 2.11 Mobile layout correct; bottom nav shows Analityka — f164aaa
