@@ -78,6 +78,8 @@ export async function createAppointmentAction(
     .eq('trainer_id', user.id)
     .lt('starts_at', endsAt.toISOString())
     .gt('ends_at', startsAt.toISOString())
+    .neq('status', 'cancelled')
+    .neq('status', 'no_show')
 
   if (overlapCount && overlapCount > 0) {
     return { errors: { _form: ['Masz już wizytę w tym przedziale czasowym'] } }
@@ -131,6 +133,8 @@ export async function updateAppointmentAction(
     .neq('id', id)
     .lt('starts_at', endsAt.toISOString())
     .gt('ends_at', startsAt.toISOString())
+    .neq('status', 'cancelled')
+    .neq('status', 'no_show')
 
   if (overlapCount && overlapCount > 0) {
     return { errors: { _form: ['Masz już wizytę w tym przedziale czasowym'] } }

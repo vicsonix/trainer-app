@@ -196,14 +196,14 @@ All tests in this plan are Vitest integration tests using the Supabase mock patt
 
 #### Automated
 
-- [ ] 1.1 Tests pass: `npm run test`
-- [ ] 1.2 Lint passes: `npm run lint`
-- [ ] 1.3 Type check passes: `npx tsc --noEmit`
+- [x] 1.1 Tests pass: `npm run test` — 965c0e5
+- [x] 1.2 Lint passes: `npm run lint` — 965c0e5
+- [x] 1.3 Type check passes: `npx tsc --noEmit` — 965c0e5
 
 ### Phase 2: Fill Remaining Action Test Gaps
 
 #### Automated
 
-- [ ] 2.1 Tests pass: `npm run test`
-- [ ] 2.2 Lint passes: `npm run lint`
-- [ ] 2.3 Type check passes: `npx tsc --noEmit`
+- [x] 2.1 Tests pass: `npm run test` — 7e9993d
+- [x] 2.2 Lint passes: `npm run lint` — 7e9993d
+- [x] 2.3 Type check passes: `npx tsc --noEmit` — 7e9993d

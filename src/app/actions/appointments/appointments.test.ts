@@ -125,6 +125,24 @@ describe('appointmentSchema', () => {
     expect(result.success).toBe(false)
     if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'duration')).toBe(true)
   })
+
+  it('rejects missing tz', () => {
+    const result = appointmentSchema.safeParse({ ...VALID_FORM, tz: '' })
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'tz')).toBe(true)
+  })
+
+  it('rejects invalid price format when non-empty', () => {
+    const result = appointmentSchema.safeParse({ ...VALID_FORM, price: '12.345' })
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'price')).toBe(true)
+  })
+
+  it('rejects non-UUID package_id when non-empty', () => {
+    const result = appointmentSchema.safeParse({ ...VALID_FORM, package_id: 'not-a-uuid' })
+    expect(result.success).toBe(false)
+    if (!result.success) expect(result.error.issues.some(i => i.path[0] === 'package_id')).toBe(true)
+  })
 })
 
 // ─── createAppointmentAction ─────────────────────────────────────────────────
@@ -185,6 +203,15 @@ describe('createAppointmentAction', () => {
     expect(result).toMatchObject({ errors: { _form: expect.any(Array) } })
     expect(revalidatePath).not.toHaveBeenCalled()
   })
+
+  it('excludes cancelled and no_show appointments from the overlap check', async () => {
+    const { overlapCh } = setupDualCallMock({ overlapCount: 0 })
+
+    await createAppointmentAction(null, makeFormData(VALID_FORM))
+
+    expect(overlapCh.neq).toHaveBeenCalledWith('status', 'cancelled')
+    expect(overlapCh.neq).toHaveBeenCalledWith('status', 'no_show')
+  })
 })
 
 // ─── updateAppointmentAction ─────────────────────────────────────────────────
@@ -224,6 +251,44 @@ describe('updateAppointmentAction', () => {
 
     expect(result).toEqual({ errors: { _form: ['Sesja wygasła'] } })
   })
+
+  it('excludes cancelled and no_show appointments from the overlap check', async () => {
+    const { overlapCh } = setupDualCallMock({ overlapCount: 0 })
+
+    await updateAppointmentAction(APPT_ID, null, makeFormData(VALID_FORM))
+
+    expect(overlapCh.neq).toHaveBeenCalledWith('id', APPT_ID)
+    expect(overlapCh.neq).toHaveBeenCalledWith('status', 'cancelled')
+    expect(overlapCh.neq).toHaveBeenCalledWith('status', 'no_show')
+  })
+
+  it('returns form error when an appointment already exists in that time slot', async () => {
+    setupDualCallMock({ overlapCount: 1 })
+
+    const result = await updateAppointmentAction(APPT_ID, null, makeFormData(VALID_FORM))
+
+    expect(result).toMatchObject({ errors: { _form: expect.any(Array) } })
+    expect(revalidatePath).not.toHaveBeenCalled()
+  })
+
+  it('returns form error when Supabase update fails', async () => {
+    setupDualCallMock({ writeError: { message: 'DB error' } })
+
+    const result = await updateAppointmentAction(APPT_ID, null, makeFormData(VALID_FORM))
+
+    expect(result).toMatchObject({ errors: { _form: expect.any(Array) } })
+    expect(revalidatePath).not.toHaveBeenCalled()
+  })
+
+  it('returns success when ownership filter matches 0 rows (silent no-op)', async () => {
+    const { writeCh } = setupDualCallMock({})
+
+    const result = await updateAppointmentAction(APPT_ID, null, makeFormData(VALID_FORM))
+
+    expect(writeCh.eq).toHaveBeenCalledWith('id', APPT_ID)
+    expect(writeCh.eq).toHaveBeenCalledWith('trainer_id', USER_ID)
+    expect(result).toEqual({ success: true })
+  })
 })
 
 // ─── deleteAppointmentAction ─────────────────────────────────────────────────
@@ -252,6 +317,25 @@ describe('deleteAppointmentAction', () => {
     expect(fromFn).not.toHaveBeenCalled()
     expect(revalidatePath).not.toHaveBeenCalled()
   })
+
+  it('returns error when Supabase delete fails', async () => {
+    setupSingleCallMock({ resolveWith: { error: { message: 'DB error' } } })
+
+    const result = await deleteAppointmentAction(APPT_ID)
+
+    expect(result).toMatchObject({ error: expect.any(String) })
+    expect(revalidatePath).not.toHaveBeenCalled()
+  })
+
+  it('returns empty object when ownership filter matches 0 rows (silent no-op)', async () => {
+    const { chain } = setupSingleCallMock({ resolveWith: { error: null } })
+
+    const result = await deleteAppointmentAction(APPT_ID)
+
+    expect(chain.eq).toHaveBeenCalledWith('id', APPT_ID)
+    expect(chain.eq).toHaveBeenCalledWith('trainer_id', USER_ID)
+    expect(result).toEqual({})
+  })
 })
 
 // ─── updateAppointmentStatusAction ───────────────────────────────────────────
@@ -278,5 +362,39 @@ describe('updateAppointmentStatusAction', () => {
 
     expect(result).toEqual({ error: 'Sesja wygasła' })
     expect(fromFn).not.toHaveBeenCalled()
+  })
+
+  it('accepts scheduled status', async () => {
+    const { chain } = setupSingleCallMock({})
+
+    await updateAppointmentStatusAction(APPT_ID, 'scheduled')
+
+    expect(chain.update).toHaveBeenCalledWith({ status: 'scheduled' })
+  })
+
+  it('accepts cancelled status', async () => {
+    const { chain } = setupSingleCallMock({})
+
+    await updateAppointmentStatusAction(APPT_ID, 'cancelled')
+
+    expect(chain.update).toHaveBeenCalledWith({ status: 'cancelled' })
+  })
+
+  it('accepts no_show status', async () => {
+    const { chain } = setupSingleCallMock({})
+
+    await updateAppointmentStatusAction(APPT_ID, 'no_show')
+
+    expect(chain.update).toHaveBeenCalledWith({ status: 'no_show' })
+  })
+
+  it('returns empty object when ownership filter matches 0 rows (silent no-op)', async () => {
+    const { chain } = setupSingleCallMock({ resolveWith: { error: null } })
+
+    const result = await updateAppointmentStatusAction(APPT_ID, 'completed')
+
+    expect(chain.eq).toHaveBeenCalledWith('id', APPT_ID)
+    expect(chain.eq).toHaveBeenCalledWith('trainer_id', USER_ID)
+    expect(result).toEqual({})
   })
 })
