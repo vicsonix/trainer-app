@@ -616,31 +616,31 @@ Same message-saving logic as ChatPanel (track `currentConversationId`, save on `
 
 #### Automated
 
-- [x] 5.1 `npm run test -- src/app/api/ai/chat/route.test.ts` — 2 cases pass (401 + scoping)
-- [x] 5.2 `npm run test -- src/lib/ai/context.test.ts` — truncation unit test passes
-- [x] 5.3 `npx playwright test playwright/assistant.spec.ts` passes
-- [x] 5.4 `npm run lint` passes
-- [x] 5.5 `npx tsc --noEmit` passes
+- [x] 5.1 `npm run test -- src/app/api/ai/chat/route.test.ts` — 2 cases pass (401 + scoping) — dca9b78
+- [x] 5.2 `npm run test -- src/lib/ai/context.test.ts` — truncation unit test passes — dca9b78
+- [x] 5.3 `npx playwright test playwright/assistant.spec.ts` passes — dca9b78
+- [x] 5.4 `npm run lint` passes — dca9b78
+- [x] 5.5 `npx tsc --noEmit` passes — dca9b78
 
 #### Manual
 
-- [x] 5.6 Test output confirms Vitest integration tests green and Playwright E2E green
-- [x] 5.7 No regressions in other test files
+- [x] 5.6 Test output confirms Vitest integration tests green and Playwright E2E green — dca9b78
+- [x] 5.7 No regressions in other test files — dca9b78
 
 ### Phase 6: Conversation History + Named Threads
 
 #### Automated
 
-- [ ] 6.1 `npm run db:push` applies conversations migration cleanly
-- [ ] 6.2 `npx tsc --noEmit` passes
-- [ ] 6.3 `npm run lint` passes
-- [ ] 6.4 `npm run test` passes
+- [x] 6.1 `npm run db:push` applies conversations migration cleanly
+- [x] 6.2 `npx tsc --noEmit` passes
+- [x] 6.3 `npm run lint` passes
+- [x] 6.4 `npm run test` passes
 
 #### Manual
 
-- [ ] 6.5 Opening the panel shows messages from the most recent conversation
-- [ ] 6.6 Messages persist across page reload
-- [ ] 6.7 `/assistant` sidebar lists past conversations
-- [ ] 6.8 Clicking a past thread loads it; New conversation clears and starts fresh
-- [ ] 6.9 Thread auto-titled from first message; rename and delete work
-- [ ] 6.10 Mobile thread list opens as sheet/drawer
+- [x] 6.5 Opening the panel shows messages from the most recent conversation
+- [x] 6.6 Messages persist across page reload
+- [x] 6.7 `/assistant` sidebar lists past conversations
+- [x] 6.8 Clicking a past thread loads it; New conversation clears and starts fresh
+- [x] 6.9 Thread auto-titled from first message; rename and delete work
+- [x] 6.10 Mobile thread list opens as sheet/drawer
