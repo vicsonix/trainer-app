@@ -36,7 +36,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | done     |
 | S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | done     |
 | S-06 | ai-assistant              | ask natural-language questions AND perform actions (book, reschedule, add client) via chat | S-04, F-01            | FR-015, FR-016, FR-017, US-02          | done     |
-| S-07 | trainer-analytics         | view stats on a dedicated page: visits completed, cancellations, top packages, revenue   | S-04                    | —                                      | proposed |
+| S-07 | trainer-analytics         | view stats on a dedicated page: visits completed, cancellations, top packages, revenue   | S-04                    | —                                      | done     |
 | S-08 | dashboard-home-data       | see live summary data on login: today's appointments, key metrics, recent activity       | S-04                    | —                                      | proposed |
 | S-09 | trainer-notifications     | receive in-app notifications for upcoming appointments and package expiry warnings       | S-04                    | —                                      | proposed |
 | S-10 | trainer-profile           | view and edit profile: name, photo, contact info, and notification preferences           | S-01                    | —                                      | proposed |
@@ -164,7 +164,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Revenue figures depend on the `price` field being populated consistently; surface a clear "no data" state rather than showing zeroes that look like real values.
-- **Status:** proposed
+- **Status:** done
 
 ### S-08: Dashboard home page with live data
 
@@ -225,7 +225,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 | S-04       | calendar-appointments    | Weekly calendar with appointment CRUD                              | done                  | Archived                                      |
 | S-05       | client-card-session-view | Client card on appointment tap + package counter                   | done                  | Archived                                      |
 | S-06       | ai-assistant             | AI assistant with action tools (book, reschedule, add client)      | done                  | Archived                                      |
-| S-07       | trainer-analytics        | Analytics page: visits, cancellations, package usage, revenue      | yes                   | Run `/10x-plan trainer-analytics`             |
+| S-07       | trainer-analytics        | Analytics page: visits, cancellations, package usage, revenue      | done                  | Archived                                      |
 | S-08       | dashboard-home-data      | Dashboard home with live appointments, stats, and recent activity  | yes                   | Run `/10x-plan dashboard-home-data`           |
 | S-09       | trainer-notifications    | In-app notifications for upcoming appointments and package expiry  | yes                   | Run `/10x-plan trainer-notifications`         |
 | S-10       | trainer-profile          | Trainer profile: name, photo, contact info, notification prefs     | yes                   | Run `/10x-plan trainer-profile`               |
@@ -255,3 +255,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **S-04: trainer can add an appointment to the weekly calendar, view the current week, and edit or delete any appointment.** — Archived 2026-06-04 → `context/archive/2026-06-01-calendar-appointments/`. Lesson: —.
 - **S-05: tap an appointment and see the full client card with remaining package visits** — Archived 2026-06-04 → `context/archive/2026-06-04-client-card-session-view/`. Lesson: —.
 - **S-06: AI assistant with action tools (book, reschedule, add client)** — Archived 2026-06-25 → `context/archive/2026-06-04-ai-assistant/`. Lesson: —.
+- **S-07: trainer can view stats on a dedicated analytics page: total completed visits, cancelled and no-show counts, most popular packages by usage, and revenue earned — filterable by period (this month / last 3 months / all time); data is computed server-side from existing appointments and packages tables with no schema changes.** — Archived 2026-06-25 → `context/archive/2026-06-25-trainer-analytics/`. Lesson: —.
