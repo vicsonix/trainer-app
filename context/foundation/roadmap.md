@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-06-04
+updated: 2026-06-25
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -35,7 +35,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | done     |
 | S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | done     |
 | S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | done     |
-| S-06 | ai-assistant              | ask natural-language questions AND perform actions (book, reschedule, add client) via chat | S-04, F-01            | FR-015, FR-016, FR-017, US-02          | proposed |
+| S-06 | ai-assistant              | ask natural-language questions AND perform actions (book, reschedule, add client) via chat | S-04, F-01            | FR-015, FR-016, FR-017, US-02          | done     |
 | S-07 | trainer-analytics         | view stats on a dedicated page: visits completed, cancellations, top packages, revenue   | S-04                    | —                                      | proposed |
 | S-08 | dashboard-home-data       | see live summary data on login: today's appointments, key metrics, recent activity       | S-04                    | —                                      | proposed |
 | S-09 | trainer-notifications     | receive in-app notifications for upcoming appointments and package expiry warnings       | S-04                    | —                                      | proposed |
@@ -152,7 +152,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Write actions (book/reschedule/cancel) execute real DB mutations via chat — the agent must confirm intent before committing. Test that the LLM never executes a write without explicit user confirmation. Also: "assistant must not present fabricated details as fact" — ground responses on full data records, not summaries.
-- **Status:** proposed
+- **Status:** done
 
 ### S-07: Trainer analytics page
 
@@ -254,3 +254,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **S-03: trainer can add a client (name, contact info), assign a package, record freetext interview notes and training goals, add a training plan link, and edit all of the above.** — Archived 2026-06-01 → `context/archive/2026-06-01-client-management/`. Lesson: —.
 - **S-04: trainer can add an appointment to the weekly calendar, view the current week, and edit or delete any appointment.** — Archived 2026-06-04 → `context/archive/2026-06-01-calendar-appointments/`. Lesson: —.
 - **S-05: tap an appointment and see the full client card with remaining package visits** — Archived 2026-06-04 → `context/archive/2026-06-04-client-card-session-view/`. Lesson: —.
+- **S-06: AI assistant with action tools (book, reschedule, add client)** — Archived 2026-06-25 → `context/archive/2026-06-04-ai-assistant/`. Lesson: —.
