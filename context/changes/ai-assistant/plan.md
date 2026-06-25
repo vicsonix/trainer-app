@@ -584,48 +584,48 @@ Same message-saving logic as ChatPanel (track `currentConversationId`, save on `
 
 #### Automated
 
-- [x] 3.1 `npx tsc --noEmit` passes
-- [x] 3.2 `npm run lint` passes
+- [x] 3.1 `npx tsc --noEmit` passes — b569677
+- [x] 3.2 `npm run lint` passes — b569677
 
 #### Manual
 
-- [x] 3.3 Floating button visible on all app pages except `/assistant`
-- [x] 3.4 Panel opens/closes; typing indicator visible during stream
-- [x] 3.5 Polish confirmation card appears for write actions; Approve executes, Cancel cancels
-- [x] 3.6 Failed write shows natural-language error (not raw JSON)
-- [x] 3.7 `/assistant` page loads with full-screen chat
-- [x] 3.8 Works on mobile (button above bottom nav; panel clears nav)
+- [x] 3.3 Floating button visible on all app pages except `/assistant` — b569677
+- [x] 3.4 Panel opens/closes; typing indicator visible during stream — b569677
+- [x] 3.5 Polish confirmation card appears for write actions; Approve executes, Cancel cancels — b569677
+- [x] 3.6 Failed write shows natural-language error (not raw JSON) — b569677
+- [x] 3.7 `/assistant` page loads with full-screen chat — b569677
+- [x] 3.8 Works on mobile (button above bottom nav; panel clears nav) — b569677
 
 ### Phase 4: Vector Search
 
 #### Automated
 
-- [ ] 4.1 `npm run db:push` applies migration cleanly
-- [ ] 4.2 `npx tsc --noEmit` passes
-- [ ] 4.3 `npm run lint` passes
-- [ ] 4.4 `npm run test` passes
+- [x] 4.1 `npm run db:push` applies migration cleanly
+- [x] 4.2 `npx tsc --noEmit` passes
+- [x] 4.3 `npm run lint` passes
+- [x] 4.4 `npm run test` passes
 
 #### Manual
 
-- [ ] 4.5 Semantic query returns clients matching by meaning, not just exact words
-- [ ] 4.6 New client create/update triggers background embedding (no `embedding_failed` in logs)
-- [ ] 4.7 Backfill script runs to completion
-- [ ] 4.8 Assistant works correctly when `VOYAGE_API_KEY` is absent
+- [x] 4.5 Semantic query returns clients matching by meaning, not just exact words
+- [x] 4.6 New client create/update triggers background embedding (no `embedding_failed` in logs)
+- [x] 4.7 Backfill script runs to completion
+- [x] 4.8 Assistant works correctly when `VOYAGE_API_KEY` is absent
 
 ### Phase 5: Tests
 
 #### Automated
 
-- [ ] 5.1 `npm run test -- src/app/api/ai/chat/route.test.ts` — 2 cases pass (401 + scoping)
-- [ ] 5.2 `npm run test -- src/lib/ai/context.test.ts` — truncation unit test passes
-- [ ] 5.3 `npx playwright test playwright/assistant.spec.ts` passes
-- [ ] 5.4 `npm run lint` passes
-- [ ] 5.5 `npx tsc --noEmit` passes
+- [x] 5.1 `npm run test -- src/app/api/ai/chat/route.test.ts` — 2 cases pass (401 + scoping)
+- [x] 5.2 `npm run test -- src/lib/ai/context.test.ts` — truncation unit test passes
+- [x] 5.3 `npx playwright test playwright/assistant.spec.ts` passes
+- [x] 5.4 `npm run lint` passes
+- [x] 5.5 `npx tsc --noEmit` passes
 
 #### Manual
 
-- [ ] 5.6 Test output confirms Vitest integration tests green and Playwright E2E green
-- [ ] 5.7 No regressions in other test files
+- [x] 5.6 Test output confirms Vitest integration tests green and Playwright E2E green
+- [x] 5.7 No regressions in other test files
 
 ### Phase 6: Conversation History + Named Threads
 

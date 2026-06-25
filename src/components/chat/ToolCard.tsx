@@ -1,7 +1,29 @@
 'use client'
 
-import { CheckCircle, XCircle, AlertTriangle, Zap } from 'lucide-react'
+import Link from 'next/link'
+import { CheckCircle, XCircle, AlertTriangle, Zap, ExternalLink } from 'lucide-react'
 import { TOOL_CONFIRMATION_LABELS, DESTRUCTIVE_TOOLS } from '@/lib/ai/tool-formatters'
+
+type ToolOutput = {
+  success: boolean
+  action?: 'created' | 'updated' | 'deleted'
+  entity?: 'client' | 'package' | 'appointment'
+  name?: string
+  href?: string
+  error?: string
+} | null
+
+const ENTITY_LABELS: Record<string, Record<string, string>> = {
+  client:      { created: 'Klient dodany',        updated: 'Klient zaktualizowany',     deleted: 'Klient usunięty' },
+  package:     { created: 'Pakiet dodany',         updated: 'Pakiet zaktualizowany',     deleted: 'Pakiet usunięty' },
+  appointment: { created: 'Wizyta zarezerwowana',  updated: 'Wizyta zaktualizowana',     deleted: 'Wizyta usunięta' },
+}
+
+const HREF_LABELS: Record<string, string> = {
+  '/clients':  'Klienci',
+  '/packages': 'Pakiety',
+  '/calendar': 'Kalendarz',
+}
 
 type ApprovalPart = {
   type: string
@@ -75,10 +97,29 @@ export function ToolCard({
   }
 
   if (part.state === 'output-available') {
+    const output = (part.output ?? null) as ToolOutput
+    const action = output?.action
+    const entity = output?.entity
+    const label = (entity && action && ENTITY_LABELS[entity]?.[action]) ?? 'Wykonano pomyślnie'
+    const hrefLabel = output?.href ? HREF_LABELS[output.href] : undefined
+
     return (
       <div className="flex items-center gap-2 rounded-xl border border-jungle-teal-200 dark:border-jungle-teal-800/60 bg-jungle-teal-50 dark:bg-jungle-teal-900/15 px-3 py-2">
         <CheckCircle size={13} className="text-jungle-teal-600 dark:text-jungle-teal-400 shrink-0" />
-        <p className="text-xs font-medium text-jungle-teal-700 dark:text-jungle-teal-300">Wykonano pomyślnie</p>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium text-jungle-teal-700 dark:text-jungle-teal-300 truncate">
+            {label}{output?.name ? `: ${output.name}` : ''}
+          </p>
+        </div>
+        {output?.href && action !== 'deleted' && hrefLabel && (
+          <Link
+            href={output.href}
+            className="shrink-0 flex items-center gap-1 text-[10px] font-semibold text-jungle-teal-600 dark:text-jungle-teal-400 hover:underline"
+          >
+            {hrefLabel}
+            <ExternalLink size={10} />
+          </Link>
+        )}
       </div>
     )
   }

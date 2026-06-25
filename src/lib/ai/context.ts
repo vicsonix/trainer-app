@@ -5,7 +5,8 @@ export const MAX_CONTEXT_CHARS = 12_000
 
 export async function buildTrainerContext(
   supabase: SupabaseClient,
-  userId: string
+  userId: string,
+  vectorResults?: Array<{ id: string; similarity: number }>
 ): Promise<string> {
   try {
     const [clientsResult, appointmentsResult, packagesResult] = await Promise.all([
@@ -28,7 +29,14 @@ export async function buildTrainerContext(
         .order('name', { ascending: true }),
     ])
 
-    const clients = clientsResult.data ?? []
+    let clients = clientsResult.data ?? []
+
+    if (vectorResults && vectorResults.length > 0) {
+      const scoreMap = new Map(vectorResults.map(r => [r.id, r.similarity]))
+      const matched = clients.filter(c => scoreMap.has(c.id)).sort((a, b) => (scoreMap.get(b.id) ?? 0) - (scoreMap.get(a.id) ?? 0))
+      const rest = clients.filter(c => !scoreMap.has(c.id))
+      clients = [...matched, ...rest]
+    }
     const appointments = appointmentsResult.data ?? []
     const packages = packagesResult.data ?? []
 
@@ -36,9 +44,11 @@ export async function buildTrainerContext(
 
     const packageBlock = packages.length > 0
       ? `=== PACKAGES ===\n${packages.map(p =>
-          `${p.name} (${p.visit_count} visits, ${p.price} PLN)`
+          `${p.name} (id: ${p.id}, ${p.visit_count} visits, ${p.price} PLN)`
         ).join('\n')}`
       : ''
+
+    const scoreMap = vectorResults ? new Map(vectorResults.map(r => [r.id, r.similarity])) : null
 
     const clientLines = clients.map(c => {
       const pkg = c.packages
@@ -47,8 +57,10 @@ export async function buildTrainerContext(
       const notes = c.interview_notes
         ? `Notes: ${c.interview_notes.slice(0, NOTES_LIMIT)}${c.interview_notes.length > NOTES_LIMIT ? '…' : ''}`
         : ''
+      const similarity = scoreMap?.get(c.id)
+      const matchLabel = similarity !== undefined ? ` [Semantic match: ${Math.round(similarity * 100)}%]` : ''
       const parts = [
-        `- ${c.first_name} ${c.last_name} (id: ${c.id})`,
+        `- ${c.first_name} ${c.last_name} (id: ${c.id})${matchLabel}`,
         `  ${pkg}`,
         notes ? `  ${notes}` : null,
         c.email ? `  Email: ${c.email}` : null,

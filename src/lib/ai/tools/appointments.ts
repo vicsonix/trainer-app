@@ -54,7 +54,7 @@ export function makeAppointmentTools(supabase: SupabaseClient, userId: string) {
           })
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'created', entity: 'appointment', name: `${date} o ${start_time}`, href: '/calendar' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -97,7 +97,7 @@ export function makeAppointmentTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'updated', entity: 'appointment', name: `${date} o ${start_time}`, href: '/calendar' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -119,7 +119,7 @@ export function makeAppointmentTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'deleted', entity: 'appointment' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -142,7 +142,7 @@ export function makeAppointmentTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'updated', entity: 'appointment', href: '/calendar' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }

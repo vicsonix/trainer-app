@@ -32,7 +32,7 @@ export function makeClientTools(supabase: SupabaseClient, userId: string) {
           })
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'created', entity: 'client', name: `${first_name} ${last_name}`, href: '/clients' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -62,7 +62,7 @@ export function makeClientTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'updated', entity: 'client', name: `${first_name} ${last_name}`, href: '/clients' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -84,7 +84,7 @@ export function makeClientTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true, warning: 'Client and all their appointments have been permanently deleted.' }
+          return { success: true, action: 'deleted', entity: 'client' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }

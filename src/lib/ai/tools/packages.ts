@@ -24,7 +24,7 @@ export function makePackageTools(supabase: SupabaseClient, userId: string) {
           })
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'created', entity: 'package', name, href: '/packages' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -46,7 +46,7 @@ export function makePackageTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'updated', entity: 'package', name, href: '/packages' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
@@ -68,7 +68,7 @@ export function makePackageTools(supabase: SupabaseClient, userId: string) {
             .eq('trainer_id', userId)
 
           if (error) return { success: false, error: error.message }
-          return { success: true }
+          return { success: true, action: 'deleted', entity: 'package' }
         } catch (err) {
           return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
         }
