@@ -178,9 +178,9 @@ Layout (top to bottom):
 
 #### Automated
 
-- [x] 1.1 TypeScript compilation passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Build completes without error: `npm run build`
+- [x] 1.1 TypeScript compilation passes: `npm run typecheck` — 6bcebce
+- [x] 1.2 Linting passes: `npm run lint` — 6bcebce
+- [x] 1.3 Build completes without error: `npm run build` — 6bcebce
 
 #### Manual
 

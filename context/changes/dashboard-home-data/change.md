@@ -1,9 +1,9 @@
 ---
 change_id: dashboard-home-data
 title: Dashboard home data
-status: implementing
+status: implemented
 created: 2026-06-25
-updated: 2026-06-25
+updated: 2026-06-27
 archived_at: null
 ---
 
