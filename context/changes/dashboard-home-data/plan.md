@@ -184,10 +184,10 @@ Layout (top to bottom):
 
 #### Manual
 
-- [x] 1.4 Dashboard shows live stat numbers matching analytics page
-- [x] 1.5 Upcoming section lists today's appointments first, then next 2–3 from the week
-- [x] 1.6 Recent activity shows last 5 completed/cancelled with correct status badges
-- [x] 1.7 Empty-state CTAs appear on a fresh account and links work
-- [x] 1.8 Nav cards at bottom, all 4 links correct
-- [x] 1.9 ≤ 5 Supabase requests on page load (no N+1)
-- [x] 1.10 Analytics page StatCard renders identically after extraction
+- [x] 1.4 Dashboard shows live stat numbers matching analytics page — 8eb086a
+- [x] 1.5 Upcoming section lists today's appointments first, then next 2–3 from the week — 8eb086a
+- [x] 1.6 Recent activity shows last 5 completed/cancelled with correct status badges — 8eb086a
+- [x] 1.7 Empty-state CTAs appear on a fresh account and links work — 8eb086a
+- [x] 1.8 Nav cards at bottom, all 4 links correct — 8eb086a
+- [x] 1.9 ≤ 5 Supabase requests on page load (no N+1) — 8eb086a
+- [x] 1.10 Analytics page StatCard renders identically after extraction — 8eb086a
