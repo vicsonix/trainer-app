@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-06-25
+updated: 2026-06-27
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -37,7 +37,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | done     |
 | S-06 | ai-assistant              | ask natural-language questions AND perform actions (book, reschedule, add client) via chat | S-04, F-01            | FR-015, FR-016, FR-017, US-02          | done     |
 | S-07 | trainer-analytics         | view stats on a dedicated page: visits completed, cancellations, top packages, revenue   | S-04                    | —                                      | done     |
-| S-08 | dashboard-home-data       | see live summary data on login: today's appointments, key metrics, recent activity       | S-04                    | —                                      | proposed |
+| S-08 | dashboard-home-data       | see live summary data on login: today's appointments, key metrics, recent activity       | S-04                    | —                                      | done     |
 | S-09 | trainer-notifications     | receive in-app notifications for upcoming appointments and package expiry warnings       | S-04                    | —                                      | proposed |
 | S-10 | trainer-profile           | view and edit profile: name, photo, contact info, and notification preferences           | S-01                    | —                                      | proposed |
 | S-11 | theme-toggle              | switch between light and dark mode with preference persisted across sessions             | S-01                    | —                                      | proposed |
@@ -176,7 +176,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Dashboard is the first screen on login — a slow query here hurts perceived performance. Keep all data in a single parallel Supabase fetch; avoid N+1 queries per client/package.
-- **Status:** proposed
+- **Status:** done
 
 ### S-09: Trainer notifications
 
@@ -226,7 +226,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 | S-05       | client-card-session-view | Client card on appointment tap + package counter                   | done                  | Archived                                      |
 | S-06       | ai-assistant             | AI assistant with action tools (book, reschedule, add client)      | done                  | Archived                                      |
 | S-07       | trainer-analytics        | Analytics page: visits, cancellations, package usage, revenue      | done                  | Archived                                      |
-| S-08       | dashboard-home-data      | Dashboard home with live appointments, stats, and recent activity  | yes                   | Run `/10x-plan dashboard-home-data`           |
+| S-08       | dashboard-home-data      | Dashboard home with live appointments, stats, and recent activity  | done                  | Implemented                                   |
 | S-09       | trainer-notifications    | In-app notifications for upcoming appointments and package expiry  | yes                   | Run `/10x-plan trainer-notifications`         |
 | S-10       | trainer-profile          | Trainer profile: name, photo, contact info, notification prefs     | yes                   | Run `/10x-plan trainer-profile`               |
 | S-11       | theme-toggle             | Light/dark mode toggle persisted across sessions                   | yes                   | Run `/10x-plan theme-toggle`                  |
@@ -256,3 +256,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **S-05: tap an appointment and see the full client card with remaining package visits** — Archived 2026-06-04 → `context/archive/2026-06-04-client-card-session-view/`. Lesson: —.
 - **S-06: AI assistant with action tools (book, reschedule, add client)** — Archived 2026-06-25 → `context/archive/2026-06-04-ai-assistant/`. Lesson: —.
 - **S-07: trainer can view stats on a dedicated analytics page: total completed visits, cancelled and no-show counts, most popular packages by usage, and revenue earned — filterable by period (this month / last 3 months / all time); data is computed server-side from existing appointments and packages tables with no schema changes.** — Archived 2026-06-25 → `context/archive/2026-06-25-trainer-analytics/`. Lesson: —.
+- **S-08: see live summary data on login: today's appointments, key metrics, recent activity** — Implemented 2026-06-27 → `context/changes/dashboard-home-data/`. Lesson: —.
