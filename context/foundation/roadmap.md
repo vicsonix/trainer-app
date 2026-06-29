@@ -3,7 +3,7 @@ project: Trainer App
 version: 1
 status: draft
 created: 2026-05-25
-updated: 2026-06-27
+updated: 2026-06-29
 prd_version: 1
 main_goal: market-feedback
 top_blocker: capacity
@@ -40,7 +40,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | S-08 | dashboard-home-data       | see live summary data on login: today's appointments, key metrics, recent activity       | S-04                    | —                                      | done     |
 | S-09 | trainer-notifications     | receive in-app notifications for upcoming appointments and package expiry warnings       | S-04                    | —                                      | proposed |
 | S-10 | trainer-profile           | view and edit profile: name, photo, contact info, and notification preferences           | S-01                    | —                                      | proposed |
-| S-11 | theme-toggle              | switch between light and dark mode with preference persisted across sessions             | S-01                    | —                                      | proposed |
+| S-11 | theme-toggle              | switch between light and dark mode with preference persisted across sessions             | S-01                    | —                                      | done     |
 
 ## Streams
 
@@ -212,7 +212,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Minimal — dark-mode classes are already authored in every component. The only risk is a flash of the wrong theme on hard reload; mitigate with an inline `<script>` in `<head>` that reads `localStorage` before React hydrates.
-- **Status:** proposed
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -257,3 +257,4 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **S-06: AI assistant with action tools (book, reschedule, add client)** — Archived 2026-06-25 → `context/archive/2026-06-04-ai-assistant/`. Lesson: —.
 - **S-07: trainer can view stats on a dedicated analytics page: total completed visits, cancelled and no-show counts, most popular packages by usage, and revenue earned — filterable by period (this month / last 3 months / all time); data is computed server-side from existing appointments and packages tables with no schema changes.** — Archived 2026-06-25 → `context/archive/2026-06-25-trainer-analytics/`. Lesson: —.
 - **S-08: see live summary data on login: today's appointments, key metrics, recent activity** — Archived 2026-06-27 → `context/archive/2026-06-25-dashboard-home-data/`. Lesson: —.
+- **S-11: trainer can switch between light and dark mode with preference persisted across sessions** — Archived 2026-06-29 → `context/archive/2026-06-27-theme-toggle/`. Lesson: —.
