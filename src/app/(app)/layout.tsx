@@ -5,6 +5,7 @@ import { logoutAction } from '@/app/actions/auth'
 import NavLink from '@/components/NavLink'
 import { ChatWrapper } from '@/components/ChatWrapper'
 import { MobileHeader } from '@/components/MobileHeader'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 const navLinks = [
   { href: '/dashboard', label: 'Panel' },
@@ -59,6 +60,7 @@ export default async function DashboardLayout({
 
         {/* User + logout */}
         <div className="border-t border-soft-linen-200 dark:border-carbon-black-800 p-3 space-y-2">
+          <ThemeToggle />
           <p className="text-xs text-muted-foreground truncate px-3">
             {user.email}
           </p>
