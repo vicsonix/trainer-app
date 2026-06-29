@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Dumbbell, Bot } from 'lucide-react'
 import { logoutAction } from '@/app/actions/auth'
 import { ChatPanel } from './ChatPanel'
+import { ThemeToggle } from './ThemeToggle'
 
 export function MobileHeader() {
   const [open, setOpen] = useState(false)
@@ -19,6 +20,7 @@ export function MobileHeader() {
         </div>
 
         <div className="flex items-center gap-1.5">
+          <ThemeToggle compact />
           <button
             onClick={() => setOpen(true)}
             aria-label="Otwórz asystenta"
