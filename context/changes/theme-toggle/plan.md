@@ -185,16 +185,16 @@ Replace the entire `@media (prefers-color-scheme: dark) { :root { … } }` block
 
 #### Automated
 
-- [x] 1.1 TypeScript compilation passes: `npx tsc --noEmit`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Build completes without error: `npm run build`
+- [x] 1.1 TypeScript compilation passes: `npx tsc --noEmit` — 2a96993
+- [x] 1.2 Linting passes: `npm run lint` — 2a96993
+- [x] 1.3 Build completes without error: `npm run build` — 2a96993
 
 #### Manual
 
-- [x] 1.4 Toggle visible in desktop sidebar and mobile header
-- [x] 1.5 Clicking toggle switches theme immediately
-- [x] 1.6 Theme persists across page reload
-- [x] 1.7 First load with no preference follows OS setting
-- [x] 1.8 No flash of wrong theme on reload
-- [x] 1.9 No styling regressions on any page in either theme
-- [x] 1.10 Toast notifications render correctly in both themes
+- [x] 1.4 Toggle visible in desktop sidebar and mobile header — 2a96993
+- [x] 1.5 Clicking toggle switches theme immediately — 2a96993
+- [x] 1.6 Theme persists across page reload — 2a96993
+- [x] 1.7 First load with no preference follows OS setting — 2a96993
+- [x] 1.8 No flash of wrong theme on reload — 2a96993
+- [x] 1.9 No styling regressions on any page in either theme — 2a96993
+- [x] 1.10 Toast notifications render correctly in both themes — 2a96993
