@@ -33,7 +33,7 @@ A solo personal trainer loses client context between sessions — before each ap
 | S-01 | auth-registration-login   | register an account and log in with email + password                                     | auth scaffold (present) | FR-001, FR-002                         | done     |
 | S-02 | package-management        | add, edit, and delete training packages                                                  | S-01                    | FR-003, FR-004                         | done     |
 | S-03 | client-management         | add a client with interview notes, assign a package, add a plan link, and edit all data  | S-02                    | FR-005, FR-006, FR-007, FR-008, FR-009 | done     |
-| S-04 | calendar-appointments     | add and manage appointments in the weekly calendar view                                  | S-03                    | FR-010, FR-011, FR-013                 | done     |
+| S-04 | calendar-appointments     | add and manage appointments in the calendar (month / week / day views; week is default)  | S-03                    | FR-010, FR-011, FR-013                 | done     |
 | S-05 | client-card-session-view  | tap an appointment and see the full client card with remaining package visits             | S-04                    | FR-012, FR-014, US-01                  | done     |
 | S-06 | ai-assistant              | ask natural-language questions AND perform actions (book, reschedule, add client) via chat | S-04, F-01            | FR-015, FR-016, FR-017, US-02          | done     |
 | S-07 | trainer-analytics         | view stats on a dedicated page: visits completed, cancellations, top packages, revenue   | S-04                    | —                                      | done     |
@@ -120,7 +120,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 
 ### S-04: Calendar and appointments
 
-- **Outcome:** trainer can add an appointment (date, time, assigned client) to the weekly calendar, view the current week, and edit or delete any appointment.
+- **Outcome:** trainer can add an appointment (date, time, assigned client) to the calendar, view the current week, and edit or delete any appointment. Delivered with a Month / Week / Day view switch (`CalendarNav.tsx` → `MonthView`/`WeekView`/`DayView`); **week is the default view** per FR-011, with month and day as additional navigation aids added during implementation.
 - **Change ID:** calendar-appointments
 - **PRD refs:** FR-010, FR-011, FR-013
 - **Prerequisites:** S-03 (client list needed to assign appointments)
@@ -244,7 +244,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **Multi-trainer / studio support** — Why parked: PRD §Non-Goals — solo-trainer model only in v1.
 - **Native mobile app** — Why parked: PRD §Non-Goals — web app only; App Store / Google Play out of scope.
 - **Google OAuth** — Why parked: PRD §Access Control — planned for v2 to reduce login friction on mobile.
-- **Monthly summary view** — Why parked: PRD §Success Criteria Secondary — not on the must-have path; defer until north star (S-05 + S-06) is shipped and validated.
+- **Monthly summary view** — a monthly *stats summary* (visits done, estimated revenue), distinct from the calendar's month **grid** view shipped in S-04. Why parked: PRD §Success Criteria Secondary — not on the must-have path; defer until north star (S-05 + S-06) is shipped and validated. (Partly served today by the S-07 analytics page's period filter.)
 
 ## Done
 
@@ -252,7 +252,7 @@ Foundations below assume these layers are present and do NOT re-scaffold them.
 - **F-01: (foundation) LLM provider wired; streaming API route in place** — Archived 2026-05-30 → `context/archive/2026-05-28-ai-streaming-route/`. Lesson: —.
 - **S-02: trainer can add a training package (name, number of visits, price), edit it, and delete it.** — Archived 2026-05-30 → `context/archive/2026-05-30-package-management/`. Lesson: —.
 - **S-03: trainer can add a client (name, contact info), assign a package, record freetext interview notes and training goals, add a training plan link, and edit all of the above.** — Archived 2026-06-01 → `context/archive/2026-06-01-client-management/`. Lesson: —.
-- **S-04: trainer can add an appointment to the weekly calendar, view the current week, and edit or delete any appointment.** — Archived 2026-06-04 → `context/archive/2026-06-01-calendar-appointments/`. Lesson: —.
+- **S-04: trainer can add an appointment to the calendar, view the current week, and edit or delete any appointment.** — Archived 2026-06-04 → `context/archive/2026-06-01-calendar-appointments/`. Lesson: shipped with month/week/day view switch (week default) — scope grew beyond the weekly-only FR-011 baseline; foundation reconciled 2026-07-01.
 - **S-05: tap an appointment and see the full client card with remaining package visits** — Archived 2026-06-04 → `context/archive/2026-06-04-client-card-session-view/`. Lesson: —.
 - **S-06: AI assistant with action tools (book, reschedule, add client)** — Archived 2026-06-25 → `context/archive/2026-06-04-ai-assistant/`. Lesson: —.
 - **S-07: trainer can view stats on a dedicated analytics page: total completed visits, cancelled and no-show counts, most popular packages by usage, and revenue earned — filterable by period (this month / last 3 months / all time); data is computed server-side from existing appointments and packages tables with no schema changes.** — Archived 2026-06-25 → `context/archive/2026-06-25-trainer-analytics/`. Lesson: —.

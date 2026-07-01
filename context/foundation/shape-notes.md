@@ -104,8 +104,8 @@ Podsumowanie miesięczne — ile wizyt odbyto, szacowany przychód. Prosty widok
 ### Kalendarz i wizyty
 
 - FR-010: Trener może dodać wizytę do kalendarza (data, godzina, przypisany klient). Priority: must-have
-- FR-011: Trener może przeglądać kalendarz w widoku tygodniowym. Priority: must-have
-  > Socrates: Kontrargument: "potrzeba widoku miesięcznego." Odrzucony — trener planuje tygodniowo.
+- FR-011: Trener może przeglądać kalendarz w widoku tygodniowym (widok domyślny), a także miesięcznym i dziennym. Priority: must-have
+  > Socrates: Kontrargument: "potrzeba widoku miesięcznego." Pierwotnie odrzucony (trener planuje tygodniowo), ostatecznie zaimplementowany — kalendarz dostarcza przełącznik Miesiąc/Tydzień/Dzień (`CalendarNav.tsx`, `MonthView`/`WeekView`/`DayView`). Widok tygodniowy pozostaje domyślny.
 - FR-012: Trener może kliknąć na wizytę i zobaczyć pełną kartę klienta. Priority: must-have
   > Socrates: Brak kontrargumentu — to core value flow.
 - FR-013: Trener może edytować i usunąć wizytę. Priority: must-have
