@@ -1,8 +1,9 @@
-# Artifact 3 — Contributors: AI Route Area
+# Artifact 3 — Contributors & Deep-Dive: Appointment Status Write-Path
 
-_Chosen area: `src/app/api/ai/chat/route.ts` + `src/lib/ai/` (the highest-churn cross-boundary hub)._
-_Source: git log --follow -p, diff analysis, research.md, plan-review.md, impl-review.md._
-_Generated: 2026-06-25_
+_Chosen area: the appointment `status` write-path — `updateAppointmentStatusAction` + `AppointmentDetailModal` + the three read surfaces (calendar, analytics, dashboard)._
+_Reason: newest live coupling; the one place where "data must survive the full user path" is unproven. Replaces the previous deep-dive (AI route), now dormant after S-06 closed._
+_Source: git log --follow -p, diff analysis, code read._
+_Generated: 2026-07-03_
 
 ---
 
@@ -10,212 +11,107 @@ _Generated: 2026-06-25_
 
 **Solo project — one human, one AI pair.**
 
-| Person | Role | Commits in area |
-|--------|------|----------------|
-| Victoria (`budziakvictoria@gmail.com`) | Author — owns all decisions, reviews, merges | 8 commits touching route.ts |
-| Claude Sonnet 4.6 | AI pair programmer — does the research, generates code, runs plan-review | Co-author on all commits |
+| Person | Role | Note |
+|--------|------|------|
+| Victoria (`budziakvictoria@gmail.com` / `vicsonix`) | Author — owns all decisions, reviews, merges | 99 commits, both identities |
+| Claude (Sonnet 4.6 ×59, Opus 4.7-1M ×13, Opus 4.8 ×1) | AI pair — research, code, plan-review | Co-author on nearly every commit |
 
-Knowledge is fully concentrated in Victoria. The AI pair has produced detailed written documentation (research.md, plan-review.md) that is the authoritative source for *why* things are the way they are. If Victoria is unavailable, these documents are the primary handoff.
+Knowledge is concentrated in Victoria. The written record (per-change `research.md` / `plan.md` / reviews under `context/archive/`) is the authoritative "why."
 
 ---
 
-## Complete Evolution of `route.ts` (8 touches, annotated)
+## The write-path in one picture
 
-Every touch to the most active file in the codebase, with the decision behind it:
-
-### Touch 1 — `a8aac56` — 2026-05-29 — First version (F-01 p2)
-
-```ts
-// Initial shape:
-// - Raw @anthropic-ai/sdk (not Vercel AI SDK)
-// - Custom SSE: data: ${JSON.stringify({ content })}\n\n
-// - Context came from caller: body.context (string, external)
-// - Module-level singleton: const anthropic = new Anthropic(...)
-// - Prompt caching: cache_control: { type: 'ephemeral' } on system block
+```
+AppointmentDetailModal.tsx  (UI: user taps "Odbyta" / "Nieobecność" / "Odwołana")
+        │  calls
+        ▼
+updateAppointmentStatusAction(id, status)          actions/appointments/index.ts:182
+        │  ── auth check (getUser)
+        │  ── GUARD: completed|no_show require starts_at <= now  (line 191–201)
+        │  ── supabase.update({ status }).eq(id).eq(trainer_id)
+        │  ── revalidatePath('/calendar')          ⚠ ONLY /calendar
+        ▼
+appointments.status  (enum: scheduled | completed | cancelled | no_show)
+        │
+        ├─► calendar views     — overlap checks exclude cancelled/no_show
+        ├─► analytics/page.tsx — completedCount, cancelledCount, noShowCount,
+        │                        revenue (completed × price), cancellation-rate
+        └─► dashboard/page.tsx — status-derived stat tiles
 ```
 
-**Decision logged:** F-01 deliberately avoided Vercel AI SDK due to bundle size risk on Cloudflare Workers free tier (3 MiB gzipped limit). Bare Anthropic SDK was the safe choice.
-
 ---
 
-### Touch 2 — `a9cecbc` — 2026-05-30 — Observability added (impl-review finding F3)
+## Evolution of the status field (annotated)
 
-```diff
-+if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY is not set')
-+log('warn', 'ai_chat_unauthorized')
-+log('info', 'ai_chat_context_truncated', { originalLength, truncatedTo })
-+log('error', 'ai_chat_stream_error', { message })
+### `20260603000001_add_appointment_status.sql` — 2026-06-04 (S-04)
+Status column added to `appointments` with a default of `scheduled`. At this point status only affected calendar overlap logic.
+
+### `368f... / calendar` — 2026-06-04 (S-04/S-05)
+`AppointmentDetailModal` gains the status buttons. Overlap checks in `createAppointmentAction` / `updateAppointmentAction` start filtering `.neq('status','cancelled').neq('status','no_show')` — a cancelled slot frees the time.
+
+### `f164aaa` — 2026-06-25 (S-07 p2) — the coupling tightens
+The analytics page turns `status` into a **reporting primitive**: every KPI (completed sessions, cancellations, no-shows, revenue, cancellation-rate, top clients) is now a projection of this one column. In the **same commit**, a bug was fixed:
+
+```
+fixed future appointment status bug: hide completed/no_show buttons in UI
+and add server-side guard in updateAppointmentStatusAction
 ```
 
-**Pattern established:** every failure path gets a structured log event. This pattern propagates to all subsequent AI work — `vector_search_failed`, `build_trainer_context_failed`, `embedding_failed` all follow the same `log(level, event_name, payload)` shape.
+Two enforcement points for one rule ("you can't mark a future appointment as attended"):
+- **UI** — `AppointmentDetailModal.tsx` hides the completed/no_show buttons for future appointments.
+- **Server** — `updateAppointmentStatusAction` re-checks `starts_at <= now` and returns an error otherwise (defense in depth; the UI hide is not trusted).
+
+This is the pattern to respect: **the server guard is the source of truth; the UI hide is a convenience.** Do not remove either assuming the other suffices.
 
 ---
 
-### Touch 3 — `8fdbe29` — 2026-05-30 — Log silent JSON parse failure (impl-review finding F3 continued)
+## The unproven part (why this area, not the AI route)
 
-```diff
--  } catch {
-+  } catch (err) {
-+    log('warn', 'ai_chat_invalid_body', { error: err instanceof Error ? err.message : String(err) })
-```
+`updateAppointmentStatusAction` calls `revalidatePath('/calendar')` and nothing else. But `/analytics` and `/dashboard` derive from the very same `status` column. Three open questions the write-path does **not** answer on its own:
 
-**Pattern:** catch blocks that were swallowing errors silently are always flagged in review. Seen again in vector search (try/catch with log in `dca9b78`).
+1. After marking an appointment completed in the calendar, does `/analytics` show the updated count on next visit, or a stale cached figure? (Depends on whether those pages are dynamically rendered / uncached — **unknown, must be confirmed**.)
+2. Revenue counts `completed` appointments **with a non-null price** (`analytics/page.tsx:88`). Appointments whose `price` is null are silently excluded from revenue but still counted as completed — is that the intended "N of M priced" behavior, or a data hole?
+3. The guard blocks *setting* completed/no_show on a future appointment. It does **not** re-validate if an already-completed appointment is later edited to a future `starts_at`. Can status and date drift out of agreement?
 
----
-
-### Touch 4 — `127562b` — 2026-05-30 — CF Workers cold-start fix
-
-```diff
--if (!process.env.ANTHROPIC_API_KEY) throw new Error(...)
--const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-+let _anthropic: Anthropic | null = null
-+function getAnthropicClient(): Anthropic {
-+  if (!_anthropic) {
-+    const apiKey = process.env.ANTHROPIC_API_KEY
-+    if (!apiKey) throw new Error('ANTHROPIC_API_KEY is not set')
-+    _anthropic = new Anthropic({ apiKey })
-+  }
-+  return _anthropic
-+}
-```
-
-**Edge case:** module-level `throw` on missing env var breaks Cloudflare Workers. CF Workers instantiates module code at **deploy time**, not at request time. A module-level throw aborts the worker deployment entirely even if the env var is present at runtime. The lazy initializer defers the check to the first POST request. This commit message is terse (`fix: anthropic client`) but the change encodes a CF-Workers-specific constraint.
-
-**This pattern is now gone** — the AI SDK v5 migration (`a437939`) removed the Anthropic SDK singleton entirely (replaced by `anthropic('claude-haiku-4-5')` from `@ai-sdk/anthropic` which handles init internally). But the constraint is still live: any new module-level initialization that reads env vars on this route will hit the same issue.
+These are exactly the cross-boundary, survives-the-full-path risks that a unit test cannot see and an E2E test can — which is what makes this the right deep-dive target.
 
 ---
 
-### Touch 5 — `a437939` — 2026-06-04 — AI SDK v5 rewrite (S-06 p1)
+## Recurring patterns Victoria applies here
 
-The biggest single change to the file. ~60 lines deleted, ~25 added. Three simultaneous shifts:
-
-**1. SDK swap:** `@anthropic-ai/sdk` → `ai` + `@ai-sdk/anthropic`
-```ts
-// Before: manual SSE ReadableStream, for-await on streamResponse events
-// After:  streamText() → createUIMessageStreamResponse()
-```
-The old SSE format (`data: {"content":"..."}`) is **incompatible** with AI SDK's data stream protocol. This was a clean-cut migration because the `/assistant` page didn't exist yet and ChatPanel hadn't been built. If there had been any existing client reading the old format, this would have been a breaking change requiring a flag or versioned route.
-
-**2. Context moved server-side:**
-```ts
-// Before: context = body.context (caller's responsibility)
-// After:  const context = await buildTrainerContext(supabase, user.id)
-```
-This fixed a security concern noted in test-plan.md risk #6: the old shape let the client send whatever context it wanted — no trainer-scoping guarantee at the route level.
-
-**3. Language hardcoded to Polish:**
-```ts
-// p1: "Respond in the same language the trainer uses."
-// p2: "Respond in Polish by default; switch to the trainer's language only if they write in a different language."
-```
-The language instruction changed between p1 and p2 — Polish became the explicit default, not inferred. This is the intended behavior for a Polish-market product.
+| Pattern | Example | Implication |
+|---------|---------|-------------|
+| **Defense in depth** | UI hides buttons **and** server guards `starts_at` | Keep both; server is source of truth |
+| **Trainer-scoping on every query** | `.eq('trainer_id', user.id)` on read and write | Never drop it — it is the data-isolation NFR |
+| **Polish user-facing strings** | `'Nie można oznaczyć przyszłej wizyty jako odbytej'` | New error paths need Polish copy |
+| **`revalidatePath` after mutation** | `revalidatePath('/calendar')` | ⚠ Currently under-scoped — analytics/dashboard not invalidated |
+| **Status enum is a closed set** | `scheduled | completed | cancelled | no_show` | A new status value must be handled in all 3 read surfaces + overlap logic |
 
 ---
 
-### Touch 6 — `368fa63` — 2026-06-04 — Tools wired (S-06 p2)
+## What to read before changing this area
 
-```diff
-+const tools = makeTools(supabase, user.id)
- const result = streamText({
-   ...
-+  tools,
- })
-```
-
-Minimal diff on route.ts — the bulk of this commit was new files (`lib/ai/tools/*`). The route itself stayed thin; `makeTools()` owns the entire tool surface area.
-
-**Decision noted in commit message:** "Polish confirmation labels for all write tools" — the confirmation UI that appears before write actions executes shows Polish text defined in `lib/ai/tool-formatters.ts`.
+| Document | What it holds |
+|----------|---------------|
+| `context/archive/2026-06-25-trainer-analytics/plan.md` | How each KPI is derived from status; the future-appointment bugfix rationale |
+| `context/archive/2026-06-01-calendar-appointments/` | Original status column + overlap-exclusion design |
+| `context/archive/2026-06-04-testing-appointment-action-baseline/` | The action test baseline — status guard tests live in `appointments.test.ts` |
+| `playwright/analytics.spec.ts`, `playwright/calendar.spec.ts` | Existing E2E; **neither asserts calendar→analytics status consistency** |
 
 ---
 
-### Touch 7 — (not a route.ts touch) — `b569677` — 2026-06-05 — UI layer
+## Test coverage of this path (current)
 
-Route unchanged. The chat panel, floating button, and assistant page were added. The only connection back to route.ts is the `api: '/api/ai/chat'` string in `ChatPanel.tsx:25` and `DefaultChatTransport`.
+| Layer | Coverage | Gap |
+|-------|----------|-----|
+| Unit | `appointments.test.ts` — action + guard | Good on the write side |
+| E2E | `calendar.spec.ts` (status change in calendar), `analytics.spec.ts` (reads KPIs) | **No test crosses the boundary**: change status in calendar → assert the number moved in analytics/dashboard |
 
----
-
-### Touch 8 — `dca9b78` — 2026-06-25 — Vector search added (S-06 p4, uncommitted)
-
-```ts
-// New: optional pre-step before buildTrainerContext()
-if (process.env.VOYAGE_API_KEY) {
-  try {
-    // embed last user message → supabase.rpc('match_clients') → vectorResults
-  } catch (err) {
-    log('warn', 'vector_search_failed', ...)  // silent degradation
-  }
-}
-const context = await buildTrainerContext(supabase, user.id, vectorResults)
-```
-
-**Degradation design:** the entire vector search block is behind `process.env.VOYAGE_API_KEY`. If the key is absent (current prod state), code path is skipped entirely. If Voyage API throws, the catch swallows and logs — context is built without reranking. Victoria chose explicit feature-flag-by-env-var over a runtime on/off switch.
-
-**Context size raised here:** `MAX_CONTEXT_CHARS` went from `8_000` (F-01) to `12_000` (S-06 p1) — the increase happened when context assembly moved server-side, because server-side queries include appointment history that doesn't fit in 8K. The value lives in `lib/ai/context.ts:4` and is re-exported from `route.ts:16`.
-
----
-
-## Recurring Patterns (what Victoria consistently does in this area)
-
-| Pattern | Example | Implication for changes |
-|---------|---------|------------------------|
-| **Observability at every failure path** | 7 `log()` calls across the route | New error paths need a log event; missing logs are flagged in impl-review |
-| **Graceful degradation via env-var gate** | `if (process.env.VOYAGE_API_KEY)` for vector search | Optional integrations are gated, not required. Same approach expected for future optional features |
-| **Defense in depth on auth** | `supabase.auth.getUser()` in route even though middleware guards all routes | Intentional double-check. Do not remove the in-route check assuming middleware is sufficient |
-| **Context assembled server-side** | `buildTrainerContext(supabase, user.id)` — caller never provides context | Security decision (risk #6). Never accept context from the request body |
-| **Tool isolation by domain** | `tools/appointments.ts`, `tools/clients.ts`, etc. — separate files, composed in index.ts | New tools go in the matching domain file, not directly in route.ts |
-
----
-
-## Key Decisions to Read Before Changing This Area
-
-### 1. `context/changes/ai-assistant/research.md`
-The most important document. 400+ lines covering:
-- Why AI SDK v5 over v4 (first-class `needsApproval`, `parts`-based rendering)
-- Z-index stack (30 for floating button, 40 for panel — below Radix modals at 50)
-- Tool inventory rationale (what's exposed, what's deferred — package write tools deferred)
-- Why context is assembled server-side (security)
-- Vector search architecture: why Voyage AI over OpenAI, dimension choice (512 vs 1536), IVFFlat index tuning, graceful degradation
-
-### 2. `context/changes/ai-assistant/reviews/plan-review.md`
-5 findings caught before implementation:
-
-| Finding | What it caught |
-|---------|---------------|
-| F1 — get_client spec | Visit count with LIMIT 10 was wrong for clients with >10 appointments |
-| **F2 — truncation test structural bug** | Mocking `buildTrainerContext` in route.test.ts bypasses truncation (it lives inside context.ts, not route.ts) — the test would pass even if truncation code was deleted |
-| **F3 — sendAutomaticallyWhen missing** | Without this option in `useChat()`, user clicks "Approve" → nothing happens. The approval response sits locally and the conversation stalls |
-| F4 — "NOT modifying actions" was wrong | clients/index.ts is modified to add embedding side-effect — the "out of scope" statement was incorrect |
-| F5 — data-testid not specified | `data-testid="typing-indicator"` needed in ChatPanel for E2E test to work |
-
-**F2 and F3 are the most important** — F2 is a test correctness trap (test passes but doesn't protect the risk), F3 is a silent runtime bug in the approval flow.
-
-### 3. `context/archive/2026-05-28-ai-streaming-route/reviews/impl-review.md`
-F-01 impl-review. The Cloudflare Workers cold-start issue (Touch 4 above) was caught here — the module-level throw pattern. This review also established the `.wrangler-dry-run/` gitignore requirement.
-
----
-
-## What's Pending / Not Yet Closed
-
-From `plan-review.md` and current working tree:
-
-| Item | Status | Risk if ignored |
-|------|--------|----------------|
-| `supabase/migrations/20260605000001_pgvector.sql` | Uncommitted, not on prod | `match_clients` RPC doesn't exist on prod → route silently falls back to keyword (no crash, but no vector search) |
-| `conversations` + `conversation_messages` tables | Defined in `actions/conversations/index.ts`, no migration | ChatPanel and assistant/page crash at runtime when trying to load conversation list |
-| Package write tools | Explicitly deferred in research.md | Not missing — intentionally out of scope for S-06 |
-| Conversation history (Phase 6) | Was added to plan during plan-review as scope addition | The `conversations` action file exists and is imported — this is partially implemented without DB schema |
+The gap in the last row is the risk to hand to the E2E flow (see repo-map "First day" + "Constraints").
 
 ---
 
 ## Knowledge Concentration Risk
 
-This entire area was designed and built by one person in a 3-week burst (2026-05-29 → 2026-06-25). The institutional knowledge lives in:
-
-1. Victoria's head
-2. `context/changes/ai-assistant/research.md` — architectural decisions
-3. `context/changes/ai-assistant/plan-review.md` — pre-implementation review findings
-4. The diff history itself (each commit message references the plan phase)
-
-There is no other person who has touched this code. The AI pair programmer (Claude) contributed code but holds no persistent memory between sessions.
-
-**Before making any change to route.ts or lib/ai/:** read research.md section 2 (API compatibility), section 3 (tool ownership model), and plan-review.md findings F2 and F3 in full.
+Built by one person. The status field crossed three domains in three different slices (S-04 calendar, S-07 analytics, S-08 dashboard) — no single document describes its full fan-out. This map (Artifact 2 "Data-level coupling" + this artifact) is currently the only place that captures it end-to-end. Before touching status handling, read the three archive folders above; the diff history is the rest of the record.

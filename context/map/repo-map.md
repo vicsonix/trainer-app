@@ -1,7 +1,8 @@
 # Repo Map
 
-_Synthesized from: git log analysis (85 files, co-change pairs), madge dependency graph, diff-level contributor review._
-_Generated: 2026-06-25. Active branch: `feature/ai-assistant`._
+_Synthesized from: git log analysis (99 commits, co-change pairs), madge dependency graph (88 files), diff-level review._
+_Generated: 2026-07-03. Branch: `chore/documentation-update`. Working tree clean; all slices merged to `main`._
+_Supersedes the 2026-06-25 map, which was generated mid-flight on `feature/ai-assistant`._
 
 ---
 
@@ -9,135 +10,146 @@ _Generated: 2026-06-25. Active branch: `feature/ai-assistant`._
 
 Solo trainer management app. One contributor (Victoria), AI pair on every commit. Stack: Next.js 16 App Router, Supabase (auth + PostgreSQL + RLS), Cloudflare Workers (via OpenNext), Vercel AI SDK v5 + Anthropic claude-haiku-4-5.
 
-Six slices shipped (S-01 through S-05, F-01). One in progress (S-06 ai-assistant, p4+p5 uncommitted).
+**Nine slices shipped and archived** (F-01, S-01…S-08, S-11). Two proposed, not started: S-09 notifications, S-10 profile. No work in flight.
+
+---
+
+## What changed since the last map
+
+The previous map's headline items were all about *in-flight* AI work. That work landed. The three most important deltas:
+
+1. **S-06 (AI assistant) closed.** `route.ts` is still the highest-churn file by lifetime count but is now **dormant** — the churn signal is stale.
+2. **Two "look wired but aren't" traps resolved.** The `conversations` tables and the pgvector migration now have committed migrations (`20260625000001_conversations.sql`, `20260605000001_pgvector.sql`). Confirm they were applied to the live Supabase instance.
+3. **A new load-bearing coupling emerged.** The appointment `status` field now feeds three surfaces — calendar, analytics (S-07), dashboard (S-08) — but its sole writer only invalidates the calendar. This is the current map's center of gravity.
 
 ---
 
 ## The four narrow doors
 
-These files are loaded by the framework, not imported by any `src/` file. The import graph doesn't see them. The entire app passes through them.
+Loaded by the framework, not imported by any `src/` file. The import graph doesn't see them; the entire app passes through them.
 
 | File | Loaded by | If broken |
 |------|-----------|-----------|
-| `src/middleware.ts` | Next.js, every request | Auth bypass or infinite redirect. Untouched since S-01 (2026-05-26) |
-| `src/app/(app)/layout.tsx` | Next.js layout tree | All 5 protected pages lose nav, ChatWrapper, auth check |
-| `src/app/api/ai/chat/route.ts` | HTTP POST `/api/ai/chat` | Entire chat UI goes dark — ChatPanel, assistant page, MobileHeader trigger |
-| `src/app/layout.tsx` | Next.js root layout | Global styles and toast provider gone for the whole app |
+| `src/middleware.ts` | Next.js, every request | Auth bypass or redirect loop. Untouched since S-01 |
+| `src/app/(app)/layout.tsx` | Next.js layout tree | All 6 protected pages lose nav, ChatWrapper, ThemeToggle, auth check |
+| `src/app/api/ai/chat/route.ts` | HTTP POST `/api/ai/chat` | Entire chat UI goes dark |
+| `src/app/layout.tsx` | Next.js root layout | Global styles, toaster, ThemeProvider gone app-wide |
 
 ---
 
-## The two widest blast radii
+## The widest blast radius
 
-**`src/lib/supabase/server.ts`** — imported by 13 files spanning every layer: layout, all pages, every server action, the AI route, and all integration tests. Its contract is one line:
+**`src/lib/supabase/server.ts`** — now imported by **16 files** (was 13; analytics + dashboard + conversations-test added), spanning every layer. Contract is one line:
 ```ts
 createClient(): Promise<SupabaseClient>
 ```
-Changing the return type or making it throw differently breaks the entire app simultaneously.
+Changing its return type or throw behavior breaks the entire app at once.
 
-**`src/lib/utils.ts`** — imported by 15+ UI components. Pure `cn()` utility. Low change risk but rebuilds all UI on touch.
+**`src/lib/utils.ts`** — ~15 UI components. Pure `cn()`. Low change risk, rebuilds all UI on touch.
 
----
-
-## The hottest file
-
-`src/app/api/ai/chat/route.ts` — 7 commits, more than any other file. Every major AI decision landed here. It crossed the runtime+build boundary in two different commits (SDK deps changed alongside route logic). It is uncommitted on the active branch today.
-
-Its evolution in one line per touch:
-```
-a8aac56  2026-05-29  Born: manual SSE, @anthropic-ai/sdk, context from caller
-a9cecbc  2026-05-30  Added: log() at every failure path (pattern for whole area)
-8fdbe29  2026-05-30  Fixed: silent JSON parse catch
-127562b  2026-05-30  Fixed: CF Workers cold-start — module-level throw breaks deploy
-a437939  2026-06-04  Rewritten: AI SDK v5, context server-side, language → Polish
-368fa63  2026-06-04  Added: makeTools() wired
-dca9b78  2026-06-25  Added: vector search behind VOYAGE_API_KEY gate (uncommitted)
-```
-
-The CF Workers constraint (`127562b`) is worth memorizing: **module-level code that reads env vars and throws will abort the Workers deployment**, because module code runs at deploy time, not per-request. The pattern was removed in the AI SDK v5 rewrite but the constraint is still live for anything added at module scope.
+**`src/components/stat-card.tsx`** — new shared insight primitive; imported by both analytics and dashboard. A prop-shape change hits both surfaces.
 
 ---
 
-## Hidden hub: `TimeGrid.tsx`
+## Hidden hubs (co-change, not imports)
 
-`src/app/(app)/calendar/TimeGrid.tsx` has no special status in the import graph — it depends on `types.ts`, `dates.ts`, `eventPositioning.ts`, `useLongPress.ts`. But co-change analysis (git, not imports) shows it moved with every other calendar file: page.tsx (3×), CalendarView (3×), MonthView (3×), WeekView (2×). It is the rendering core the calendar views converge on. It does not announce itself as a hub.
-
-**Before touching any calendar view: check TimeGrid first.**
+- **`calendar/TimeGrid.tsx`** — no special import status, but co-moves with every calendar view (page 3×, CalendarView 3×, MonthView 3×). The calendar's rendering core. **Check it before touching any calendar view.**
+- **The `status` column** — invisible to madge (it's data, not an import). Written in one place, read in three. See below.
 
 ---
 
-## Four cycles, one root cause
-
-`npx madge --circular` found 4 cycles, all in `src/app/(app)/clients/`:
+## The current risk center: appointment `status`
 
 ```
-page.tsx → ClientsClientSection → ClientFormModal → page.tsx
-page.tsx → ClientsClientSection → ClientCard → EditClientModal → ClientForm → page.tsx
+AppointmentDetailModal (UI)
+   └─► updateAppointmentStatusAction   actions/appointments/index.ts:182
+         ├─ server guard: completed|no_show require starts_at <= now
+         ├─ update({ status }).eq(trainer_id)
+         └─ revalidatePath('/calendar')      ⚠ ONLY /calendar
+   status ∈ {scheduled, completed, cancelled, no_show}
+         ├─► calendar   (overlap excludes cancelled/no_show)
+         ├─► analytics  (all KPIs + revenue are projections of status)
+         └─► dashboard  (status-derived tiles)
 ```
 
-Root cause: `PackageOption` interface lives in `page.tsx` (line 4) and is `import type`-d by 4 sibling components. Runtime-safe (`import type` is erased), but `page.tsx` now plays two roles — Server Component and shared type source — and every change to `PackageOption` fans out to 4 files.
-
-Fix when convenient: move `PackageOption` to `src/app/(app)/clients/types.ts`. Zero runtime change.
+The write revalidates only `/calendar`, yet analytics and dashboard derive from the same column. Whether they show stale numbers after a status change is **unproven** — the key unknown driving the deep-dive below.
 
 ---
 
-## Two things that look wired but aren't
+## Four cycles, one root cause (unchanged)
 
-**`src/app/actions/conversations/index.ts`** is imported by `ChatPanel.tsx` and `assistant/page.tsx`. It queries `conversations` and `conversation_messages`. Neither table has a migration. Both consumers will throw a Supabase error at runtime the moment a user opens the chat panel. This is Phase 6 of S-06 — added to scope during plan-review but the DB half wasn't committed.
-
-**`src/lib/supabase/client.ts`** (`createBrowserClient`) has zero importers in `src/`. All chat UI communicates via HTTP to the API route; there is no direct client-side Supabase access. The file exists but is currently dead code.
+`npx madge --circular` → 4 cycles, all in `src/app/(app)/clients/`. Root cause: `PackageOption` interface lives in `clients/page.tsx` and is `import type`-d by 4 siblings. Runtime-safe (`import type` erased), but `page.tsx` plays two roles and every `PackageOption` change fans out to 4 files. Fix when convenient: move it to `clients/types.ts`.
 
 ---
 
-## What to read before changing the AI area
+## Still dead code
 
-All three documents are in `context/changes/ai-assistant/`:
+`src/lib/supabase/client.ts` (`createBrowserClient`) — zero importers in `src/`. All chat UI talks to the API route over HTTP. Held for a future realtime feature, or removable.
 
-| Document | What it contains |
-|----------|-----------------|
-| `research.md` | Why AI SDK v5 (not v4), tool inventory rationale, why context is server-side (security risk #6), vector search architecture, z-index stack |
-| `reviews/plan-review.md` | **F2**: truncation test mocks away the thing it's testing — passes even if truncation is deleted. **F3**: missing `sendAutomaticallyWhen` in `useChat()` silently stalls tool approval flow |
-| `context/archive/2026-05-28-ai-streaming-route/reviews/impl-review.md` | CF Workers cold-start issue; `.wrangler-dry-run/` gitignore requirement |
+---
 
-F2 and F3 from plan-review are the most operationally dangerous findings in the codebase — both are silent (no crash, no test failure, wrong behavior).
+# Deep-dive target (this map's pick)
+
+The lesson asks for **one** flow to deepen. Selection is driven by the three sections below.
+
+## 1. Risk zones → the target
+
+The hardest current coupling is the appointment **`status` write-path**. It:
+- crosses the most boundaries — one server action → DB enum → three independent read surfaces (calendar, analytics, dashboard);
+- is the **newest** live coupling (analytics turned status into a reporting primitive on 2026-06-25, with a bug fix in the same commit);
+- has a **structural smell**: the sole writer `revalidatePath`s only `/calendar`, so analytics/dashboard may silently disagree;
+- carries a business guardrail — the future-appointment guard is enforced in two places (UI + server) that must stay in sync.
+
+This beats the previously-chosen AI approval flow, which is now closed, dormant, and already documented under `context/archive/2026-06-04-ai-assistant/`.
+
+## 2. First day → entry points (read these first, in order)
+
+1. `src/app/actions/appointments/index.ts` — `updateAppointmentStatusAction` (line 182): the guard, the update, the single `revalidatePath`.
+2. `src/app/(app)/calendar/AppointmentDetailModal.tsx` — the UI that calls it and mirrors the guard by hiding buttons.
+3. `src/app/(app)/analytics/page.tsx` — how every KPI (counts, revenue, cancellation rate) is derived from `status` (lines 82–94).
+
+Then skim `src/app/(app)/dashboard/page.tsx` for the third reader, and `playwright/{calendar,analytics}.spec.ts` for what E2E already covers.
+
+## 3. Constraints → first unknowns for the agent to confirm or refute
+
+- **U1 — Cache/revalidation:** `updateAppointmentStatusAction` invalidates only `/calendar`. Are `/analytics` and `/dashboard` dynamically rendered (so they refetch on next visit), or do they serve stale status-derived numbers? Confirm by rendering mode / fetch caching.
+- **U2 — Migrations applied to prod:** the `conversations` and `pgvector` migrations exist on disk and are committed. Confirm they are actually applied to the live Supabase instance, not just present in `supabase/migrations/`.
+- **U3 — Revenue data hole:** revenue sums `completed` appointments with non-null `price` only. Is the "N of M priced" display intentional, or are unpriced completed sessions an unintended gap?
+- **U4 — Status/date drift:** the guard blocks *setting* completed/no_show on a future appointment, but does editing an already-completed appointment's date to the future re-validate? Can status and `starts_at` disagree?
 
 ---
 
 ## Before any significant change: the short checklist
 
 ```
+□ Touching appointment status handling?
+  → Keep BOTH guards (UI hide + server starts_at check); server is source of truth.
+  → If a new surface reads status, extend revalidatePath or confirm dynamic rendering.
+  → A new status enum value must be handled in calendar overlap + analytics + dashboard.
+
 □ Touching middleware.ts or supabase/server.ts?
-  → Full regression across auth + every page + every action.
+  → Full regression across auth + every page + every action (16 importers).
 
 □ Touching (app)/layout.tsx?
-  → NavLink, ChatWrapper, MobileHeader, auth redirect all change together.
+  → NavLink, ChatWrapper, MobileHeader, ThemeToggle, auth redirect change together.
 
 □ Touching any calendar component?
   → Check TimeGrid.tsx — it co-moves with everything in that module.
 
 □ Touching route.ts or lib/ai/?
-  → Read research.md §2 (API compat) and plan-review F2 + F3.
+  → Area is closed/dormant; read context/archive/2026-06-04-ai-assistant/ first.
   → Do not add module-level env-var reads that throw (CF Workers cold-start).
-  → Do not accept context from the request body (security, risk #6).
   → New tools go in the domain file under lib/ai/tools/, not in route.ts.
-
-□ Adding a new optional external integration?
-  → Gate it behind process.env.KEY; degrade gracefully in the catch.
-
-□ Merging feature/ai-assistant?
-  → Apply supabase/migrations/20260605000001_pgvector.sql to prod first.
-  → Create conversations + conversation_messages tables before ChatPanel ships.
 ```
 
 ---
 
 ## Stable areas (low risk)
 
-These files have not changed since the slice that introduced them and have no active work nearby:
-
 | File / Area | Last touched | Note |
 |---|---|---|
 | `src/middleware.ts` | 2026-05-26 (S-01) | Auth gate — correct by inertia, sensitive by nature |
-| `src/lib/supabase/{client,server}.ts` | 2026-05-19 (scaffold) | Foundation; never changed |
-| `src/app/actions/appointments/` | 2026-06-04 (S-04) | Complete; tests pass |
+| `src/lib/supabase/{client,server}.ts` | scaffold | Foundation; never changed |
+| `src/app/api/ai/chat/route.ts` + `lib/ai/` | 2026-06-25 (S-06) | Closed & archived; dormant |
 | `src/app/actions/packages/` | 2026-05-30 (S-02) | Complete; tests pass |
-| `src/app/(app)/calendar/` (excluding TimeGrid) | 2026-06-04 (S-05) | Done; badge fixes were the last touch |
+| `src/app/(app)/calendar/` (excl. TimeGrid + status path) | 2026-06-25 | Done |
