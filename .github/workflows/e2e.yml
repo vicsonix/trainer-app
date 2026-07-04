@@ -1,0 +1,84 @@
+name: E2E (Playwright)
+
+# Slow, backend-dependent tests. Kept OUT of the fast lint/typecheck/unit/AI
+# loop on purpose: it boots an ephemeral local Supabase (Docker), applies the
+# repo migrations, seeds the login user, then runs the browser specs.
+# NOT a prerequisite for the AI review — a flaky browser test must never block
+# a code-review comment.
+
+on:
+  # Re-enable once the E2E gaps are closed: mock the LLM for assistant.spec
+  # and seed a client for calendar.spec. Until then, run on demand only so a
+  # scaffold-in-progress doesn't red-X every PR.
+  # pull_request:
+  #   types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    # Skip drafts when triggered by a PR; always run on manual dispatch.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+
+    # Throwaway credentials for the ephemeral DB — no secret needed, the whole
+    # backend is discarded when the job ends.
+    env:
+      PLAYWRIGHT_TEST_EMAIL: e2e@example.com
+      PLAYWRIGHT_TEST_PASSWORD: e2e-password-123
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - run: npm ci
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start ephemeral Supabase and apply migrations
+        run: |
+          supabase start
+          supabase db reset --no-seed   # applies supabase/migrations/* to a clean DB
+
+      - name: Export local Supabase URL + keys to the job env
+        run: |
+          # `supabase status -o env` emits API_URL / ANON_KEY / SERVICE_ROLE_KEY
+          eval "$(supabase status -o env)"
+          {
+            echo "NEXT_PUBLIC_SUPABASE_URL=$API_URL"
+            echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY"
+            echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY"
+          } >> "$GITHUB_ENV"
+
+      - name: Seed the E2E login user
+        run: |
+          curl -sf -X POST "$NEXT_PUBLIC_SUPABASE_URL/auth/v1/admin/users" \
+            -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"email\":\"$PLAYWRIGHT_TEST_EMAIL\",\"password\":\"$PLAYWRIGHT_TEST_PASSWORD\",\"email_confirm\":true}"
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E specs
+        # Playwright's webServer config starts `npm run dev` itself and waits for
+        # http://localhost:3000. NEXT_PUBLIC_* are read from $GITHUB_ENV above.
+        run: npx playwright test
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

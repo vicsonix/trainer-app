@@ -19,6 +19,11 @@ const USER_ID   = 'user-123'
 const APPT_ID   = 'appt-456'
 const CLIENT_ID = '550e8400-e29b-41d4-a716-446655440001'
 
+// starts_at values for the completed/no_show guard (only past appointments
+// may be marked completed/no_show).
+const PAST_STARTS_AT   = '2020-01-01T10:00:00.000Z'
+const FUTURE_STARTS_AT = '2999-01-01T10:00:00.000Z'
+
 function makeFormData(data: Record<string, string>): FormData {
   const fd = new FormData()
   Object.entries(data).forEach(([k, v]) => fd.append(k, v))
@@ -46,7 +51,7 @@ function makeChain(resolveWith: unknown) {
     catch:   (fn: any)            => Promise.resolve(resolveWith).catch(fn),
     finally: (fn: any)            => Promise.resolve(resolveWith).finally(fn),
   }
-  for (const m of ['select', 'insert', 'update', 'delete', 'eq', 'neq', 'lt', 'gt']) {
+  for (const m of ['select', 'insert', 'update', 'delete', 'eq', 'neq', 'lt', 'gt', 'single']) {
     chain[m] = vi.fn().mockReturnValue(chain)
   }
   return chain
@@ -344,7 +349,9 @@ describe('updateAppointmentStatusAction', () => {
   beforeEach(() => { vi.clearAllMocks() })
 
   it('calls update with new status and revalidates', async () => {
-    const { fromFn, chain } = setupSingleCallMock({})
+    const { fromFn, chain } = setupSingleCallMock({
+      resolveWith: { data: { starts_at: PAST_STARTS_AT }, error: null },
+    })
 
     await updateAppointmentStatusAction(APPT_ID, 'completed')
 
@@ -381,7 +388,9 @@ describe('updateAppointmentStatusAction', () => {
   })
 
   it('accepts no_show status', async () => {
-    const { chain } = setupSingleCallMock({})
+    const { chain } = setupSingleCallMock({
+      resolveWith: { data: { starts_at: PAST_STARTS_AT }, error: null },
+    })
 
     await updateAppointmentStatusAction(APPT_ID, 'no_show')
 
@@ -389,12 +398,26 @@ describe('updateAppointmentStatusAction', () => {
   })
 
   it('returns empty object when ownership filter matches 0 rows (silent no-op)', async () => {
-    const { chain } = setupSingleCallMock({ resolveWith: { error: null } })
+    const { chain } = setupSingleCallMock({
+      resolveWith: { data: { starts_at: PAST_STARTS_AT }, error: null },
+    })
 
     const result = await updateAppointmentStatusAction(APPT_ID, 'completed')
 
     expect(chain.eq).toHaveBeenCalledWith('id', APPT_ID)
     expect(chain.eq).toHaveBeenCalledWith('trainer_id', USER_ID)
     expect(result).toEqual({})
+  })
+
+  it('rejects marking a future appointment as completed without a DB write', async () => {
+    const { chain } = setupSingleCallMock({
+      resolveWith: { data: { starts_at: FUTURE_STARTS_AT }, error: null },
+    })
+
+    const result = await updateAppointmentStatusAction(APPT_ID, 'completed')
+
+    expect(result).toMatchObject({ error: expect.any(String) })
+    expect(chain.update).not.toHaveBeenCalled()
+    expect(revalidatePath).not.toHaveBeenCalled()
   })
 })

@@ -1,0 +1,92 @@
+name: AI Code Review (scripted agent)
+
+# Runs the scripted reviewer in packages/review against the pull request diff.
+# Unlike anthropics/claude-code-action (an interactive, comment-driven bot),
+# this always runs the SAME reviewer prompt + JSON schema and emits a
+# machine-readable pass/fail verdict the job can gate on.
+
+on:
+  pull_request:
+
+# Least privilege: read the code to diff it, write PR comments to post the review.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need the base branch too, to compute the PR diff
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install review agent deps
+        working-directory: packages/review
+        run: npm ci
+
+      - name: Run scripted code review over the PR diff
+        working-directory: packages/review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          git diff --no-color "origin/${{ github.base_ref }}...HEAD" > diff.patch
+          npx tsx review.ts < diff.patch > review.json
+          cat review.json
+
+      - name: Post the review as a sticky PR comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const review = JSON.parse(
+              fs.readFileSync("packages/review/review.json", "utf8"),
+            );
+
+            const marker = "<!-- ai-code-review -->";
+            const icon = review.verdict === "pass" ? "✅" : "❌";
+            const body = [
+              marker,
+              `## ${icon} AI Code Review — verdict: \`${review.verdict}\``,
+              "",
+              review.summary,
+              "",
+              `<sub>Scripted reviewer · commit ${context.sha.slice(0, 7)}</sub>`,
+            ].join("\n");
+
+            const { owner, repo } = context.repo;
+            const issue_number = context.issue.number;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number,
+            });
+            const existing = comments.find((c) => c.body?.includes(marker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body,
+              });
+            }
+
+      - name: Gate the check on the agent's verdict
+        working-directory: packages/review
+        run: |
+          verdict=$(jq -r '.verdict' review.json)
+          echo "Reviewer verdict: $verdict"
+          test "$verdict" = "pass"
